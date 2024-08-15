@@ -57,7 +57,6 @@ export const ButtonsBudget = ({ corporate = false }) => {
   };
 
   async function generatePdfBudgetCorporate (text: Descendant []) {
-    console.log(text, slateToPdfMake(text));
     handleCloseModal();
     if(!bodyResponseBudget) {
       handleCloseBackdrop();
