@@ -1,7 +1,9 @@
 import {days_to_check_dead_line} from "./DaysToStage/Days";
 import {Sleep} from "../services/chatguru/Sleep";
 
-
+/*
+    verifica os funis do rd e troca quando o dia do acompanhamento muda
+*/
 export const fsAssistDaysDeadLine = async () => {
     const days = Object.keys(days_to_check_dead_line).reverse();
 

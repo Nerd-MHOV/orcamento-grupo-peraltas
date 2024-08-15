@@ -18,11 +18,12 @@ import {
     TariffValuesProps,
 } from "./interfaces";
 import { CorporateBodySendBudget } from "../../context/generateTariff/interfaces/corporateProps";
+import { API_URL } from "../../config";
 
 const storageData = localStorage.getItem("authToken");
 
 const api = axios.create({
-    baseURL: "http://192.168.10.87:3335",
+    baseURL: API_URL,
     headers: {
         Authorization: `Bearer ${storageData}`,
     },

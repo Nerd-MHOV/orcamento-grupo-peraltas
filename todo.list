@@ -1,7 +1,0 @@
- backend:
-    - construir o racional de ajuste de tarifario para corporativo
-        -> todo esse racional vai ser feito apartir do valor final, ou quartos, ou pax
-frontend:
-    - PDF: Orçamente corporativo 
-    - layout de descontos gerais
-    - layout de descontos unitarios por quarto

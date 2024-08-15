@@ -3,6 +3,10 @@ import {addDays} from "date-fns";
 import ChatGuru from "../../services/chatguru/main";
 import {rdGetContactDeal} from "../../services/rdstation/getContactDeal";
 
+
+/*
+    Após 24h no status: "vencido" ele manda o dialogo para os cliente
+*/
 export default async function assist24hInExpend() {
 
     const budgets = await prismaClient.saveBudgets.findMany({

@@ -2,6 +2,10 @@ import {rdGetDeals} from "../services/rdstation/getDeals";
 import {prismaClient} from "../database/prismaClient";
 import {winChange} from "../services/winChange";
 
+
+/*
+    verifica alterações feitas no rd e att os status no sistema de orçamento
+*/
 export const fsAssistOpportunity = async () => {
     const {has_change, find_last_edit, page, has_more} = await assistOpportunity()
 
@@ -30,9 +34,7 @@ export const assistOpportunity = async (page = 1) => {
         let deal_change = false;
 
         const check_in = field.filter((fil) => fil.custom_field_id === "64b7e36af4f07f001ab229e9")[0]?.value + "" || null;
-
         const check_out = field.filter((fil) => fil.custom_field_id === "64b7e389d59c560018d30e20")[0]?.value + "" || null;
-
         const budget_status = field.filter((fil) => fil.custom_field_id === "64b94d33862444000e56696e")[0]?.value + "" || null;
 
         const win = deal.win + "" || null;

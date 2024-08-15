@@ -3,6 +3,10 @@ import {addDays} from "date-fns";
 import ChatGuru from "../../services/chatguru/main";
 import {rdGetContactDeal} from "../../services/rdstation/getContactDeal";
 
+
+/*
+    Após 48h no status: "em andamento" ele manda o dialogo para os clientes
+*/
 export default async function assist48hInWalking() {
 
     const budgets = await prismaClient.saveBudgets.findMany({

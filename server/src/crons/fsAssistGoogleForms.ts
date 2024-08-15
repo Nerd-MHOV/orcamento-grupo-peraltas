@@ -1,6 +1,10 @@
 import axios from "axios"
 import { Dialog } from "../services/chatguru/Dialog";
 
+
+/*
+    verifica na planilha do google, se manda dialogo para os clientes
+*/
 const urlGform = 'https://script.googleusercontent.com/macros/echo?user_content_key=Eo1Ibj5gChBi5Kgv3qV6CYasDAoqn2Xc7ApiDVnLoyoOYsLWKfVJb1x54htA1dUbI0eeZb83uodwLxQJ55T0p1DRXEPLSY98m5_BxDlH2jW0nuo2oDemN9CCS2h10ox_1xSncGQajx_ryfhECjZEnNDasiZwjNv1ruALyCF38tw7mLHQtawvz8xkH_EfmA3XtRFUU8CBye49qM3uxDeaeXSJvjwNIaNMhoYVxuOwY_lLQ2bUJoVbww&lib=MLrAqLxNrNjbk__S6BTMqzNdsv6zkqyqw'
 export const fsAssistGoogleForms = async  () => {
 

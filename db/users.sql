@@ -1,1 +1,0 @@
-INSERT INTO public.users (email, phone, name, username, password, token_pipe, user_pipe, id, level, active) VALUES ('matheus.henrique4245@gmail.com', '14 991578451', 'Matheus Henrique', 'admin', '$2b$10$xFQtfQ65jzpCzw7wmIjGAO4.hv17t.yHIWW7sNoYjbZKgoIgTzmIW', '0b89d278f9d3debfe30b08cb441f295f84832371', '3183119', 'a3a4cc8f-ed46-4b9c-b095-52cff8cef306', 3, true);
