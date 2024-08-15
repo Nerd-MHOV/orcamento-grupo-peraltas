@@ -1,0 +1,5 @@
+{
+  "devDependencies": {
+    "@types/redis-info": "^3.0.3"
+  }
+}

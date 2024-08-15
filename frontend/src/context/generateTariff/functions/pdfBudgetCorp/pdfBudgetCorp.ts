@@ -14,7 +14,7 @@ import { breakPage } from "./breakPage";
 import { doBodyLocations } from "./location";
 (<any>pdfMake).vfs = pdfFonts && pdfFonts.pdfMake ? pdfFonts.pdfMake.vfs : globalThis.pdfMake.vfs;
 
-const slideImagesPath = 'http://localhost:5173/budgetCorpImages/';
+const slideImagesPath = 'http://192.168.10.87:83/budgetCorpImages/';
 
 async function pdfBudgetCorp(
   budget: CorporateBodyResponseBudget,

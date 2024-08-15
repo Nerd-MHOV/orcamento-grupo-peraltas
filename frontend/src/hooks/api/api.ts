@@ -22,7 +22,7 @@ import { CorporateBodySendBudget } from "../../context/generateTariff/interfaces
 const storageData = localStorage.getItem("authToken");
 
 const api = axios.create({
-    baseURL: "http://localhost:3335",
+    baseURL: "http://192.168.10.87:3335",
     headers: {
         Authorization: `Bearer ${storageData}`,
     },

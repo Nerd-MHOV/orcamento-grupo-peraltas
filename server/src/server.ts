@@ -56,18 +56,18 @@ app.use(
     })
 );
 app.use(express.json());
-app.use(morgan("dev"))
+app.use(morgan("short"))
 app.use(routes);
 // app.use(basePath, serverAdapter.getRouter())
 
 
 
-// cron.schedule("*/20 * * * * *", fsAssistOpportunity)
-// cron.schedule("0 */2 * * *", fsAssistDBStatus)
-// // cron.schedule("0 9 * * *", assist48hInWalking)
-// // cron.schedule("0 10 * * *", assist24hInExpend)
-// cron.schedule("0 3 * * *", fsAssistDaysDeadLine);
-// cron.schedule("0 2 * * *", fsAssistGoogleForms);
+cron.schedule("*/20 * * * * *", fsAssistOpportunity)
+cron.schedule("0 */2 * * *", fsAssistDBStatus)
+// cron.schedule("0 9 * * *", assist48hInWalking)
+// cron.schedule("0 10 * * *", assist24hInExpend)
+cron.schedule("0 3 * * *", fsAssistDaysDeadLine);
+cron.schedule("0 2 * * *", fsAssistGoogleForms);
 
 
 
