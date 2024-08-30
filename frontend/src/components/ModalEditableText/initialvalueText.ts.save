@@ -152,6 +152,52 @@ const initialValue: Descendant[] = [
         "align": "left",
         "children": [
             {
+                "text": "02 barril de choop pilsen, casa da mina , 30 litros cada."
+            }
+        ]
+    },
+    {
+        "type": "paragraph",
+        "checked": true,
+        "align": "left",
+        "children": [
+            {
+                "text": "01 coordenador para acompanhar o grupo durante o dia "
+            }
+        ]
+    },
+    {
+        "type": "paragraph",
+        "checked": true,
+        "align": "left",
+        "children": [
+            {
+                "text": "Cardápio será enviado após o bloqueio da data e confecção do Contrato de Prestação de Serviço"
+            }
+        ]
+    },
+    {
+        "type": "paragraph",
+        "checked": true,
+        "align": "left",
+        "children": [
+            {
+                "text": "Coffe Brack tipo 1 - café, sucos de frutas, torradas, bolo, mini lanche natural, 02 tipos de patês, 02 tipos de geleias e biscoitos caseiro será servido – dia 06 a tarde – dia 07 manha e tarde – dia 08 manha – horários a ser definidos"
+            }
+        ]
+    },
+    {
+        "type": "paragraph",
+        "checked": true,
+        "align": "left",
+        "children": [
+            {
+                "text": "Para uso na sala : 124 copos de água por pessoa manha e tarde a ser    {
+        "type": "paragraph",
+        "checked": true,
+        "align": "left",
+        "children": [
+            {
                 "text": "Frigobar dos apartamentos entregue vazios."
             }
         ]

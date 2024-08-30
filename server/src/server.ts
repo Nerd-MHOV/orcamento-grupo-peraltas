@@ -57,7 +57,7 @@ app.use(
     })
 );
 app.use(express.json());
-app.use(morgan("dev"))
+app.use(morgan("short"))
 app.use(routes);
 // app.use(basePath, serverAdapter.getRouter())
 
