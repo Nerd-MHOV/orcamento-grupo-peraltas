@@ -54,7 +54,7 @@ const doContent = (content: TableCell[][]): ContentTable => {
 }
 
 const sliceContent = (array: TableCell[][], rows_in_page: number) => {
-    let lineToBreak = 20
+    let lineToBreak = 19
     let contentChunck = [];
     for (let i = -(rows_in_page); i < array.length; i += lineToBreak) {
         const init = (i < 0) ? 0 : i

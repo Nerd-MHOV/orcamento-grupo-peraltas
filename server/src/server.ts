@@ -45,6 +45,7 @@ const whiteList = [
     "http://localhost:83",
     "http://192.168.10.87:3333",
     "http://localhost:4173",
+    "http://127.0.0.1:5500"
 ];
 app.use(
     cors({
@@ -62,12 +63,12 @@ app.use(routes);
 
 
 
-cron.schedule("*/20 * * * * *", fsAssistOpportunity) // a cada 20s
-cron.schedule("0 */2 * * *", fsAssistDBStatus) // a cada 2h
-// cron.schedule("0 9 * * *", assist48hInWalking) // 9h da manhã
-// cron.schedule("0 10 * * *", assist24hInExpend) // 10h da manhã
-cron.schedule("0 3 * * *", fsAssistDaysDeadLine); // 3h da manhã
-cron.schedule("0 2 * * *", fsAssistGoogleForms); // 2h da manhã
+// cron.schedule("*/20 * * * * *", fsAssistOpportunity) // a cada 20s
+// cron.schedule("0 */2 * * *", fsAssistDBStatus) // a cada 2h
+// // cron.schedule("0 9 * * *", assist48hInWalking) // 9h da manhã
+// // cron.schedule("0 10 * * *", assist24hInExpend) // 10h da manhã
+// cron.schedule("0 3 * * *", fsAssistDaysDeadLine); // 3h da manhã
+// cron.schedule("0 2 * * *", fsAssistGoogleForms); // 2h da manhã
 
 
 
