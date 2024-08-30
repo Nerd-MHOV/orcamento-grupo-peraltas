@@ -116,7 +116,7 @@ export const useApi = () => ({
         return response.data;
     },
 
-    getTariffPipe: async (date_in: Date, date_out: Date) => {
+    getTariffORM: async (date_in: Date, date_out: Date) => {
         const response = await api.post("/tariff_pipe", {
             date_in,
             date_out,

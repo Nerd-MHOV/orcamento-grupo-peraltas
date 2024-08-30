@@ -2,9 +2,12 @@ import {useApi} from "../../../hooks/api/api";
 import DataContentProps from "../interfaces/tableBudgetDataContentProps";
 import {format} from "date-fns";
 
-export async function rdSaveProcess(userId: string, budgets: DataContentProps[], group = false) {
+
+
+export async function rdSaveProcess(budgets: DataContentProps[], group = false) {
     const api = useApi();
 
+    
     let realBudget: DataContentProps = budgets[0];
     let dealId = "";
     for (let budget of budgets) {
@@ -24,19 +27,11 @@ export async function rdSaveProcess(userId: string, budgets: DataContentProps[],
     for (const prod of productsToDelete) {
         await api.rdDeleteProduct(dealId, prod.id)
     }
-
+    
     if(group) {
         // add all budgets
         for (const budget of budgets) {
-            try {
-
-                await api
-                    .getTariffPipe(budget.arrComplete.selectionRange.startDate, budget.arrComplete.selectionRange.endDate)
-                    .then((tariff_id) => {
-                        // pipe.addFile();
-                        api.rdAddProduct(dealId, tariff_id.product_rd, budget?.total?.total ?? 0)
-                    })
-            } catch (error) {}
+            await apiSave(budget, dealId);
         } 
     } else {
         const budget = budgets.reduce((old, current) => {
@@ -45,18 +40,8 @@ export async function rdSaveProcess(userId: string, budgets: DataContentProps[],
 
             return currentValue < oldValue ? current : old;
         }, budgets[0]);
-
-        try {
-            await api
-                .getTariffPipe(budget.arrComplete.selectionRange.startDate, budget.arrComplete.selectionRange.endDate)
-                .then((tariff_id) => {
-                    // pipe.addFile();
-                    api.rdAddProduct(dealId, tariff_id.product_rd, budget?.total?.total ?? 0)
-                })
-        } catch (error) {}
+        await apiSave(budget, dealId);
     }
-
-
 
     await api.rdChangeStage(
         dealId, 
@@ -66,4 +51,19 @@ export async function rdSaveProcess(userId: string, budgets: DataContentProps[],
         realBudget.arrComplete.childValue, 
         realBudget.arrComplete.petValue
         )
+}
+
+
+async function apiSave(budget: DataContentProps, dealId: string) {
+    const api = useApi();
+    try {
+        await api
+            .getTariffORM(budget.arrComplete.selectionRange.startDate, budget.arrComplete.selectionRange.endDate)
+            .then((tariff_id) => {
+                // pipe.addFile();
+                api.rdAddProduct(dealId, tariff_id.product_rd, budget?.total?.total ?? 0)
+            })
+
+            console.log('salvou normal')
+    } catch (error) {}
 }
