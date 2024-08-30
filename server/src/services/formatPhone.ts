@@ -1,4 +1,5 @@
 const formatPhone = (phone: string) => {
+    if(!phone) return '';
     // retira tudo que não for numero
     phone = phone.replace(/\D/g, '');
 
