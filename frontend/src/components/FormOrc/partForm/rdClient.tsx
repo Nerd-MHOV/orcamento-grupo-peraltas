@@ -4,7 +4,7 @@ import { useGenerateTariff, useGenerateTariffCorporate } from "../../../context/
 import useQuery from "../../../hooks/urlQuery/query";
 
 export const RdClientInputForm = ({ corporate = false }) => {
-    const { callHandleForm, getClientName } = corporate ? useGenerateTariffCorporate() : useGenerateTariff();
+    const { callHandleForm, getClientName, changeIdClient } = corporate ? useGenerateTariffCorporate() : { ...useGenerateTariff(), changeIdClient: () => {}};
     const query = useQuery()
     const [value, setValue] = useState<String>()
 
@@ -19,6 +19,7 @@ export const RdClientInputForm = ({ corporate = false }) => {
             value={value}
             onChange={(e) => {
                 setValue(e.target.value)
+                changeIdClient(e.target.value)
                 callHandleForm()
                 getClientName(e.target.value)
             }}

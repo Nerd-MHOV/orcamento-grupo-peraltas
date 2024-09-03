@@ -39,11 +39,10 @@ export function useComponentButtonsBudget(corporate: boolean) {
         return;
       }
   
-  
-      if(!corporate) generatePdfBudget();
-      else setOpenModalEditableText(true);
-      
       handleOpenBackdrop();
+      if(!corporate) generatePdfBudget();
+      else if(bodyResponseBudget) setOpenModalEditableText(true);
+      else handleCloseBackdrop();
      };
   
     const handleCloseModal = () => {
@@ -65,13 +64,43 @@ export function useComponentButtonsBudget(corporate: boolean) {
         arrUser.phone,
         slateToPdfMake(text),
       );
-  
-  
+
       // save budget
       const deal_id = bodyResponseBudget.idClient;
       let response;
       if (deal_id) response = await api.rdGetaDeal(deal_id);
-      // api.saveBudget(userLogin, bodyResponseBudget, true, response?.name);
+      api.saveBudgetCorp(userLogin, bodyResponseBudget, true, response?.name);
+  
+      handleCloseBackdrop();
+    }
+
+    async function generatePdfBudget(group = false) {
+      handleCloseModal();
+      if (budgets.length < 1) {
+        return;
+      }
+      await rdSaveProcess(budgets, group);
+      if (
+        budgets.find((budget) =>
+          budget.arrComplete.responseForm.category.match(/Day-Use/)
+        )
+      ) {
+        return;
+      }
+      const arrUser = await api.findUniqueUser(userLogin);
+      await pdfBudget(
+        budgets,
+        arrUser.name,
+        arrUser.email,
+        arrUser.phone,
+      );
+  
+      const deal_id = budgets[0].arrComplete.responseForm.rd_client;
+      let response;
+      if (deal_id) response = await api.rdGetaDeal(deal_id);
+  
+      api.saveBudget(userLogin, budgets, true, response?.name)
+  
   
       handleCloseBackdrop();
     }
@@ -107,36 +136,7 @@ export function useComponentButtonsBudget(corporate: boolean) {
       handleCloseBackdrop()
     }
   
-    async function generatePdfBudget(group = false) {
-      handleCloseModal();
-      if (budgets.length < 1) {
-        return;
-      }
-      await rdSaveProcess(budgets, group);
-      if (
-        budgets.find((budget) =>
-          budget.arrComplete.responseForm.category.match(/Day-Use/)
-        )
-      ) {
-        return;
-      }
-      const arrUser = await api.findUniqueUser(userLogin);
-      await pdfBudget(
-        budgets,
-        arrUser.name,
-        arrUser.email,
-        arrUser.phone,
-      );
-  
-      const deal_id = budgets[0].arrComplete.responseForm.rd_client;
-      let response;
-      if (deal_id) response = await api.rdGetaDeal(deal_id);
-  
-      api.saveBudget(userLogin, budgets, true, response?.name)
-  
-  
-      handleCloseBackdrop();
-    }
+   
 
     return {
         openModalConfirmGroup,

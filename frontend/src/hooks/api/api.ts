@@ -365,6 +365,17 @@ export const useApi = () => ({
         return response.data;
     },
 
+    saveBudgetCorp: async (user_id: string, budget: CorporateBodyResponseBudget, remake = true, name = "") => {
+        const response = await api.post("/save-budget-corp", {
+            user_id,
+            budget,
+            remake,
+            name,
+        });
+
+        return response.data;
+    },
+
     renameBudget: async (id: string, name: string) => {
         const response = await api.put("/save-budget/rename", {
             id, name
