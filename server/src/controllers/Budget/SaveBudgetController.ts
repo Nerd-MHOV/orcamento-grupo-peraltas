@@ -45,4 +45,36 @@ export class SaveBudgetController {
     return response.json(updated);
   }
 
+  async saveCorp(request: Request, response: Response) {
+    const { user_id, budget, remake = true, name = ""  } = request.body;
+    const id = budget.idClient;
+
+    if(remake && id) {
+      const ignore = ["perdido", "ganho", "none"]
+      await prismaClient.saveBudgetsCorp.updateMany({
+        where: {
+          budget: {
+              path: ["idClient"],
+              string_contains: id,
+          },
+          status: {
+            notIn: ignore
+          }
+        },
+        data: {
+          status: "refeito"
+        }
+      })
+    }
+    const save = await prismaClient.saveBudgetsCorp.create({
+      data: {
+        user_id,
+        budget,
+        ...!id ? {status: "none"} : "",
+        name,
+      },
+    });
+
+    return response.json(save);
+  }
 }

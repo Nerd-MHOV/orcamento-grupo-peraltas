@@ -11,18 +11,20 @@ datasource db {
 }
 
 model User {
-  id          String             @id @default(uuid())
-  email       String             @unique
-  phone       String
-  name        String             @unique
-  username    String             @unique
-  password    String
-  user_rd     String
-  token_rd    String
-  level       Float              @default(1)
-  active      Boolean            @default(true)
-  SaveBudgets SaveBudgets[]
-  Favorites   BudgetsFavorites[]
+  id              String             @id @default(uuid())
+  email           String             @unique
+  phone           String
+  name            String             @unique
+  username        String             @unique
+  password        String
+  user_rd         String
+  token_rd        String
+  level           Float              @default(1)
+  active          Boolean            @default(true)
+
+  SaveBudgets     SaveBudgets[]
+  Favorites       BudgetsFavorites[]
+  SaveBudgetsCorp SaveBudgetsCorp[]
 
   @@map("users")
 }
@@ -170,16 +172,30 @@ model DUTariffValues {
 }
 
 model SaveBudgets {
-  id          String             @id @default(uuid())
-  user_id     String
-  budgets     Json
-  name        String?
-  status      String             @default("em andamento")
-  createdAt   DateTime           @default(now())
+  id        String   @id @default(uuid())
+  user_id   String
+  budgets   Json
+  name      String?
+  status    String   @default("em andamento")
+  createdAt DateTime @default(now())
+
   responsible User               @relation(fields: [user_id], references: [id])
   favorites   BudgetsFavorites[]
 
   @@map("save_budgets")
+}
+
+model SaveBudgetsCorp {
+  id        String   @id @default(uuid())
+  user_id   String
+  budget    Json
+  name      String
+  status    String   @default("em andamento")
+  createdAt DateTime @default(now())
+
+  responsible User @relation(fields: [user_id], references: [id])
+
+  @@map("save_budgets_corp")
 }
 
 model BudgetsFavorites {

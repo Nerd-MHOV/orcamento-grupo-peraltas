@@ -183,6 +183,7 @@ routes.post("/budget", calcBudget.handle);
 routes.post("/budget-du", calcBudgetDU.handle);
 routes.post("/budget-corp", calcCorpBudget.handle);
 routes.post("/save-budget", saveBudget.handle);
+routes.post("/save-budget-corp", saveBudget.saveCorp);
 routes.put("/save-budget/rename", saveBudget.renameBudget);
 routes.get("/budget", getBudget.handle);
 
