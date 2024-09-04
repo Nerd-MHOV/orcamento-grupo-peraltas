@@ -1,4 +1,5 @@
 import {useApi} from "../../../hooks/api/api";
+import { CorporateBodyResponseBudget } from "../../../hooks/api/interfaces";
 import DataContentProps from "../interfaces/tableBudgetDataContentProps";
 import {format} from "date-fns";
 
@@ -20,18 +21,17 @@ export async function rdSaveProcess(budgets: DataContentProps[], group = false) 
         return;
     }
 
-
-
-    // delete old products
-    const productsToDelete = (await api.rdGetaDeal(dealId)).deal_products
-    for (const prod of productsToDelete) {
-        await api.rdDeleteProduct(dealId, prod.id)
-    }
+    await deleteOldProd(dealId);
     
     if(group) {
         // add all budgets
         for (const budget of budgets) {
-            await apiSave(budget, dealId);
+            await apiAddProd(
+                budget.arrComplete.selectionRange.startDate,
+                 budget.arrComplete.selectionRange.endDate,
+                 budget?.total?.total ?? 0,
+                  dealId
+                );
         } 
     } else {
         const budget = budgets.reduce((old, current) => {
@@ -40,7 +40,12 @@ export async function rdSaveProcess(budgets: DataContentProps[], group = false) 
 
             return currentValue < oldValue ? current : old;
         }, budgets[0]);
-        await apiSave(budget, dealId);
+        await apiAddProd(
+            budget.arrComplete.selectionRange.startDate,
+             budget.arrComplete.selectionRange.endDate,
+             budget?.total?.total ?? 0,
+            dealId
+            );
     }
 
     await api.rdChangeStage(
@@ -53,15 +58,54 @@ export async function rdSaveProcess(budgets: DataContentProps[], group = false) 
         )
 }
 
+export async function rdSaveProcessCorp(budget: CorporateBodyResponseBudget) {
+    const api = useApi();
+    const idClient = budget.idClient;
+    if(!idClient) return;
 
-async function apiSave(budget: DataContentProps, dealId: string) {
+    const dateIn = new Date(budget.dateRange[0].startDate)
+    const dateOut = new Date(budget.dateRange[0].endDate)
+    const adt = budget.rooms.reduce((accumulator, currentValue) => accumulator + currentValue.adt, 0);
+    const chd = budget.rooms.map( room => room.chd ).flat();
+    const pet = budget.rooms.map( room => room.pet ).flat();
+    console.log(typeof dateIn);
+    await deleteOldProd(idClient);
+    await apiAddProd(
+        dateIn,
+        dateOut,
+        budget.rowsValues.total.total,
+        idClient,
+    );
+    await api.rdChangeStage(
+        idClient,
+        format(dateIn, "dd/MM/yyyy"),
+        format(dateOut, "dd/MM/yyyy"),
+        adt,
+        chd,
+        pet,
+    )
+}
+
+async function deleteOldProd(dealId: string) {
+    const api = useApi();
+    // delete old products
+    const productsToDelete = (await api.rdGetaDeal(dealId)).deal_products
+    for (const prod of productsToDelete) {
+        await api.rdDeleteProduct(dealId, prod.id)
+    }
+}
+async function apiAddProd(
+    dateIn: Date,
+    dateOut: Date,
+    total: number,
+    dealId: string) {
     const api = useApi();
     try {
         await api
-            .getTariffORM(budget.arrComplete.selectionRange.startDate, budget.arrComplete.selectionRange.endDate)
+            .getTariffORM(dateIn, dateOut)
             .then((tariff_id) => {
                 // pipe.addFile();
-                api.rdAddProduct(dealId, tariff_id.product_rd, budget?.total?.total ?? 0)
+                api.rdAddProduct(dealId, tariff_id.product_rd, total)
             })
 
             console.log('salvou normal')

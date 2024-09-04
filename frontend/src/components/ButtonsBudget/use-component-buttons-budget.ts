@@ -3,7 +3,7 @@ import { AuthContext } from "../../context/authContext";
 import { useApi } from "../../hooks/api/api";
 import pdfBudget from "../../context/generateTariff/functions/pdfBudget";
 import pdfDescription from "../../context/generateTariff/functions/pdfDescription";
-import { rdSaveProcess } from "../../context/generateTariff/functions/rdSaveProcess";
+import { rdSaveProcess, rdSaveProcessCorp } from "../../context/generateTariff/functions/rdSaveProcess";
 import { useGenerateTariff, useGenerateTariffCorporate } from "../../context/generateTariff/generateTariff";
 import * as React from "react";
 import pdfBudgetCorp from "../../context/generateTariff/functions/pdfBudgetCorp/pdfBudgetCorp";
@@ -56,6 +56,7 @@ export function useComponentButtonsBudget(corporate: boolean) {
         handleCloseBackdrop();
         return;
       }
+      await rdSaveProcessCorp(bodyResponseBudget);
       const arrUser = await api.findUniqueUser(userLogin);
       await pdfBudgetCorp(
         bodyResponseBudget!,
