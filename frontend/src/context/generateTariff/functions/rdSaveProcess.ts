@@ -68,7 +68,6 @@ export async function rdSaveProcessCorp(budget: CorporateBodyResponseBudget) {
     const adt = budget.rooms.reduce((accumulator, currentValue) => accumulator + currentValue.adt, 0);
     const chd = budget.rooms.map( room => room.chd ).flat();
     const pet = budget.rooms.map( room => room.pet ).flat();
-    console.log(typeof dateIn);
     await deleteOldProd(idClient);
     await apiAddProd(
         dateIn,
@@ -107,7 +106,5 @@ async function apiAddProd(
                 // pipe.addFile();
                 api.rdAddProduct(dealId, tariff_id.product_rd, total)
             })
-
-            console.log('salvou normal')
     } catch (error) {}
 }
