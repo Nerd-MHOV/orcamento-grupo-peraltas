@@ -1,11 +1,4 @@
-import { format } from "date-fns";
-import { Dialog } from "../../services/chatguru/Dialog";
-import formatPhone from "../../services/formatPhone";
-import { rdCreateTask } from "../../services/rdstation/createTask";
 import { Day_x } from "./CheckDayToChangeStage";
-import { checkDeadLine } from "./CheckDeadLine";
-import { UpdateCustomFieldsRDToCG } from "./UpdateCustomFieldsRDToCG";
-import updateRDInformations from "./functions/updateRDInformations";
 import preChangeStageDefault from "./functions/preChangeStageDefault";
 import simpleDialogDaysToStage from "./functions/simpleDialog";
 import { rdGetContactDeal } from "../../services/rdstation/getContactDeal";
