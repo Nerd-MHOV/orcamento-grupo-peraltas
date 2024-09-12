@@ -8,7 +8,7 @@ export function rdGetADeal(deal_id: string): Promise<Deal> {
                 resolve(response.data);
             })
             .catch(error => {
-                console.error(" [ ERROR ] - error getting negotiations in RD Stations");
+                console.error(" [ ERROR ] - error getting negotiations in RD Stations", deal_id);
                 reject(error);
             });
     });

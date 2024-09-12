@@ -14,23 +14,28 @@ export async function UpdateDeal(deal_id: string, params: {
         if (deal_id === "") reject(" [ ERROR ] - incorrect parameter")
         if (params.deal?.deal_custom_fields) {
             // pegar todos os campos ja existentes, PQ O RD É UMA MERDA
-            const deal = await rdGetADeal(deal_id);
-            const newDealCustomFields = deal.deal_custom_fields.map(cf => {
-                return {
-                    custom_field_id: cf.custom_field_id,
-                    value: cf.value,
-                }
-            })
-            params.deal?.deal_custom_fields?.forEach((deal_cf) => {
-                const indexCF = newDealCustomFields.findIndex(cf => cf.custom_field_id === deal_cf.custom_field_id);
-                if (indexCF !== -1) {
-                    newDealCustomFields[indexCF].value = deal_cf.value;
-                } else {
-                    newDealCustomFields.push({ ...deal_cf })
-                }
-            })
+            try {
+                const deal = await rdGetADeal(deal_id)
 
-            params.deal.deal_custom_fields = newDealCustomFields;
+                const newDealCustomFields = deal.deal_custom_fields.map(cf => {
+                    return {
+                        custom_field_id: cf.custom_field_id,
+                        value: cf.value,
+                    }
+                })
+                params.deal?.deal_custom_fields?.forEach((deal_cf) => {
+                    const indexCF = newDealCustomFields.findIndex(cf => cf.custom_field_id === deal_cf.custom_field_id);
+                    if (indexCF !== -1) {
+                        newDealCustomFields[indexCF].value = deal_cf.value;
+                    } else {
+                        newDealCustomFields.push({ ...deal_cf })
+                    }
+                })
+
+                params.deal.deal_custom_fields = newDealCustomFields;
+            } catch (error) {
+                reject(' [ ERROR ] - Deal Id is not valid!')
+            }
         }
 
 

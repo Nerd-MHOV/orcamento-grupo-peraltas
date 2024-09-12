@@ -1,6 +1,7 @@
 import {rdGetDeals} from "../services/rdstation/getDeals";
 import {prismaClient} from "../database/prismaClient";
 import {winChange} from "../services/winChange";
+import { Deal } from "../services/rdstation/rd.types";
 
 
 /*
@@ -95,7 +96,8 @@ export const assistOpportunity = async (page = 1) => {
 
             deal_change = true
         }
-
+        
+        // HOSPEDAGEM --------------------------------------------------init
         const budgets_deal = await prismaClient.saveBudgets.findMany({
             where: {
                 budgets: {
@@ -105,22 +107,24 @@ export const assistOpportunity = async (page = 1) => {
         })
 
         if (budgets_deal.length > 0) {
-            const onlyWin = budgets_deal.filter(budget => budget.status === 'ganho')
-            const onlyLose = budgets_deal
-                .filter(budget => budget.status === 'perdido')
-            if (deal.win === true && onlyWin.length !== budgets_deal.length) {
-                await winChange(deal, 'ganho')
-                deal_change = true
-            }
-            else if (deal.win === false && onlyLose.length !== budgets_deal.length) {
-                await winChange(deal, 'perdido')
-                deal_change = true
-            }
-            else if (deal.win === null && (onlyWin.length > 0 || onlyLose.length > 0)) {
-                await winChange(deal, "em andamento")
-                deal_change = true
-            }
+            deal_change = await updateStatusInOpportunity(budgets_deal, deal, false);
+
         }
+        // HOSPEDAGEM --------------------------------------------------end
+
+        // CORPORATIVO --------------------------------------------------init
+        const corp_deal = await prismaClient.saveBudgetsCorp.findMany({
+            where: {
+                budget: {
+                    path: ["idClient"], string_contains: db_deal.id,
+                },
+            }
+        })
+        if (corp_deal.length > 0) {
+            console.log('change corp')
+            deal_change = await updateStatusInOpportunity(corp_deal, deal, true);
+        }
+        // CORPORATIVO --------------------------------------------------end
 
 
         if (deal_change) {
@@ -160,4 +164,24 @@ export const assistOpportunity = async (page = 1) => {
         has_change, find_last_edit, page, has_more,
     }
 
+}
+
+
+async function updateStatusInOpportunity(budget_deal: {status: string}[], deal: Deal, corp: boolean) {
+    let deal_change = false
+    const onlyWin = budget_deal.filter(budget => budget.status === 'ganho')
+    const onlyLose = budget_deal.filter(budget => budget.status === 'perdido')
+    if (deal.win === true && onlyWin.length !== budget_deal.length) {
+        await winChange(deal, 'ganho', corp)
+        deal_change = true
+    }
+    else if (deal.win === false && onlyLose.length !== budget_deal.length) {
+        await winChange(deal, 'perdido', corp)
+        deal_change = true
+    }
+    else if (deal.win === null && (onlyWin.length > 0 || onlyLose.length > 0)) {
+        await winChange(deal, "em andamento", corp)
+        deal_change = true
+    }
+    return deal_change;
 }

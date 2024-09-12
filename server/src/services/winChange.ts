@@ -4,11 +4,23 @@ import {rdApiAdm} from "./rdstation/rdApiAdm";
 import {Deal} from "./rdstation/rd.types";
 import { UpdateDeal } from "./rdstation/updateDeal";
 
-export const winChange = async (deal: Deal, status: string ) => {
+export const winChange = async (deal: Deal, status: string, corp = false ) => {
     console.log("altomação: ", status, deal.name)
 
     // mudar etapa no db
-    const updatedDb = prismaClient.saveBudgets.updateMany({
+    const updatedDb = corp 
+    ? prismaClient.saveBudgetsCorp.updateMany({
+        where: {
+            budget: {
+                path: ["idClient"],
+                string_contains: deal.id,
+            },
+        },
+        data: {
+            status: status
+        }
+    })
+    : prismaClient.saveBudgets.updateMany({
         where: {
             budgets: {
                 path: ["0", "arrComplete", "responseForm", "rd_client"],
@@ -20,6 +32,9 @@ export const winChange = async (deal: Deal, status: string ) => {
         }
     })
 
+    console.log(updatedDb);
+
+    
     // mudar etapa no rd
     const updateRd =  UpdateDeal(deal.id, {
         deal: {
@@ -34,6 +49,7 @@ export const winChange = async (deal: Deal, status: string ) => {
     
 
     return await Promise.all([updatedDb, updateRd]).then(res => {
+        console.log(res);
         return true
     }) .catch(err => {
         return false
