@@ -53,6 +53,7 @@ export const ActionInputForm = ({ corporate = false }) => {
         id="applied_in"
         value={select}
         label="Aplicar em"
+        name="action"
         onChange={(e) => {
           setActionSelected(action.find((el) => el.name === e.target.value));
         }}

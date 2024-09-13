@@ -22,6 +22,7 @@ export interface ArrComplete {
         rd_client?: string;
         housingUnit: string;
         discount?: string | number;
+        action?: string;
     }
 }
 
