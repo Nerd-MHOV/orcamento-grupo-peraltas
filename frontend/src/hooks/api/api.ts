@@ -19,6 +19,7 @@ import {
 } from "./interfaces";
 import { CorporateBodySendBudget } from "../../context/generateTariff/interfaces/corporateProps";
 import { API_URL } from "../../config";
+import { insights } from "./all/insights";
 
 const storageData = localStorage.getItem("authToken");
 
@@ -30,6 +31,9 @@ const api = axios.create({
 });
 
 export const useApi = () => ({
+    insights: insights(api),
+
+
     validateToken: async () => {
         const response = await api.get("/validate");
         return response.data;

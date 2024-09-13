@@ -7,19 +7,42 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { head, Row } from "./helpers";
 import { ApiDiscountProps } from "../../hooks/api/interfaces";
+import { ActionsInsightsApi } from "../../hooks/api/all/insights";
+import { useState } from "react";
+import InsightCloud from "./insights-cloud";
 
 interface CollapsibleTableProps {
   rows: ApiDiscountProps[];
   ButtonsOn?: boolean;
   reloadRows?: VoidFunction;
+  insights: ActionsInsightsApi
 }
 
 export default function CollapsibleTableDiscounts({
   rows,
+  insights,
   ButtonsOn = true,
   reloadRows = () => {},
 }: CollapsibleTableProps) {
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [hoveredRow, setHoveredRow] = useState<ApiDiscountProps | null>(null);
+
+  const handleMouseMove = (event: React.MouseEvent<HTMLTableCellElement, MouseEvent>) => {
+    setMousePosition({ x: event.clientX, y: event.clientY });
+  };
+
+  const handleMouseEnter = (row: ApiDiscountProps) => {
+    setHoveredRow(row);
+  };
+
+  const handleMouseLeave = () => {
+    setHoveredRow(null);
+  };
+
+
   return (
+    <div onMouseMove={handleMouseMove}>
+
     <TableContainer component={Paper}>
       <Table aria-label="collapsible table">
         <TableHead>
@@ -37,10 +60,14 @@ export default function CollapsibleTableDiscounts({
               row={row}
               ButtonsOn={ButtonsOn}
               reloadRows={reloadRows}
+              onMouseEnter={() => handleMouseEnter(row)}
+              onMouseLeave={(handleMouseLeave)}
             />
           ))}
         </TableBody>
       </Table>
     </TableContainer>
+    {hoveredRow && <InsightCloud mousePosition={mousePosition} insights={insights[hoveredRow.name]} />}
+    </div>
   );
 }

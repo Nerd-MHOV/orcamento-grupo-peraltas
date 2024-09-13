@@ -6,13 +6,17 @@ import CollapsibleTableDiscounts from "../../components/TableDiscounts";
 import { useApi } from "../../hooks/api/api";
 import { ApiDiscountProps } from "../../hooks/api/interfaces";
 import "./style.scss";
+import { ActionsInsightsApi } from "../../hooks/api/all/insights";
 
 export const DiscountsPage = () => {
   const api = useApi();
   const [discounts, setDiscounts] = useState<ApiDiscountProps[]>([]);
+  const [insights, setInsights] = useState<ActionsInsightsApi>({});
 
   const getDiscounts = async () => {
     const response = await api.getAllDiscounts();
+    const insResponse = await api.insights.actions();
+    setInsights(insResponse);
     setDiscounts(response);
   };
 
@@ -33,6 +37,7 @@ export const DiscountsPage = () => {
           <div className="table">
             <CollapsibleTableDiscounts
               rows={discounts}
+              insights={insights}
               reloadRows={getDiscounts}
             />
           </div>

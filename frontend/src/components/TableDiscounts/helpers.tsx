@@ -47,6 +47,8 @@ export function Row(props: {
   row: ApiDiscountProps;
   ButtonsOn: boolean;
   reloadRows: VoidFunction;
+  onMouseEnter?: React.MouseEventHandler<HTMLTableCellElement>
+  onMouseLeave?: React.MouseEventHandler<HTMLTableCellElement>
 }) {
   const api = useApi();
   const { row, ButtonsOn, reloadRows } = props;
@@ -101,7 +103,7 @@ export function Row(props: {
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
         </TableCell>
-        <TableCell component="th" scope="row">
+        <TableCell component="th" scope="row" onMouseEnter={props.onMouseEnter} onMouseLeave={props.onMouseLeave}>
           {row.name}
         </TableCell>
         <TableCell>{row.percent_general}%</TableCell>
