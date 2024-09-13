@@ -194,12 +194,12 @@ async function pdfDescription(
 
         const content: any[] = [
             {
-                text: singleBudget.arrComplete.responseForm.category,
+                text: singleBudget.arrComplete?.responseForm.category,
                 style: {fontSize: 18},
                 alignment: "center",
             },
             {
-                text: `${singleBudget.arrComplete.responseForm.housingUnit} - pensão: ${singleBudget.arrComplete.responseForm.pension}`,
+                text: `${singleBudget.arrComplete?.responseForm.housingUnit} - pensão: ${singleBudget.arrComplete?.responseForm.pension}`,
                 style: {fontSize: 8},
                 alignment: "center",
             },
@@ -233,7 +233,7 @@ async function pdfDescription(
         },
         pageMargins: 15,
         content: [
-            ...HeaderCalcMemory(namePerson, realBudget.arrComplete.responseForm.rd_client),
+            ...HeaderCalcMemory(namePerson, realBudget.arrComplete?.responseForm.rd_client || ''),
             //for
             {
                 text: "_______________________________________________________________________________________",

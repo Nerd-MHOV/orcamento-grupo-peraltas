@@ -348,10 +348,10 @@ export const useApi = () => ({
 
     saveBudget: async (user_id: string, budgets: DataContentProps[], remake = true, name = "") => {
 
-        const budgetId = budgets.find(obj => obj.arrComplete.responseForm.rd_client);
+        const budgetId = budgets.find(obj => obj.arrComplete?.responseForm.rd_client);
         if (budgetId) {
             budgets.forEach(obj => {
-                obj.arrComplete.responseForm.rd_client = budgetId.arrComplete.responseForm.rd_client;
+                obj.arrComplete!.responseForm.rd_client = budgetId.arrComplete?.responseForm.rd_client;
             })
         }
 

@@ -10,12 +10,10 @@ import {
 import { calcTotal } from "../../context/generateTariff/functions/calcTotal";
 import { useGenerateTariff, useGenerateTariffCorporate } from "../../context/generateTariff/generateTariff";
 import "./style.scss";
-import {useModalDescriptionUniqueRoom} from "../../context/generateTariff/context/ModalDescriptionUniqueRoomContext";
 import relationWithDiscountAndNoDiscount from "./relationWithDiscountAndNoDiscount";
 
 const TableCalc = ({ corporate = false }) => {
   const { dataTable: data, handleClickOpenModalDiscount } = corporate ? useGenerateTariffCorporate() : useGenerateTariff()
-  const { open: showRoom } = corporate ? useModalDescriptionUniqueRoom() : { open: (roomID: number) => {} }
   let calc = calcTotal(data);
   let totalPerRow = calc.totalPerRow;
   let total = calc.total;
@@ -55,7 +53,6 @@ const TableCalc = ({ corporate = false }) => {
                 component="th"
                 scope="row"
                 style={{ background: "rgb(248,248,248)", cursor: "pointer" }}
-                onDoubleClick={() => {showRoom(row.id)}}
               >
                 {row.desc}
               </TableCell>

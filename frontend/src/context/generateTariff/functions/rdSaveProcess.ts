@@ -12,8 +12,8 @@ export async function rdSaveProcess(budgets: DataContentProps[], group = false) 
     let realBudget: DataContentProps = budgets[0];
     let dealId = "";
     for (let budget of budgets) {
-        if (budget.arrComplete.responseForm.rd_client) {
-            dealId = budget.arrComplete.responseForm.rd_client;
+        if (budget.arrComplete?.responseForm.rd_client) {
+            dealId = budget.arrComplete?.responseForm.rd_client;
         }
     }
 
@@ -27,8 +27,8 @@ export async function rdSaveProcess(budgets: DataContentProps[], group = false) 
         // add all budgets
         for (const budget of budgets) {
             await apiAddProd(
-                budget.arrComplete.selectionRange.startDate,
-                 budget.arrComplete.selectionRange.endDate,
+                budget.arrComplete?.selectionRange.startDate!,
+                 budget.arrComplete?.selectionRange.endDate!,
                  budget?.total?.total ?? 0,
                   dealId
                 );
@@ -41,8 +41,8 @@ export async function rdSaveProcess(budgets: DataContentProps[], group = false) 
             return currentValue < oldValue ? current : old;
         }, budgets[0]);
         await apiAddProd(
-            budget.arrComplete.selectionRange.startDate,
-             budget.arrComplete.selectionRange.endDate,
+            budget.arrComplete?.selectionRange.startDate!,
+             budget.arrComplete?.selectionRange.endDate!,
              budget?.total?.total ?? 0,
             dealId
             );
@@ -50,11 +50,11 @@ export async function rdSaveProcess(budgets: DataContentProps[], group = false) 
 
     await api.rdChangeStage(
         dealId, 
-        format(realBudget.arrComplete.selectionRange.startDate, "dd/MM/yyyy"), 
-        format(realBudget.arrComplete.selectionRange.endDate, "dd/MM/yyyy"), 
-        +realBudget.arrComplete.responseForm.adult, 
-        realBudget.arrComplete.childValue, 
-        realBudget.arrComplete.petValue
+        format(realBudget.arrComplete?.selectionRange.startDate!, "dd/MM/yyyy"), 
+        format(realBudget.arrComplete?.selectionRange.endDate!, "dd/MM/yyyy"), 
+        +realBudget.arrComplete?.responseForm.adult!, 
+        realBudget.arrComplete?.childValue || [], 
+        realBudget.arrComplete?.petValue || []
         )
 }
 

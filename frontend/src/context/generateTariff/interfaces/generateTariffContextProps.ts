@@ -1,7 +1,7 @@
 import SelectionRangeProps from "./selectionRangeProps";
 import {ApiDiscountProps, ApiRequirementsProps} from "../../../hooks/api/interfaces";
 import {AppHotelProps} from "../../../hooks/appHotel/interfaces";
-import DataContentProps from "./tableBudgetDataContentProps";
+import DataContentProps, { ArrComplete } from "./tableBudgetDataContentProps";
 import RequirementSubmitProps, { RequirementSubmitValuesProps } from "./requirementSubmitProps";
 import OccupancyProps from "./occupancyProps";
 import { CategoryOptionsProps } from "./categoriesProps";
@@ -36,7 +36,7 @@ export type occupacyUHProps = {
 }
 
 export interface InfoBudgetGTCP {
-    addRows(rows: any[], arrComplete: any): void;
+    addRows(rows: any[], arrComplete: ArrComplete): void;
     deleteLine(indexDelete: number): void;
     handleSaveBudget: () => Promise<void>;
     clearTariffs: () => Promise<void>;

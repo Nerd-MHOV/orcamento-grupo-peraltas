@@ -20,7 +20,7 @@ export const InfoTable = ({ corporate = false }) => {
         </Typography>
         {budgets.map((budget, index) => {
           let countDaily = budget.columns.length - 1;
-          let primary = `${countDaily} diárias - ${budget.arrComplete.responseForm.category}`;
+          let primary = `${countDaily} diárias - ${budget.arrComplete?.responseForm.category}`;
           let total = 0;
           budget.rows.map((row) => {
             total += Number(row.total);
@@ -46,7 +46,7 @@ export const InfoTable = ({ corporate = false }) => {
                 <ListItemText
                   primary={primary}
                   secondary={`Pensão: ${
-                    budget.arrComplete.responseForm.pension
+                    budget.arrComplete?.responseForm.pension
                   } \n Total: R$ ${total.toLocaleString("pt-BR", {
                     minimumFractionDigits: 2,
                     maximumFractionDigits: 2,

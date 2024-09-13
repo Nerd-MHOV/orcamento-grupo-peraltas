@@ -33,12 +33,8 @@ async function pdfBudget(
   const titleMonth = months[monthNum - 1];
 
   const arrValues: any[] = [];
-  let dealId = 0;
 
   for (let budget of budgets) {
-    if (budget.arrComplete.responseForm.numberPipe) {
-      dealId = budget.arrComplete.responseForm.numberPipe;
-    }
     const rowBudget = [];
     const layoutRooms = getLayoutRooms(
       budget.arrComplete.responseForm.adult,

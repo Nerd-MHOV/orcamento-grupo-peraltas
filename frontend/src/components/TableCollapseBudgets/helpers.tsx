@@ -27,6 +27,7 @@ import {Star, StarOutline, StartOutlined} from "@mui/icons-material";
 import {StatusBudget} from "../StatusBudget/StatusBudget";
 import BudgetNameField from "./BudgetNameField";
 import Button from "@mui/material/Button";
+import DataContentProps from "../../context/generateTariff/interfaces/tableBudgetDataContentProps";
 
 export const head = ["Data", "nome", "User", "ID RD", "UHs", "TOTAL", "status", "favoritos"];
 
@@ -60,7 +61,7 @@ export interface BudgetsFavoritesProps {
 
 export interface BudgetsContentProps {
     rows: RowsProps[];
-    columns: string[] | [];
+    columns: string[];
     arrComplete: BudgetsArrCompleteProps;
     total: {
         total: number; noDiscount: number;
@@ -77,7 +78,8 @@ export interface BudgetsArrCompleteProps {
 export interface BudgetsResponseFormProps {
     adult: string | number;
     pension: PensionsOptionsProps;
-    category: CategoryOptionsProps;
+    category: string;
+    categoryComplete: CategoryOptionsProps;
     discount?: string | number;
     rd_client?: string;
     housingUnit: string;
@@ -98,9 +100,8 @@ export function Row(props: {
     const [openUH, setOpenUH] = React.useState(false);
     const {userLogin} = React.useContext(AuthContext);
 
-    async function generatePdfDescription(budgets: BudgetsContentProps[]) {
-        const arrUser = await api.findUniqueUser(userLogin);
-        const deal_id = budgets[0].arrComplete.responseForm?.rd_client;
+    async function generatePdfDescription(budgets: DataContentProps[]) {
+        const deal_id = budgets[0].arrComplete?.responseForm.rd_client;
         let name: string;
         name = "";
         if (typeof deal_id === "string") api.rdGetaDeal(deal_id)

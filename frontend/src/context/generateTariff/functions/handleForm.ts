@@ -2,6 +2,7 @@ import serialize from "form-serialize";
 import { useApi } from "../../../hooks/api/api";
 import RowModalDiscount from "../interfaces/rowModalDiscount";
 import SelectionRangeProps from "../interfaces/selectionRangeProps";
+import { ArrComplete } from "../interfaces/tableBudgetDataContentProps";
 
 export interface selectionRange {
   startDate: Date;
@@ -14,7 +15,7 @@ export async function handleForm(
   selectionRange: SelectionRangeProps,
   unitaryDiscount: RowModalDiscount[],
   dailyCourtesy: boolean,
-  addRows: (rows: any[], arrComplete: any) => void,
+  addRows: (rows: any[], arrComplete: ArrComplete) => void,
 ) {
   const api = useApi();
 

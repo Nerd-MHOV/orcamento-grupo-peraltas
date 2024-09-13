@@ -28,7 +28,7 @@ export function useComponentButtonsBudget(corporate: boolean) {
   
     const handleOpenModalConfirmGroup = () => {
       const dealId = budgets.reduce((acc, budget) => {
-        if (!acc && budget.arrComplete.responseForm.rd_client) {
+        if (!acc && budget.arrComplete?.responseForm.rd_client) {
           return budget.arrComplete.responseForm.rd_client;
         }
         return acc;
@@ -83,7 +83,7 @@ export function useComponentButtonsBudget(corporate: boolean) {
       await rdSaveProcess(budgets, group);
       if (
         budgets.find((budget) =>
-          budget.arrComplete.responseForm.category.match(/Day-Use/)
+          budget.arrComplete?.responseForm.category.match(/Day-Use/)
         )
       ) {
         return;
@@ -96,7 +96,7 @@ export function useComponentButtonsBudget(corporate: boolean) {
         arrUser.phone,
       );
   
-      const deal_id = budgets[0].arrComplete.responseForm.rd_client;
+      const deal_id = budgets[0].arrComplete?.responseForm.rd_client;
       let response;
       if (deal_id) response = await api.rdGetaDeal(deal_id);
   
@@ -129,7 +129,7 @@ export function useComponentButtonsBudget(corporate: boolean) {
       //   return;
       // }
       handleOpenBackdrop()
-      const deal_id = budgets[0].arrComplete.responseForm.rd_client;
+      const deal_id = budgets[0].arrComplete?.responseForm.rd_client;
       let response;
       if (deal_id) response = await api.rdGetaDeal(deal_id);
       let name = response?.name || "undefined";

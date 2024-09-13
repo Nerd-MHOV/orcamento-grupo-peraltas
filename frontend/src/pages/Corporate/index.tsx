@@ -9,18 +9,12 @@ import { GenerateTariffCorporateProvider} from "../../context/generateTariff/gen
 import ModalPermissionDiscount from "../../components/ModalPermissionDiscount";
 import { FormOrcCorporate } from "../../components/FormOrc/corporate";
 import { ListUHsCorporate } from "../../components/ListUHsCorporate/ListUHsCorporate";
-import {
-  ModalDescriptionUniqueRoomProvider
-} from "../../context/generateTariff/context/ModalDescriptionUniqueRoomContext";
-import ModalDescriptionUniqueRoom from "./ModalDescriptionUniqueRoom";
 import TableCalcCorp from "../../components/TableCalc/corp";
 import { ModalDiscount } from "../../components/ModalDiscount/corp";
 
 const Corporate = () => {
   return (
     <GenerateTariffCorporateProvider>
-      <ModalDescriptionUniqueRoomProvider>
-
         <div className="corporate">
           <Sidebar />
           <div className="corporateBx">
@@ -29,7 +23,6 @@ const Corporate = () => {
               {/* modal */}
                <ModalDiscount />  {/* disconto unitario */}
               <ModalPermissionDiscount corporate />
-              <ModalDescriptionUniqueRoom />
               <div className="containerBx">
 
                 <div className="top">
@@ -50,7 +43,6 @@ const Corporate = () => {
             </div>
           </div>
         </div>
-      </ModalDescriptionUniqueRoomProvider>
     </GenerateTariffCorporateProvider>
   );
 };
