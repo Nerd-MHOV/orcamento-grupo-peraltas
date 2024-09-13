@@ -82,7 +82,11 @@ const CorporateProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
             const responseBudget = response;
             bodySendBudget.setBodyResponseBudget(response);
             infoBudgetHook.addRows(responseBudget.rowsValues.rows, {
+                childValue: [],
+                petValue: [],
+                selectionRange: selectionRangeHook.selectionRange[0],
                 responseForm: {
+                    adult: responseBudget.rooms.reduce((acc, cur) => acc + cur.adt, 0),
                     category: `${responseBudget.rooms.length} quartos`,
                     pension: responseBudget.pension,
                     rd_client: responseBudget.idClient || '',
