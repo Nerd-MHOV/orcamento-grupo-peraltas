@@ -28,7 +28,7 @@ export default function CollapsibleTableDiscounts({
   const [hoveredRow, setHoveredRow] = useState<ApiDiscountProps | null>(null);
 
   const handleMouseMove = (event: React.MouseEvent<HTMLTableCellElement, MouseEvent>) => {
-    setMousePosition({ x: event.clientX, y: event.clientY });
+    setMousePosition({ x: event.pageX, y: event.pageY });
   };
 
   const handleMouseEnter = (row: ApiDiscountProps) => {
