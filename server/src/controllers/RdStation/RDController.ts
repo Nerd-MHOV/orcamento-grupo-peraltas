@@ -45,12 +45,13 @@ export class RDController {
     }
 
     async changeStage(request: Request, response: Response) {
-        const { deal_id, check_in, check_out, adt, chd, pet } = request.body;
+        const { deal_id, check_in, check_out, adt, chd, pet, corp = false } = request.body;
         const user = request.user;
+        const deal_stage_id = corp ? "64ca54153fc57f000d2c00e2" : "649dcc5287d5af0023d4aaa0";
         console.log(request.body)
         try {
             const axiosResponse = await rdApi.put(`/deals/${deal_id}`, {
-                deal_stage_id: "649dcc5287d5af0023d4aaa0", deal: {
+                deal_stage_id, deal: {
                     user_id: user.user_rd, deal_custom_fields: [{
                         "custom_field_id": "64ff4e1f2ab269001b8bb10f", //check-in
                         "value": check_in

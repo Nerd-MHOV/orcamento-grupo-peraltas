@@ -68,6 +68,7 @@ export async function rdSaveProcessCorp(budget: CorporateBodyResponseBudget) {
     const adt = budget.rooms.reduce((accumulator, currentValue) => accumulator + currentValue.adt, 0);
     const chd = budget.rooms.map( room => room.chd ).flat();
     const pet = budget.rooms.map( room => room.pet ).flat();
+    const corp = true;
     await deleteOldProd(idClient);
     await apiAddProd(
         dateIn,
@@ -82,6 +83,7 @@ export async function rdSaveProcessCorp(budget: CorporateBodyResponseBudget) {
         adt,
         chd,
         pet,
+        corp,
     )
 }
 

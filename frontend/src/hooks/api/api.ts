@@ -422,14 +422,15 @@ export const useApi = () => ({
         );
         return response.data;
     },
-    rdChangeStage: async (deal_id: string, check_in: string, check_out: string, adt: number, chd: number[], pet: string[]) => {
+    rdChangeStage: async (deal_id: string, check_in: string, check_out: string, adt: number, chd: number[], pet: string[], corp = false) => {
         const response = await api.post(`/rd/change_stage`, {
             deal_id,
             check_in,
             check_out,
             adt,
             chd,
-            pet
+            pet,
+            corp
         });
         return response.data;
     },
