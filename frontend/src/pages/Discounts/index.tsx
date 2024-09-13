@@ -27,7 +27,7 @@ export const DiscountsPage = () => {
   return (
     <LayoutBudget>
       <div className="p20">
-        <div className="containerBx">
+        <div className="containerBx" style={{ marginBottom: '100px'}}>
           <div className="top">
             <div className="titleContainerBx">Gerenciar Ação</div>
             <Link to="/discounts/create" className="link">
