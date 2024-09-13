@@ -54,6 +54,7 @@ import {RoutinesAutomations} from "./controllers/RoutinesAutomations/RoutinesAut
 import assist48hInWalking from "./crons/DBStatus/assist48hInWalking";
 import {assistDBStatus} from "./crons/DBStatus/assistDBStatus";
 import { CalcBudgetCorpController } from "./controllers/Budget/CalcBudgetCorpController";
+import { Actions } from "./controllers/Insights/actions";
 
 const routes = express.Router();
 
@@ -119,6 +120,8 @@ const daily_courtesy = new ToggleDailyCourtesyController();
 const deleteDiscount = new DeleteDiscountController();
 const rd = new RDController();
 const routinesAutomations = new RoutinesAutomations();
+
+const insightsActions = new Actions();
 
 routes.post("/user", createUser.handle);
 routes.post("/login", loginUser.handle);
@@ -201,6 +204,9 @@ routes.post("/rd/delete_product", rd.deleteProduct)
 routes.post("/rd/add_product", rd.addProduct)
 routes.post("/rd/change_stage", rd.changeStage)
 
+
+routes.get("/insights/actions/:action", insightsActions.action);
+routes.get("/insights/actions", insightsActions.all);
 
 
 // routes.post("/pipedrive", changeDeal.handle);
