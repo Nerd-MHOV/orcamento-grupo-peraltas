@@ -16,7 +16,7 @@ export async function getInsightsActions( action: string ) {
         totalUtil: 0,
         ganho: finded.filter((item) => item.status === 'ganho').length,
         perdido: finded.filter((item) => item.status === 'perdido').length,
-        emAndamento: finded.filter((item) => item.status === 'emAndamento').length,
+        emAndamento: finded.filter((item) => item.status === 'em andamento').length,
         vencido: finded.filter((item) => item.status === 'vencido').length,
         aguardando: finded.filter((item) => item.status === 'aguardando').length,
         refeito: finded.filter((item) => item.status === 'refeito').length,
