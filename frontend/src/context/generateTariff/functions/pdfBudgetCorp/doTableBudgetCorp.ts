@@ -57,9 +57,9 @@ const sliceContent = (array: TableCell[][], rows_in_page: number) => {
     let lineToBreak = 19
     let contentChunck = [];
 
-    // if the array has only one element and the rows_in_page is equal to lineToBreak, 
-    // increment lineToBreak, because the content will cause an error
-    if ( rows_in_page === lineToBreak && array.length === 1) lineToBreak ++;  
+    // if the rows_in_page is equal to lineToBreak, increment lineToBreak,
+    // because the content will cause an error
+    if ( rows_in_page === lineToBreak ) lineToBreak ++;  
 
     for (let i = -(rows_in_page); i < array.length; i += lineToBreak) {
         const init = (i < 0) ? 0 : i
