@@ -67,3 +67,4 @@ const sliceContent = (array: TableCell[][], rows_in_page: number) => {
     }
     return contentChunck;
 }
+
