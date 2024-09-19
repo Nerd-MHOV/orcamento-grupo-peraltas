@@ -22,9 +22,10 @@ const Transition = React.forwardRef(function Transition(
 export function ModalEditableText({ open, handleClose, handleConclusion }: {
     open: boolean;
     handleClose: VoidFunction;
-    handleConclusion: (text: Descendant[]) => Promise<void>;
+    handleConclusion: (text: Descendant[], linesToBreakPage: number) => Promise<void>;
 }) {
     const [text, setText] = React.useState(initialValue);
+    const [linesToBreakPage, setLinesToBreakPage] = React.useState(22)
 
     return (
         <Dialog
@@ -41,12 +42,14 @@ export function ModalEditableText({ open, handleClose, handleConclusion }: {
                 >
                     <TextEditor
                         setText={setText}
+                        linesToBreakPage={linesToBreakPage}
+                        setLinesToBreakPage={setLinesToBreakPage}
                     />
                 </Box>
                 <Box
                     sx={{ flexDirection: 'column', display: "flex", gap: 1 }}
                 >
-                    <Btn color="green" onClick={() => { handleConclusion(text) }} action={"Confirmar"} />
+                    <Btn color="green" onClick={() => { handleConclusion(text, linesToBreakPage) }} action={"Confirmar"} />
                 </Box>
             </DialogContent>
         </Dialog>

@@ -23,6 +23,7 @@ async function pdfBudgetCorp(
   email: string,
   numberPhone: string,
   descriptionBudget: Content[],
+  linesToBreakPage: number,
 ) {
   const now = format(new Date(), "dd/MM/yyyy HH:mm");
   const validate = format(addDays(new Date(), 3), "dd/MM/yyyy");
@@ -51,25 +52,30 @@ async function pdfBudgetCorp(
   const stringDateSelection = dateSelection && dateSecond ? ` (${format(new Date(dateSelection?.startDate), 'dd')} à ${format(new Date(dateSelection?.endDate), 'dd/MM')})` : '';
   const stringDateSecond = dateSecond ? ` (${format(new Date(dateSecond?.startDate), 'dd')} à ${format(new Date(dateSecond?.endDate), 'dd/MM')})` : '';
 
-  const accommodationTable = doTableBudgetCorp([
-    applyBoder([`HOSPEDAGEM${stringDateSelection}`, "DISPOSIÇÃO", "PREÇO"], 'total_block'),
-    ...doBodyAccommodation(budget, false),
-  ], callBreakPage, !!budget.rooms.filter(room => !room.isStaff).length)
+  const accommodationTable = doTableBudgetCorp(
+    [
+      applyBoder([`HOSPEDAGEM${stringDateSelection}`, "DISPOSIÇÃO", "PREÇO"], 'total_block'),
+      ...doBodyAccommodation(budget, false),
+    ],
+    callBreakPage,
+    !!budget.rooms.filter(room => !room.isStaff).length,
+    linesToBreakPage,
+  )
 
   const accommodationTableStaff = doTableBudgetCorp([
     applyBoder([`HOSPEDAGEM${stringDateSecond}`, "DISPOSIÇÃO", "PREÇO"], 'total_block'),
     ...doBodyAccommodation(budget, true),
-  ], callBreakPage, !!budget.rooms.filter(room => room.isStaff).length, accommodationTable.rows)
+  ], callBreakPage, !!budget.rooms.filter(room => room.isStaff).length, linesToBreakPage, accommodationTable.rows)
 
   const requirementTable = doTableBudgetCorp([
     applyBoder(["REQUERIMENTOS", "QUANTIDADE", "PREÇO"], 'total_block'),
     ...doBodyRequirements(budget),
-  ], callBreakPage, !!budget.requirements.some(req => req.type !== "location"), accommodationTableStaff.rows)
+  ], callBreakPage, !!budget.requirements.some(req => req.type !== "location"), linesToBreakPage, accommodationTableStaff.rows)
 
   const locationTable = doTableBudgetCorp([
     applyBoder(["LOCAÇÃO", "QUANTIDADE", "PREÇO"], 'total_block'),
     ...doBodyLocations(budget),
-  ], callBreakPage, !!budget.requirements.some(req => req.type === "location"), requirementTable.rows)
+  ], callBreakPage, !!budget.requirements.some(req => req.type === "location"), linesToBreakPage, requirementTable.rows)
   const agencyTable = doTableBudgetCorp([
     applyBoder(["AGÊNCIA",
       `${budget.agencyPercent}%`,
@@ -78,7 +84,7 @@ async function pdfBudgetCorp(
         maximumFractionDigits: 2,
       })]
       , 'total_block'),
-  ], callBreakPage, !!budget.rowsValues.rows.some(row => row.type === "agency"), locationTable.rows)
+  ], callBreakPage, !!budget.rowsValues.rows.some(row => row.type === "agency"), linesToBreakPage, locationTable.rows)
 
   const docDefinitions: TDocumentDefinitions = {
     defaultStyle: {
@@ -125,9 +131,9 @@ async function pdfBudgetCorp(
             maximumFractionDigits: 2,
           }),
         ], 'total_block'),
-      ], callBreakPage, true, agencyTable.rows).content,
+      ], callBreakPage, true, linesToBreakPage, agencyTable.rows).content,
       callBreakPage(),
-      descriptionBudget.map( desc => {
+      descriptionBudget.map(desc => {
         //@ts-ignore
         if (desc?.text === '<---------------------breakPage--------------------->')
           return callBreakPage()
