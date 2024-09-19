@@ -18,6 +18,7 @@ import {
     InsertPageBreak
 } from '@mui/icons-material'
 import initialValue from './initialvalueText'
+import { TextField } from '@mui/material'
 
 const HOTKEYS: { [key: string]: string } = {
     'mod+b': 'bold',
@@ -30,13 +31,14 @@ const HOTKEYS: { [key: string]: string } = {
 const LIST_TYPES: string[] = ['numbered-list', 'bulleted-list']
 const TEXT_ALIGN_TYPES: string[] = ['left', 'center', 'right', 'justify']
 
-const TextEditor: React.FC<{ setText: React.Dispatch<Descendant[]> }> = ({
-    setText
+const TextEditor: React.FC<{ setText: React.Dispatch<Descendant[]> , linesToBreakPage: number, setLinesToBreakPage: React.Dispatch<number>}> = ({
+    setText,
+    linesToBreakPage,
+    setLinesToBreakPage
 }) => {
     const renderElement = useCallback((props: RenderElementProps) => <Element {...props} />, [])
     const renderLeaf = useCallback((props: RenderLeafProps) => <Leaf {...props} />, [])
     const editor = useMemo(() => withHistory(withReact(createEditor())), [])
-
 
     return (
         <Slate editor={editor} initialValue={initialValue} onChange={value => setText(value)}>
@@ -57,6 +59,24 @@ const TextEditor: React.FC<{ setText: React.Dispatch<Descendant[]> }> = ({
                     const breakPageElement = { type: 'breakPage', children: [{ text: '<---------------------breakPage--------------------->' }] }
                     editor.insertNode(breakPageElement)
                 }}
+                />
+                <TextField
+                    type="number"
+                    className="textField"
+                    variant="standard"
+                    value={linesToBreakPage}
+                    style={{
+                        maxWidth: '35px',
+                        // marginTop: '-20px',
+                        marginLeft: '50px',
+                        maxHeight: '20px',
+                    }}
+                    onChange={(e) => {
+                        let line = +e.target.value
+                        if (line < 15) line = 15
+                        if (line > 25) line = 25
+                        setLinesToBreakPage(line)
+                    }}
                 />
             </Toolbar>
             <Editable

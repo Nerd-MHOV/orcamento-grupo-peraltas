@@ -50,7 +50,7 @@ export function useComponentButtonsBudget(corporate: boolean) {
       setOpenModalEditableText(false);
     };
   
-    async function generatePdfBudgetCorporate (text: Descendant []) {
+    async function generatePdfBudgetCorporate (text: Descendant [], linesToBreakPage: number) {
       handleCloseModal();
       if(!bodyResponseBudget) {
         handleCloseBackdrop();
@@ -64,6 +64,7 @@ export function useComponentButtonsBudget(corporate: boolean) {
         arrUser.email,
         arrUser.phone,
         slateToPdfMake(text),
+        linesToBreakPage
       );
 
       // save budget
