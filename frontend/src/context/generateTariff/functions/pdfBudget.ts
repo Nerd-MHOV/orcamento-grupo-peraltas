@@ -49,8 +49,6 @@ async function pdfBudget(
       totalNoDiscount += Number(row.totalNoDiscount);
     });
 
-    let totalIn6x = totalNoDiscount + totalNoDiscount * 0.1;
-
     let requirementString = [];
     let requirementChild = true;
     let requirementObsCeu = true;
@@ -131,7 +129,7 @@ async function pdfBudget(
     rowBudget.push({
       text:
         "R$ " +
-        totalIn6x.toLocaleString("pt-BR", {
+        total.toLocaleString("pt-BR", {
           minimumFractionDigits: 2,
           maximumFractionDigits: 2,
         }),
@@ -139,11 +137,12 @@ async function pdfBudget(
       border: [false, false, false, true],
       borderColor: "#c8c8c8",
       margin: 8,
+      bold: true,
     });
     rowBudget.push({
       text:
         "R$ " +
-        total.toLocaleString("pt-BR", {
+        Math.ceil(total * 0.95).toLocaleString("pt-BR", {
           minimumFractionDigits: 2,
           maximumFractionDigits: 2,
         }),
@@ -181,17 +180,13 @@ async function pdfBudget(
       {
         image: "top",
         width: 600,
-        margin: [0, 0, 0, 0],
+        margin: [0, 0, 0, 8],
       },
       { text: `Consultor(a): ${name}`, style: "vendedora", bold: true },
       {
         text: `e-mail: ${email} telefone: ${numberPhone}`,
         style: "vendedora",
-      },
-      {
-        text: `DATA DA COTAÇÃO: ${now} - VALIDADE DA COTAÇÃO: ${validate}`,
-        style: "vendedora",
-        bold: true,
+        margin: [0, 0, 0, 8],
       },
       {
         style: "titleTag",
@@ -229,7 +224,7 @@ async function pdfBudget(
                 borderColor: ["#c8c8c8", "#c8c8c8", "#c8c8c8", "#c8c8c8"],
               },
               {
-                text: "Valor do Apartamento",
+                text: "Valor por quarto",
                 style: "headerTable",
                 bold: true,
                 margin: 10,
@@ -260,17 +255,21 @@ async function pdfBudget(
                 borderColor: ["#c8c8c8", "#c8c8c8", "#c8c8c8", "#c8c8c8"],
               },
               {
-                text: "30% via depósito + saldo restante em até\n06x no check-in.",
+                text: [
+                  "Pagamento parcelado no cartão de crédito em até",
+                  { text: " 10x ", color: "#137173", bold: true },
+                  "sem juros.\n",
+                  { text: "(Mastercard/Visa/Elo)", bold: true },
+                ],
                 style: "headerTable",
-                bold: true,
+                // bold: true,
                 margin: [0, 8, 0, 8],
 
                 borderColor: ["#c8c8c8", "#c8c8c8", "#c8c8c8", "#c8c8c8"],
               },
               {
                 text: [
-                  { text: "Á VISTA ", color: "#137173", bold: true },
-                  "ou 30% via depósito + saldo\nrestante em até 03x no check-in.",
+                  { text: "À VISTA ", color: "#137173", bold: true, fontSize: 10 },
                 ],
                 style: "headerTable",
                 margin: 8,
@@ -285,51 +284,54 @@ async function pdfBudget(
         table: {
           widths: ["*"],
           body: [
-            [
-              {
-                text: [
-                  "Não aceitamos cheques de terceiros, pessoa jurídica, comprovantes de agendamento de transferência, DOC, depósito em caixa eletrônico e\ncomprovantes em prints de tela. Trabalhamos apenas com as bandeiras de cartão: ",
-                  { text: "Mastercard/Visa/Elo", bold: true },
-                  {
-                    text: ". Não aceitamos outras bandeiras.",
-                    bold: true,
-                    color: "#137173",
-                  },
-                ],
-                borderColor: ["", "#c8c8c8", "", "#c8c8c8"],
-                border: [false, true, false, true],
-                style: "descriptions",
-              },
-            ],
-            [
-              {
-                text: [
-                  { text: "PETS", color: "#137173" },
-                  " são muito bem-vindos em nosso hotel fazenda, porém como nossa política é satisfazer a todos, informamos que a ala luxo(800) é a única do nosso hotel que não recebe animais de estimação. Caso tenha um animalzinho informe seu consultor para remanejamento de apartamento. É obrigatório o envio da carteira de vacinação do PET e regulamento animal assinado.",
-                ],
-                bold: true,
-                borderColor: ["", "#c8c8c8", "", "#c8c8c8"],
-                border: [false, true, false, true],
-                style: "descriptions",
-              },
-            ],
-            [
-              {
-                text: "É de suma importância comunicar com antecedência que trará seu animal de estimação, visto que os mesmos só poderão ser acomodados nas alas PADRÃO VARANDA e sob aviso prévio.",
-                borderColor: ["", "#c8c8c8", "", "#c8c8c8"],
-                border: [false, true, false, true],
-                style: "descriptions",
-              },
-            ],
+            // [
+            //   {
+            //     text: [
+            //       "Não aceitamos cheques de terceiros, pessoa jurídica, comprovantes de agendamento de transferência, DOC, depósito em caixa eletrônico e\ncomprovantes em prints de tela. Trabalhamos apenas com as bandeiras de cartão: ",
+            //       { text: "Mastercard/Visa/Elo", bold: true },
+            //       {
+            //         text: ". Não aceitamos outras bandeiras.",
+            //         bold: true,
+            //         color: "#137173",
+            //       },
+            //     ],
+            //     borderColor: ["", "#c8c8c8", "", "#c8c8c8"],
+            //     border: [false, true, false, true],
+            //     style: "descriptions",
+            //   },
+            // ],
+            // [
+            //   {
+            //     text: [
+            //       { text: "PETS", color: "#137173" },
+            //       " são muito bem-vindos em nosso hotel fazenda, porém como nossa política é satisfazer a todos, informamos que a ala luxo(800) é a única do nosso hotel que não recebe animais de estimação. Caso tenha um animalzinho informe seu consultor para remanejamento de apartamento. É obrigatório o envio da carteira de vacinação do PET e regulamento animal assinado.",
+            //     ],
+            //     bold: true,
+            //     borderColor: ["", "#c8c8c8", "", "#c8c8c8"],
+            //     border: [false, true, false, true],
+            //     style: "descriptions",
+            //   },
+            // ],
+            // [
+            //   {
+            //     text: "É de suma importância comunicar com antecedência que trará seu animal de estimação, visto que os mesmos só poderão ser acomodados nas alas PADRÃO VARANDA e sob aviso prévio.",
+            //     borderColor: ["", "#c8c8c8", "", "#c8c8c8"],
+            //     border: [false, true, false, true],
+            //     style: "descriptions",
+            //   },
+            // ],
             [
               {
                 text: [
                   { text: "Informação importante", bold: true },
-                  "\nNo período de baixa temporada recebemos alguns grupos escolares, pode acontecer de termos crianças durante sua estadia.",
+                  "\nNo período de baixa temporada recebemos alguns grupos escolares,",
+                  "\npode acontecer de termos crianças durante sua estadia.",
+                  "\nNesse cenário temos uma adequação quanto a equipe de lazer."
                 ],
                 borderColor: ["", "#c8c8c8", "", "#c8c8c8"],
                 border: [false, true, false, true],
                 style: "descriptions",
+                margin: [8, 8, 8, 8],
               },
             ],
           ],
@@ -373,12 +375,8 @@ async function pdfBudget(
                   {
                     text: [
                       { text: "PENSÃO COMPLETA:", bold: true },
-                      ` Café da manhã, almoço e jantar + suco natural do dia e
-                                        sobremesa. Outras bebidas e consumo cobrados à parte. `,
-                      { text: "OBS", bold: true },
-                      `. As bebidas adquiridas
-                                        fora do hotel possuem taxa rolha por unidade. Consulte Tarifas.
-                                        `,
+                      ` Café da manhã, almoço e jantar + suco natural do dia e sobremesa (outras bebidas e consumos cobrados à parte).`,
+                      ` Contamos com refeições temáticas com pratos ecléticos e feitos com ingredientes naturais da fazenda.`,
                       { text: "IMPORTANTE:", bold: true },
                       ` Trabalhamos com regime de pensão completa no sistema "Buffet Self
                                         Service" à vontade acima de 21 apartamentos. Quando há um fluxo menor de
@@ -398,12 +396,12 @@ async function pdfBudget(
                     borderColor: ["", "", "", "#c8c8c8"],
                     bold: true,
                     color: "#137173",
-                    margin: 12,
+                    margin: 30,
                   },
                   {
                     text: [
-                      `Aproveite a jacuzzi (1h por apartamento) reservar na recepção; gazebos para leitura;
-                              bosque com redário; mesa de carteado; bilhar e ping-pong.`,
+                      `Aproveite gazebos para leitura, bosque com redário, sauna seca e a Lagoa Encantada: uma piscina temática, aquecida e coberta com variação de temperatura entre 28º a 30ºC. Ambientalizada em uma caverna cenográfca, possuindo iluminação cênica computadorizada, som digital, cachoeiras, jatos de água,\nestruturas de pontos de jacuzzi, disponível: Terça a Sexta-feira: das 16h00 às 18h30. Sábado e
+Domingo das 10h30 às 12h30 e das 16h às 18h30.`,
                     ],
                     border: [false, false, false, true],
                     borderColor: ["", "", "", "#c8c8c8"],
@@ -412,28 +410,28 @@ async function pdfBudget(
                     margin: [0, 8, 0, 8],
                   },
                 ],
-                [
-                  {
-                    text: "HORA DE SE DIVERTIR",
-                    border: [false, false, false, true],
-                    borderColor: ["", "", "", "#c8c8c8"],
-                    bold: true,
-                    color: "#137173",
-                    margin: 17,
-                  },
-                  {
-                    text: [
-                      `Que tal aproveitar a estadia para curtir: arco e flecha; passeio de bike; campeonatos de
-                              futebol e vôlei; paredão de escalada; touro mecânico; 02 tobogãs; 05 piscinas e muito
-                              mais.`,
-                    ],
-                    border: [false, false, false, true],
-                    borderColor: ["", "", "", "#c8c8c8"],
-                    fontSize: 9,
-                    alignment: "left",
-                    margin: [0, 9, 0, 8],
-                  },
-                ],
+                // [
+                //   {
+                //     text: "HORA DE SE DIVERTIR",
+                //     border: [false, false, false, true],
+                //     borderColor: ["", "", "", "#c8c8c8"],
+                //     bold: true,
+                //     color: "#137173",
+                //     margin: 17,
+                //   },
+                //   {
+                //     text: [
+                //       `Que tal aproveitar a estadia para curtir: arco e flecha; passeio de bike; campeonatos de
+                //               futebol e vôlei; paredão de escalada; touro mecânico; 02 tobogãs; 05 piscinas e muito
+                //               mais.`,
+                //     ],
+                //     border: [false, false, false, true],
+                //     borderColor: ["", "", "", "#c8c8c8"],
+                //     fontSize: 9,
+                //     alignment: "left",
+                //     margin: [0, 9, 0, 8],
+                //   },
+                // ],
                 [
                   {
                     text: "PROGRAMAÇÃO HOTEL",
@@ -441,12 +439,11 @@ async function pdfBudget(
                     borderColor: ["", "", "", "#c8c8c8"],
                     bold: true,
                     color: "#137173",
-                    margin: 12,
+                    margin: 20,
                   },
                   {
                     text: [
-                      `Monitoria especializada para adultos e crianças a partir de 04 anos. Atividades com a
-                              equipe desde o café da manhã até o jantar.`,
+                      `Contamos com uma equipe de lazer especializada para adultos e crianças a partir de 04 anos. Atividades desde o café da manhã até o jantar, como oficinas de artes e culinária, desafios aquáticos, passeios ecológicos internos, ordenha, futebol de sabão, arco e flecha, mini circuito de arvorismo, campeonatos de futebol e volei, paredão de escalada, touro mecânico, tirolesa no lago, gincanas em família e muito mais!`,
                     ],
                     border: [false, false, false, true],
                     borderColor: ["", "", "", "#c8c8c8"],
@@ -457,7 +454,7 @@ async function pdfBudget(
                 ],
                 [
                   {
-                    text: "LAGOA ENCANTADA",
+                    text: "PETFRIENDLY",
                     border: [false, false, false, true],
                     borderColor: ["", "", "", "#c8c8c8"],
                     bold: true,
@@ -467,27 +464,8 @@ async function pdfBudget(
                   },
                   {
                     text: [
-                      `Lagoa Encantada: é uma piscina temática, aquecida e coberta com variação de
-                              temperatura entre 28º a 30ºC. Ambientalizada em uma caverna cenográfica, a Lagoa
-                              Encantada possui iluminação cênica computadorizada, som digital, cachoeiras, jatos de
-                              água, estruturas de pontos de jacuzzi.
-                              `,
-                      { text: "IMPORTANTE:", bold: true, color: "#137173" },
-                      ` Ressaltando que ocasionalmente os jatos, podem não estar ligados,
-                              mas a piscina estará aberta para utilização. Isso ocorre para não esfriar a água nos dias
-                              mais frios.
-                              Toda segunda-feira, a Lagoa Encantada ficará fechada para manutenção.
-                              `,
-                      {
-                        text: "Horário de funcionamento:",
-                        bold: true,
-                        color: "#137173",
-                      },
-                      {
-                        text: ` Terça a Sexta-feira: das 16h00 às 18h30. Sábado e
-                              Domingo das 10h30 às 12h30 e das 16h às 18h30.`,
-                        bold: true,
-                      },
+                      `PETS pequenos, médios e de grande porte de raças dóceis são muito bem-vindos em nosso hotel fazenda, porém como nossa política é satisfazer a todos, informamos que a ala luxo (800) é a única do nosso hotel que não recebe animais de estimação. É obrigatório o envio da carteira de vacinação do PET e regulamento animal assinado. Orientamos a passear com o seu melhor amigo munido de guia e em áreas abertas que não interfiram em piscinas e restaurantes. Contamos com o DOG PARK - local dedicado a acondicionar o pet em canis individuais na ausência do tutor e um circuito de agility, ideal para se exercitarem.`,
+                      `É de suma importância comunicar com antecedência que trará seu animal de estimação, visto que os mesmos só poderão ser acomodados nas alas PADRÃO VARANDA e sob aviso prévio.`
                     ],
                     border: [false, false, false, true],
                     borderColor: ["", "", "", "#c8c8c8"],
@@ -507,8 +485,11 @@ async function pdfBudget(
                   },
                   {
                     text: [
-                      `Faça a sua reserva antecipadamente para a visita na Fundação CEU e ganhe 20% de
-                              descontos nos ingressos integrais! www.fundacaoceu.org.br\n`,
+                      `Faça a sua reserva antecipadamente para o Centro de Estudos do Universo e ganhe 20% de desconto nos ingressos integrais! Nesse local poderá realizar obervação de astros em telescópios profissionais e sessão de planetário com conteúdo exclusivo!`,
+                      {
+                        text: ' www.ceubrotas.com.br\n',
+                        bold: true,
+                      },
                       {
                         text: "Consulte se há sessão aberta e disponivel na data de sua estada",
                         bold: true,
@@ -523,7 +504,7 @@ async function pdfBudget(
                 ],
                 [
                   {
-                    text: "RADICAL!",
+                    text: "RADICAL",
                     border: [false, false, false, true],
                     borderColor: ["", "", "", "#c8c8c8"],
                     bold: true,
@@ -532,9 +513,7 @@ async function pdfBudget(
                   },
                   {
                     text: [
-                      `temos parceria com as principais agências de ecoturismo da cidade, então podem
-                              adquirir em nossa recepção ou fazer uma reserva antecipada para atividades como
-                              Rafting, Boia Cross, Rapel, Tirolesas e outras.`,
+                      `Aproveite a sua vinda a Brotas para realizar as melhores atividades ecológicas e radicais do país! Temos parceria com as principais operadoras certificadas da cidade para que conheçam, o Rafting, Tirolesa, Boia Cross, Rapel entre muitas outras!`,
                     ],
                     border: [false, false, false, true],
                     borderColor: ["", "", "", "#c8c8c8"],
@@ -546,8 +525,13 @@ async function pdfBudget(
               ],
             },
           },
-          { width: "*", text: "" },
         ],
+      },
+      {
+        text: `DATA DA COTAÇÃO: ${now} - VALIDADE DA COTAÇÃO: ${validate}`,
+        style: "vendedora",
+        margin: [0, 20, 0, 0],
+        bold: true,
       },
       {
         marginTop: 20,
@@ -580,7 +564,7 @@ async function pdfBudget(
         alignment: "center",
       },
       tbody: {
-        fontSize: 9,
+        fontSize: 10,
         background: "white",
         fillColor: "white",
         lineHeight: 1.2,
