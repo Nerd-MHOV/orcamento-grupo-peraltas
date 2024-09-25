@@ -1,4 +1,4 @@
-import {BrowserRouter, Routes, Route} from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import { NewTariff } from "./pages/Tariffs/NewTariffs";
@@ -17,6 +17,7 @@ import { BudgetsPage } from "./pages/Budgets";
 import { DiscountsPage } from "./pages/Discounts";
 import { NewDiscountPage } from "./pages/Discounts/NewDiscount";
 import Corporate from "./pages/Corporate";
+import BudgetClient from "./pages/client/budget";
 
 function App() {
 
@@ -71,6 +72,7 @@ function App() {
                 </Route>
               </Route>
             </Route>
+            <Route path="/client/:id/:token" element={<BudgetClient />} />
           </Route>
         </Routes>
       </BrowserRouter>
