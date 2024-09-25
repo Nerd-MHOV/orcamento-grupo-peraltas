@@ -20,6 +20,10 @@ const months = [
   "Novembro",
   "Dezembro",
 ];
+import { PATH_IMAGES } from "../../../config";
+
+
+const imagePath = PATH_IMAGES;
 
 async function pdfBudget(
   budgets: any[],
@@ -41,7 +45,7 @@ async function pdfBudget(
       budget.arrComplete.childValue,
       budget.arrComplete.petValue
     );
- 
+
     let total = 0;
     let totalNoDiscount = 0;
     budget.rows.map((row: any) => {
@@ -112,7 +116,7 @@ async function pdfBudget(
       ],
       style: "tbody",
       border: [false, false, false, true],
-      borderColor: "#c8c8c8",
+      borderColor: "#e9e9e9",
       margin: 8,
     });
     rowBudget.push({
@@ -122,7 +126,7 @@ async function pdfBudget(
         format(budget.arrComplete.selectionRange.endDate, "dd/MM"),
       style: "tbody",
       border: [false, false, false, true],
-      borderColor: "#c8c8c8",
+      borderColor: "#e9e9e9",
       margin: 8,
       bold: true,
     });
@@ -135,7 +139,7 @@ async function pdfBudget(
         }),
       style: "tbody",
       border: [false, false, false, true],
-      borderColor: "#c8c8c8",
+      borderColor: "#e9e9e9",
       margin: 8,
       bold: true,
     });
@@ -148,7 +152,7 @@ async function pdfBudget(
         }),
       style: "tbody",
       border: [false, false, false, true],
-      borderColor: "#c8c8c8",
+      borderColor: "#e9e9e9",
       margin: 8,
       color: "#137173",
       bold: true,
@@ -172,6 +176,7 @@ async function pdfBudget(
     },
     pageMargins: [0, 0, 0, 0],
     images: {
+      verify: { url: `${imagePath}verifica.png` },
       top: {
         url: "https://i.postimg.cc/C1cGv2Bd/top.jpg",
       },
@@ -184,7 +189,7 @@ async function pdfBudget(
       },
       { text: `Consultor(a): ${name}`, style: "vendedora", bold: true },
       {
-        text: `e-mail: ${email} telefone: ${numberPhone}`,
+        text: `e-mail: ${email} | telefone: ${numberPhone}`,
         style: "vendedora",
         margin: [0, 0, 0, 8],
       },
@@ -197,7 +202,7 @@ async function pdfBudget(
           body: [
             [
               {
-                text: titleMonth,
+                text: 'Viva a Natureza - Orçamento Exclusivo',
                 style: "titulo",
                 bold: true,
               },
@@ -206,42 +211,46 @@ async function pdfBudget(
         },
       },
       {
-        fillColor: "#c8c8c8",
+        fillColor: "#e9e9e9",
         //   layout: "noBorders",
         table: {
-          widths: [145, "*", 150, 150],
+          widths: [160, "*", 150, 150],
           body: [
             [
               {
-                text: "",
-                borderColor: ["#c8c8c8", "#c8c8c8", "#c8c8c8", "#c8c8c8"],
+                text: "Descrição do Apartamento",
+                style: "headerTable",
+                bold: true,
+                margin: 10,
+                borderColor: ["#e9e9e9", "#e9e9e9", "#e9e9e9", "#e9e9e9"],
               },
               {
                 text: "Período da Viagem",
                 style: "headerTable",
                 bold: true,
                 margin: 10,
-                borderColor: ["#c8c8c8", "#c8c8c8", "#c8c8c8", "#c8c8c8"],
+                borderColor: ["#e9e9e9", "#e9e9e9", "#e9e9e9", "#e9e9e9"],
               },
               {
                 text: "Valor por quarto",
                 style: "headerTable",
                 bold: true,
                 margin: 10,
-                borderColor: ["#c8c8c8", "#c8c8c8", "#c8c8c8", "#c8c8c8"],
+                borderColor: ["#e9e9e9", "#e9e9e9", "#e9e9e9", "#e9e9e9"],
               },
               {
                 text: "Especial para você!",
                 style: "headerTable",
                 bold: true,
                 margin: 10,
-                borderColor: ["#c8c8c8", "#c8c8c8", "#c8c8c8", "#c8c8c8"],
+                borderColor: ["#e9e9e9", "#e9e9e9", "#e9e9e9", "#e9e9e9"],
               },
             ],
+            ...arrValues,
             [
               {
                 text: "",
-                borderColor: ["#c8c8c8", "#c8c8c8", "#c8c8c8", "#c8c8c8"],
+                borderColor: ["#e9e9e9", "#e9e9e9", "#e9e9e9", "#e9e9e9"],
               },
               {
                 text: [
@@ -250,9 +259,9 @@ async function pdfBudget(
                   " e\nCheck out as ",
                   { text: "15h", color: "#137173", bold: true },
                 ],
-                style: "headerTable",
+                style: "headerTableDescription",
                 margin: 8,
-                borderColor: ["#c8c8c8", "#c8c8c8", "#c8c8c8", "#c8c8c8"],
+                borderColor: ["#f2f2f2", "#f2f2f2", "#f2f2f2", "#f2f2f2"],
               },
               {
                 text: [
@@ -261,81 +270,56 @@ async function pdfBudget(
                   "sem juros.\n",
                   { text: "(Mastercard/Visa/Elo)", bold: true },
                 ],
-                style: "headerTable",
+                style: "headerTableDescription",
                 // bold: true,
                 margin: [0, 8, 0, 8],
 
-                borderColor: ["#c8c8c8", "#c8c8c8", "#c8c8c8", "#c8c8c8"],
+                borderColor: ["#f2f2f2", "#f2f2f2", "#f2f2f2", "#f2f2f2"],
               },
               {
                 text: [
                   { text: "À VISTA ", color: "#137173", bold: true, fontSize: 10 },
                 ],
-                style: "headerTable",
+                style: "headerTableDescription",
                 margin: 8,
-                borderColor: ["#c8c8c8", "#c8c8c8", "#c8c8c8", "#c8c8c8"],
+                borderColor: ["#f2f2f2", "#f2f2f2", "#f2f2f2", "#f2f2f2"],
               },
             ],
-            ...arrValues,
           ],
         },
       },
       {
-        table: {
-          widths: ["*"],
-          body: [
-            // [
-            //   {
-            //     text: [
-            //       "Não aceitamos cheques de terceiros, pessoa jurídica, comprovantes de agendamento de transferência, DOC, depósito em caixa eletrônico e\ncomprovantes em prints de tela. Trabalhamos apenas com as bandeiras de cartão: ",
-            //       { text: "Mastercard/Visa/Elo", bold: true },
-            //       {
-            //         text: ". Não aceitamos outras bandeiras.",
-            //         bold: true,
-            //         color: "#137173",
-            //       },
-            //     ],
-            //     borderColor: ["", "#c8c8c8", "", "#c8c8c8"],
-            //     border: [false, true, false, true],
-            //     style: "descriptions",
-            //   },
-            // ],
-            // [
-            //   {
-            //     text: [
-            //       { text: "PETS", color: "#137173" },
-            //       " são muito bem-vindos em nosso hotel fazenda, porém como nossa política é satisfazer a todos, informamos que a ala luxo(800) é a única do nosso hotel que não recebe animais de estimação. Caso tenha um animalzinho informe seu consultor para remanejamento de apartamento. É obrigatório o envio da carteira de vacinação do PET e regulamento animal assinado.",
-            //     ],
-            //     bold: true,
-            //     borderColor: ["", "#c8c8c8", "", "#c8c8c8"],
-            //     border: [false, true, false, true],
-            //     style: "descriptions",
-            //   },
-            // ],
-            // [
-            //   {
-            //     text: "É de suma importância comunicar com antecedência que trará seu animal de estimação, visto que os mesmos só poderão ser acomodados nas alas PADRÃO VARANDA e sob aviso prévio.",
-            //     borderColor: ["", "#c8c8c8", "", "#c8c8c8"],
-            //     border: [false, true, false, true],
-            //     style: "descriptions",
-            //   },
-            // ],
-            [
-              {
-                text: [
-                  { text: "Informação importante", bold: true },
-                  "\nNo período de baixa temporada recebemos alguns grupos escolares,",
-                  "\npode acontecer de termos crianças durante sua estadia.",
-                  "\nNesse cenário temos uma adequação quanto a equipe de lazer."
+        columns: [
+          { width: "*", text: "" },
+          {
+            width: "auto",
+            margin: [15, 0, 15, 0],
+            table: {
+              body: [
+                [
+                  {
+                    text: "Informação importante",
+                    border: [false, false, false, true],
+                    borderColor: ["", "", "", "#e9e9e9"],
+                    bold: true,
+                    fontSize: 9,
+                    margin: [40, 10, 40, 10],
+                  },
+                  {
+                    text: [
+                      `No período de baixa temporada recebemos alguns grupos escolares, pode acontecer de termos crianças durante sua estadia. Nesse cenário temos uma adequação quanto a equipe de lazer.`,
+                    ],
+                    border: [false, false, false, true],
+                    borderColor: ["", "", "", "#e9e9e9"],
+                    fontSize: 9,
+                    alignment: "left",
+                    margin: [0, 9, 0, 8],
+                  },
                 ],
-                borderColor: ["", "#c8c8c8", "", "#c8c8c8"],
-                border: [false, true, false, true],
-                style: "descriptions",
-                margin: [8, 8, 8, 8],
-              },
-            ],
-          ],
-        },
+              ],
+            },
+          },
+        ],
       },
       {
         style: "titleTag",
@@ -366,10 +350,10 @@ async function pdfBudget(
                   {
                     text: "ALIMENTAÇÃO",
                     border: [false, false, false, true],
-                    borderColor: ["", "", "", "#c8c8c8"],
+                    borderColor: ["", "", "", "#e9e9e9"],
                     bold: true,
                     color: "#137173",
-                    margin: 30,
+                    margin: [30, 40, 30, 30],
                     noWrap: true,
                   },
                   {
@@ -383,7 +367,7 @@ async function pdfBudget(
                                         hóspedes, servimos o sistema "À La Carte" com a opção também à vontade.`,
                     ],
                     border: [false, false, false, true],
-                    borderColor: ["", "", "", "#c8c8c8"],
+                    borderColor: ["", "", "", "#e9e9e9"],
                     fontSize: 9,
                     alignment: "left",
                     margin: [0, 8, 0, 8],
@@ -393,18 +377,21 @@ async function pdfBudget(
                   {
                     text: "RELAX",
                     border: [false, false, false, true],
-                    borderColor: ["", "", "", "#c8c8c8"],
+                    borderColor: ["", "", "", "#e9e9e9"],
                     bold: true,
                     color: "#137173",
                     margin: 30,
                   },
                   {
                     text: [
-                      `Aproveite gazebos para leitura, bosque com redário, sauna seca e a Lagoa Encantada: uma piscina temática, aquecida e coberta com variação de temperatura entre 28º a 30ºC. Ambientalizada em uma caverna cenográfca, possuindo iluminação cênica computadorizada, som digital, cachoeiras, jatos de água,\nestruturas de pontos de jacuzzi, disponível: Terça a Sexta-feira: das 16h00 às 18h30. Sábado e
-Domingo das 10h30 às 12h30 e das 16h às 18h30.`,
+                      `Aproveite gazebos para leitura, bosque com redário, sauna seca e a Lagoa Encantada:
+                      uma piscina temática, aquecida e coberta com variação de temperatura entre 28º a 30ºC.
+                      Ambientalizada em uma caverna cenográfca, possuindo iluminação cênica computadorizada, 
+                      som digital, cachoeiras, jatos de água,\nestruturas de pontos de jacuzzi, disponível:
+                      Terça a Domingo: das 10h às 13h e das 15h às 18h45.`,
                     ],
                     border: [false, false, false, true],
-                    borderColor: ["", "", "", "#c8c8c8"],
+                    borderColor: ["", "", "", "#e9e9e9"],
                     fontSize: 9,
                     alignment: "left",
                     margin: [0, 8, 0, 8],
@@ -414,7 +401,7 @@ Domingo das 10h30 às 12h30 e das 16h às 18h30.`,
                 //   {
                 //     text: "HORA DE SE DIVERTIR",
                 //     border: [false, false, false, true],
-                //     borderColor: ["", "", "", "#c8c8c8"],
+                //     borderColor: ["", "", "", "#e9e9e9"],
                 //     bold: true,
                 //     color: "#137173",
                 //     margin: 17,
@@ -426,7 +413,7 @@ Domingo das 10h30 às 12h30 e das 16h às 18h30.`,
                 //               mais.`,
                 //     ],
                 //     border: [false, false, false, true],
-                //     borderColor: ["", "", "", "#c8c8c8"],
+                //     borderColor: ["", "", "", "#e9e9e9"],
                 //     fontSize: 9,
                 //     alignment: "left",
                 //     margin: [0, 9, 0, 8],
@@ -436,7 +423,7 @@ Domingo das 10h30 às 12h30 e das 16h às 18h30.`,
                   {
                     text: "PROGRAMAÇÃO HOTEL",
                     border: [false, false, false, true],
-                    borderColor: ["", "", "", "#c8c8c8"],
+                    borderColor: ["", "", "", "#e9e9e9"],
                     bold: true,
                     color: "#137173",
                     margin: 20,
@@ -446,7 +433,7 @@ Domingo das 10h30 às 12h30 e das 16h às 18h30.`,
                       `Contamos com uma equipe de lazer especializada para adultos e crianças a partir de 04 anos. Atividades desde o café da manhã até o jantar, como oficinas de artes e culinária, desafios aquáticos, passeios ecológicos internos, ordenha, futebol de sabão, arco e flecha, mini circuito de arvorismo, campeonatos de futebol e volei, paredão de escalada, touro mecânico, tirolesa no lago, gincanas em família e muito mais!`,
                     ],
                     border: [false, false, false, true],
-                    borderColor: ["", "", "", "#c8c8c8"],
+                    borderColor: ["", "", "", "#e9e9e9"],
                     fontSize: 9,
                     alignment: "left",
                     margin: [0, 8, 0, 8],
@@ -456,7 +443,7 @@ Domingo das 10h30 às 12h30 e das 16h às 18h30.`,
                   {
                     text: "PETFRIENDLY",
                     border: [false, false, false, true],
-                    borderColor: ["", "", "", "#c8c8c8"],
+                    borderColor: ["", "", "", "#e9e9e9"],
                     bold: true,
                     color: "#137173",
                     margin: [0, 48, 0, 48],
@@ -468,7 +455,7 @@ Domingo das 10h30 às 12h30 e das 16h às 18h30.`,
                       `É de suma importância comunicar com antecedência que trará seu animal de estimação, visto que os mesmos só poderão ser acomodados nas alas PADRÃO VARANDA e sob aviso prévio.`
                     ],
                     border: [false, false, false, true],
-                    borderColor: ["", "", "", "#c8c8c8"],
+                    borderColor: ["", "", "", "#e9e9e9"],
                     fontSize: 9,
                     alignment: "left",
                     margin: [0, 8, 0, 8],
@@ -478,14 +465,17 @@ Domingo das 10h30 às 12h30 e das 16h às 18h30.`,
                   {
                     text: "OBSERVAÇÃO DOS ASTROS",
                     border: [false, false, false, true],
-                    borderColor: ["", "", "", "#c8c8c8"],
+                    borderColor: ["", "", "", "#e9e9e9"],
                     bold: true,
                     color: "#137173",
-                    margin: 12,
+                    margin: 20,
                   },
                   {
                     text: [
-                      `Faça a sua reserva antecipadamente para o Centro de Estudos do Universo e ganhe 20% de desconto nos ingressos integrais! Nesse local poderá realizar obervação de astros em telescópios profissionais e sessão de planetário com conteúdo exclusivo!`,
+                      `Faça a sua reserva antecipadamente e ganhe 20% de desconto nos ingressos integrais 
+                      para o Centro de Estudos do Universo, que fica dentro de nosso complexo! Nesse local 
+                      poderá realizar observação de astros em telescópios profissionais e sessão de 
+                      planetário com conteúdo exclusivo!`,
                       {
                         text: ' www.ceubrotas.com.br\n',
                         bold: true,
@@ -496,7 +486,7 @@ Domingo das 10h30 às 12h30 e das 16h às 18h30.`,
                       },
                     ],
                     border: [false, false, false, true],
-                    borderColor: ["", "", "", "#c8c8c8"],
+                    borderColor: ["", "", "", "#e9e9e9"],
                     fontSize: 9,
                     alignment: "left",
                     margin: [0, 8, 0, 8],
@@ -506,17 +496,17 @@ Domingo das 10h30 às 12h30 e das 16h às 18h30.`,
                   {
                     text: "RADICAL",
                     border: [false, false, false, true],
-                    borderColor: ["", "", "", "#c8c8c8"],
+                    borderColor: ["", "", "", "#e9e9e9"],
                     bold: true,
                     color: "#137173",
                     margin: 17,
                   },
                   {
                     text: [
-                      `Aproveite a sua vinda a Brotas para realizar as melhores atividades ecológicas e radicais do país! Temos parceria com as principais operadoras certificadas da cidade para que conheçam, o Rafting, Tirolesa, Boia Cross, Rapel entre muitas outras!`,
+                      `Aproveite a sua vinda a Brotas para realizar as melhores atividades ecológicas e radicais do país! Temos parceria com as principais operadoras certificadas da cidade para que conheçam Rafting e Tirolesas com translado gratuito!`,
                     ],
                     border: [false, false, false, true],
-                    borderColor: ["", "", "", "#c8c8c8"],
+                    borderColor: ["", "", "", "#e9e9e9"],
                     fontSize: 9,
                     alignment: "left",
                     margin: [0, 9, 0, 8],
@@ -538,8 +528,23 @@ Domingo das 10h30 às 12h30 e das 16h às 18h30.`,
         layout: "noBorders",
         fillColor: "#137173",
         table: {
-          widths: ["*"],
-          body: [[{ text: "", margin: 30 }]],
+          widths: ["*", "*", "*"],
+          body: [
+            [
+              [
+                { image: 'verify', width: 20, height: 20, margin: [0, 15, 0, 10] },
+                { text: "Hotel vencedor Traveller’s Choice", margin: [0, 0, 0, 15], style: 'strengths' },
+              ],
+              [
+                { image: 'verify', width: 20, height: 20, margin: [0, 15, 0, 10] },
+                { text: "Único Hotel Fazenda dentro da área urbana de Brotas", margin: [0, 0, 0, 15], style: 'strengths' },
+              ],
+              [
+                { image: 'verify', width: 20, height: 20, margin: [0, 15, 0, 10] },
+                { text: "45 anos de experiência", margin: [0, 0, 0, 15], style: 'strengths' },
+              ],
+            ]
+          ],
         },
       },
     ],
@@ -558,10 +563,13 @@ Domingo das 10h30 às 12h30 e das 16h às 18h30.`,
         background: "#137173",
       },
       headerTable: {
-        marginTop: 3,
-        marginBottom: 10,
+        fontSize: 9,
+        alignment: "center",
+      },
+      headerTableDescription: {
         fontSize: 8,
         alignment: "center",
+        fillColor: '#e9e9e9',
       },
       tbody: {
         fontSize: 10,
@@ -577,6 +585,10 @@ Domingo das 10h30 às 12h30 e das 16h às 18h30.`,
         fontSize: 8,
         lineHeight: 1.2,
         margin: 8,
+      },
+      strengths: {
+        fontSize: 10,
+        color: 'white',
       },
     },
   };
