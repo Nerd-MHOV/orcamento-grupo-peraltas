@@ -193,20 +193,27 @@ async function pdfBudget(
         style: "vendedora",
         margin: [0, 0, 0, 8],
       },
+      
       {
-        style: "titleTag",
         layout: "noBorders",
         fillColor: "#137173",
         table: {
-          widths: ["*"],
+          widths: ["*", "*", "*"],
           body: [
             [
-              {
-                text: 'Viva a Natureza - Orçamento Exclusivo',
-                style: "titulo",
-                bold: true,
-              },
-            ],
+              [
+                { image: 'verify', width: 20, height: 20, margin: [0, 15, 0, 10] },
+                { text: "Hotel vencedor Traveller’s Choice", margin: [0, 0, 0, 15], style: 'strengths' },
+              ],
+              [
+                { image: 'verify', width: 20, height: 20, margin: [0, 15, 0, 10] },
+                { text: "Único Hotel Fazenda dentro da área urbana de Brotas", margin: [0, 0, 0, 15], style: 'strengths' },
+              ],
+              [
+                { image: 'verify', width: 20, height: 20, margin: [0, 15, 0, 10] },
+                { text: "45 anos de experiência", margin: [0, 0, 0, 15], style: 'strengths' },
+              ],
+            ]
           ],
         },
       },
@@ -362,9 +369,7 @@ async function pdfBudget(
                       ` Café da manhã, almoço e jantar + suco natural do dia e sobremesa (outras bebidas e consumos cobrados à parte).`,
                       ` Contamos com refeições temáticas com pratos ecléticos e feitos com ingredientes naturais da fazenda.`,
                       { text: "IMPORTANTE:", bold: true },
-                      ` Trabalhamos com regime de pensão completa no sistema "Buffet Self
-                                        Service" à vontade acima de 21 apartamentos. Quando há um fluxo menor de
-                                        hóspedes, servimos o sistema "À La Carte" com a opção também à vontade.`,
+                      ` Trabalhamos com regime de pensão completa no sistema "Buffet SelfService" à vontade acima de 21 apartamentos. Quando há um fluxo menor de hóspedes, servimos o sistema "À La Carte" com a opção também à vontade.`,
                     ],
                     border: [false, false, false, true],
                     borderColor: ["", "", "", "#e9e9e9"],
@@ -384,11 +389,7 @@ async function pdfBudget(
                   },
                   {
                     text: [
-                      `Aproveite gazebos para leitura, bosque com redário, sauna seca e a Lagoa Encantada:
-                      uma piscina temática, aquecida e coberta com variação de temperatura entre 28º a 30ºC.
-                      Ambientalizada em uma caverna cenográfca, possuindo iluminação cênica computadorizada, 
-                      som digital, cachoeiras, jatos de água,\nestruturas de pontos de jacuzzi, disponível:
-                      Terça a Domingo: das 10h às 13h e das 15h às 18h45.`,
+                      `Aproveite gazebos para leitura, bosque com redário, sauna seca e a Lagoa Encantada: uma piscina temática, aquecida e coberta com variação de temperatura entre 28º a 30ºC. Ambientalizada em uma caverna cenográfca, possuindo iluminação cênica computadorizada,  som digital, cachoeiras, jatos de água, estruturas de pontos de jacuzzi, disponível: Terça a Domingo: das 10h às 13h e das 15h às 18h45.`,
                     ],
                     border: [false, false, false, true],
                     borderColor: ["", "", "", "#e9e9e9"],
@@ -451,8 +452,8 @@ async function pdfBudget(
                   },
                   {
                     text: [
-                      `PETS pequenos, médios e de grande porte de raças dóceis são muito bem-vindos em nosso hotel fazenda, porém como nossa política é satisfazer a todos, informamos que a ala luxo (800) é a única do nosso hotel que não recebe animais de estimação. É obrigatório o envio da carteira de vacinação do PET e regulamento animal assinado. Orientamos a passear com o seu melhor amigo munido de guia e em áreas abertas que não interfiram em piscinas e restaurantes. Contamos com o DOG PARK - local dedicado a acondicionar o pet em canis individuais na ausência do tutor e um circuito de agility, ideal para se exercitarem.`,
-                      `É de suma importância comunicar com antecedência que trará seu animal de estimação, visto que os mesmos só poderão ser acomodados nas alas PADRÃO VARANDA e sob aviso prévio.`
+                      `PETS pequenos, médios e de grande porte de raças dóceis são muito bem-vindos em nosso hotel fazenda, porém como nossa política é satisfazer a todos, informamos que a ala luxo (800) é a única do  nosso hotel que não recebe animais de estimação. É obrigatório o envio  da carteira de vacinação do PET e regulamento animal assinado. Orientamos  a passear com o seu melhor amigo munido de guia e em áreas abertas que não  interfiram em piscinas e restaurantes. Contamos com o DOG PARK - local dedicado a acondicionar o pet em canis individuais na ausência do tutor  e um circuito de agility, ideal para se exercitarem.`,
+                      `É de suma importância comunicar com antecedência que trará seu animal de estimação.`
                     ],
                     border: [false, false, false, true],
                     borderColor: ["", "", "", "#e9e9e9"],
@@ -472,13 +473,11 @@ async function pdfBudget(
                   },
                   {
                     text: [
-                      `Faça a sua reserva antecipadamente e ganhe 20% de desconto nos ingressos integrais 
-                      para o Centro de Estudos do Universo, que fica dentro de nosso complexo! Nesse local 
-                      poderá realizar observação de astros em telescópios profissionais e sessão de 
-                      planetário com conteúdo exclusivo!`,
+                      `Faça a sua reserva antecipadamente e ganhe 20% de desconto nos ingressos integrais para o Centro de Estudos do Universo, que fica dentro de nosso complexo! Nesse local poderá realizar observação de astros em telescópios profissionais e sessão de planetário com conteúdo exclusivo!`,
                       {
                         text: ' www.ceubrotas.com.br\n',
                         bold: true,
+                        color: "#137173",
                       },
                       {
                         text: "Consulte se há sessão aberta e disponivel na data de sua estada",
@@ -525,25 +524,19 @@ async function pdfBudget(
       },
       {
         marginTop: 20,
+        style: "titleTag",
         layout: "noBorders",
         fillColor: "#137173",
         table: {
-          widths: ["*", "*", "*"],
+          widths: ["*"],
           body: [
             [
-              [
-                { image: 'verify', width: 20, height: 20, margin: [0, 15, 0, 10] },
-                { text: "Hotel vencedor Traveller’s Choice", margin: [0, 0, 0, 15], style: 'strengths' },
-              ],
-              [
-                { image: 'verify', width: 20, height: 20, margin: [0, 15, 0, 10] },
-                { text: "Único Hotel Fazenda dentro da área urbana de Brotas", margin: [0, 0, 0, 15], style: 'strengths' },
-              ],
-              [
-                { image: 'verify', width: 20, height: 20, margin: [0, 15, 0, 10] },
-                { text: "45 anos de experiência", margin: [0, 0, 0, 15], style: 'strengths' },
-              ],
-            ]
+              {
+                text: 'VIVA UMA EXPERIÊNCIA ÚNICA NO BROTAS ECO HOTEL FAZENDA',
+                style: "titulo",
+                bold: true,
+              },
+            ],
           ],
         },
       },
