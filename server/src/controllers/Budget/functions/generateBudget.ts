@@ -64,7 +64,7 @@ export async function generateBudget(
       if (onlyFood) tariffBudget = 90;
     }
 
-    if (daily_courtesy && date > mainPeriod[mainPeriod.length - 1]) {
+    if (daily_courtesy && date == mainPeriod[mainPeriod.length - 1]) {
       tariffBudget = 0;
     }
 
