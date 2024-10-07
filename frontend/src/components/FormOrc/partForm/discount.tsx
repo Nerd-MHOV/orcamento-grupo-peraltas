@@ -12,7 +12,7 @@ export const DiscountInputForm = () => {
   } = useGenerateTariff();
   const [discount, setDiscount] = useState<number | null>(null);
   const handleChangeDiscount = async (value: number) => {
-    let limit = actionSelected?.percent_general ?? 10;
+    let limit = actionSelected?.percent_general ?? 0;
 
     if (value > limit) {
       verifyPermission(value);
