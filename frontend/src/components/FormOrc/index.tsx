@@ -7,13 +7,14 @@ import { DiscountInputForm } from "./partForm/discount";
 import { CategoryInputForm } from "./partForm/category";
 import { PensionInputForm } from "./partForm/pension";
 import { PipeNumberInputForm } from "./partForm/pipeNumber";
-import { RdClientInputForm} from "./partForm/rdClient";
+import { RdClientInputForm } from "./partForm/rdClient";
 import { RequirementInputForm } from "./partForm/requirement";
 import { InfoApp } from "../InfoApp";
 import { useGenerateTariff } from "../../context/generateTariff/generateTariff";
 import { ActionInputForm } from "./partForm/action";
-import {GetClientName} from "./partForm/getClientName";
+import { GetClientName } from "./partForm/getClientName";
 import { DailyCourtesy } from "./partForm/dailyCourtesy";
+import { ParcelInputForm } from "./partForm/parcel";
 
 export const FormOrc = () => {
   const {
@@ -41,8 +42,12 @@ export const FormOrc = () => {
             <PensionInputForm />
             {/*<PipeNumberInputForm />*/}
             <RdClientInputForm />
-            <RequirementInputForm />
+            <ParcelInputForm />
+
           </div>
+        </div>
+        <div style={{ width: "100%" }}>
+          <RequirementInputForm />
         </div>
         <div style={{ width: "100%" }}>
           <ActionInputForm />

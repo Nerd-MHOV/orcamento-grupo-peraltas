@@ -20,7 +20,7 @@ export const InfoTable = ({ corporate = false }) => {
         </Typography>
         {budgets.map((budget, index) => {
           let countDaily = budget.columns.length - 1;
-          let primary = `${countDaily} diárias - ${budget.arrComplete?.responseForm.category}`;
+          let primary = `${countDaily} diárias - ${budget.arrComplete?.responseForm.category} - ${budget.arrComplete?.responseForm.parcel}x`;
           let total = 0;
           budget.rows.map((row) => {
             total += Number(row.total);
