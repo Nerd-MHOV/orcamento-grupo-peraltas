@@ -6,23 +6,7 @@ import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 import getLayoutRooms from "./file-part/getLayoutRooms";
 (<any>pdfMake).vfs = pdfFonts && pdfFonts.pdfMake ? pdfFonts.pdfMake.vfs : globalThis.pdfMake.vfs;
 
-const months = [
-  "Janeiro",
-  "Fevereiro",
-  "Março",
-  "Abril",
-  "Maio",
-  "Junho",
-  "Julho",
-  "Agosto",
-  "Setembro",
-  "Outubro",
-  "Novembro",
-  "Dezembro",
-];
 import { PATH_IMAGES } from "../../../config";
-
-
 const imagePath = PATH_IMAGES;
 
 async function pdfBudget(
@@ -33,8 +17,12 @@ async function pdfBudget(
 ) {
   const now = format(new Date(), "dd/MM/yyyy HH:mm");
   const validate = format(addDays(new Date(), 3), "dd/MM/yyyy");
-  const monthNum = Number(budgets[0].columns[1].substr(-2));
-  const titleMonth = months[monthNum - 1];
+  
+  const parcel = budgets.reduce((acc, curr) => {
+    const currParcel = curr.arrComplete?.responseForm.parcel;
+    const accParcel = acc.arrComplete?.responseForm.parcel;
+    return currParcel > accParcel ? curr : acc;
+  }, budgets[0]).arrComplete?.responseForm.parcel;
 
   const arrValues: any[] = [];
 
@@ -272,8 +260,9 @@ async function pdfBudget(
               },
               {
                 text: [
-                  "Pagamento parcelado no cartão de crédito em até",
-                  { text: " 10x ", color: "#137173", bold: true },
+                  "Pagamento parcelado no cartão de crédito em até ",
+                  { text: parcel, color: "#137173", bold: true },
+                  { text: "x ", color: "#137173", bold: true },
                   "sem juros.\n",
                   { text: "(Mastercard/Visa/Elo)", bold: true },
                 ],

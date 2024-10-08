@@ -21,6 +21,7 @@ export interface ArrComplete {
         category: string;
         rd_client?: string;
         housingUnit: string;
+        parcel: string | number;
         discount?: string | number;
         action?: string;
     }

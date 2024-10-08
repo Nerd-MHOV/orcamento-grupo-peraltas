@@ -89,6 +89,7 @@ const CorporateProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
                     adult: responseBudget.rooms.reduce((acc, cur) => acc + cur.adt, 0),
                     category: `${responseBudget.rooms.length} quartos`,
                     pension: responseBudget.pension,
+                    parcel: 0,
                     rd_client: responseBudget.idClient || '',
                     housingUnit: `${responseBudget.rooms.length} quartos`,
                 }

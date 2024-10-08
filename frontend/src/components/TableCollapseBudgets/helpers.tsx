@@ -80,6 +80,7 @@ export interface BudgetsResponseFormProps {
     pension: PensionsOptionsProps;
     category: string;
     categoryComplete: CategoryOptionsProps;
+    parcel: string | number;
     discount?: string | number;
     rd_client?: string;
     housingUnit: string;
