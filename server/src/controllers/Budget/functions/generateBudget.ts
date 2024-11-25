@@ -15,16 +15,22 @@ export async function generateBudget(
   daily_courtesy: boolean,
   isCorporate: boolean,
 ) {
-  const valuesBudget =  await Promise.all(completePeriod.map( async (date) => {
+  const valuesBudget = await Promise.all(completePeriod.map(async (date) => {
     let tariffBudget = 0;
     // verifica se essa data é cobrada
-    if(!inMainPeriod(mainPeriod, date)) return tariffBudget
+    if (!inMainPeriod(mainPeriod, date)) return tariffBudget
+
+    /// REMOVE LATER - essa regra esta sendo criada apenas para janeiro de 2025 --------- START
+
+    const isFirstDayJanuary2025 = date == mainPeriod[0] || date == mainPeriod[1] || date == mainPeriod[2];
+
+    /// REMOVE LATER - essa regra esta sendo criada apenas para janeiro de 2025 --------- FIM
 
     let dayMonthYear = format(date, "yyyy-MM-dd");
     let monthYear = format(date, "yyyy-MM");
     let dayWeek = format(date, "E");
     let month = format(date, "MM");
-    let tariffs = await getTariff(dayMonthYear, monthYear);
+    let tariffs = await getTariff(dayMonthYear, monthYear, isFirstDayJanuary2025);
 
     let numCategory = (await prismaClient.categories.findFirst({
       where: {
@@ -56,7 +62,7 @@ export async function generateBudget(
       )[0];
 
       let tariffDayAgeGroup = tariffDay[ageGroup]
-      if(isCorporate) {
+      if (isCorporate) {
         tariffDayAgeGroup = Math.round(tariffDayAgeGroup * (1 - getPercentAdjustmentCorp(date)));
       }
       tariffBudget = tariffDayAgeGroup + tariffFood;
@@ -69,6 +75,6 @@ export async function generateBudget(
     }
 
     return tariffBudget;
-  } ))
+  }))
   return valuesBudget;
 }

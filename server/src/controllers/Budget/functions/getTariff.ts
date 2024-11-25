@@ -1,6 +1,6 @@
 import { prismaClient } from "../../../database/prismaClient";
 
-export async function getTariff(specificDay: string, commonDay: string) {
+export async function getTariff(specificDay: string, commonDay: string, isFirstDayJanuary2025 = false) {
   const responseSpecific = await prismaClient.specificDates.findFirst({
     where: {
       date: specificDay,
@@ -15,7 +15,14 @@ export async function getTariff(specificDay: string, commonDay: string) {
     },
   });
 
-  if (responseSpecific) {
+
+  /// REMOVE LATER - essa regra esta sendo criada apenas para janeiro de 2025 --------- START
+
+  const isJanuary2025 = specificDay === "2025-01-01" || specificDay === "2025-01-02" || specificDay === "2025-01-03";
+
+  /// REMOVE LATER - essa regra esta sendo criada apenas para janeiro de 2025 --------- FIM
+
+  if (responseSpecific && !(isFirstDayJanuary2025 && isJanuary2025)) {
     return {
       type: "specific",
       tariff_mw_id: responseSpecific.tariffs_id,
