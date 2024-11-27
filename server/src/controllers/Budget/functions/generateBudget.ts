@@ -20,9 +20,11 @@ export async function generateBudget(
     // verifica se essa data é cobrada
     if (!inMainPeriod(mainPeriod, date)) return tariffBudget
 
-    /// REMOVE LATER - essa regra esta sendo criada apenas para janeiro de 2025 --------- START
+    /// REMOVE LATER - essa regra esta sendo criada apenas para janeiro de 2025 | aplicada tabem para dia 20 e 21 / 12 --------- START
 
     const isFirstDayJanuary2025 = date == mainPeriod[0] || date == mainPeriod[1] || date == mainPeriod[2];
+    const isDecemberDay = format(mainPeriod[0], 'yyyy-MM-dd') == "2024-12-16" || format(mainPeriod[0], 'yyyy-MM-dd') == "2024-12-17" 
+      || format(mainPeriod[0], 'yyyy-MM-dd') == "2024-12-18" || format(mainPeriod[0], 'yyyy-MM-dd') == "2024-12-19";
 
     /// REMOVE LATER - essa regra esta sendo criada apenas para janeiro de 2025 --------- FIM
 
@@ -30,7 +32,7 @@ export async function generateBudget(
     let monthYear = format(date, "yyyy-MM");
     let dayWeek = format(date, "E");
     let month = format(date, "MM");
-    let tariffs = await getTariff(dayMonthYear, monthYear, isFirstDayJanuary2025);
+    let tariffs = await getTariff(dayMonthYear, monthYear, isFirstDayJanuary2025, isDecemberDay);
 
     let numCategory = (await prismaClient.categories.findFirst({
       where: {
