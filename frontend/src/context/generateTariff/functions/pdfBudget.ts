@@ -22,7 +22,7 @@ async function pdfBudget(
     const currParcel = curr.arrComplete?.responseForm.parcel;
     const accParcel = acc.arrComplete?.responseForm.parcel;
     return currParcel > accParcel ? curr : acc;
-  }, budgets[0]).arrComplete?.responseForm.parcel;
+  }, budgets[0]).arrComplete?.responseForm.parcel - 1;
 
   const arrValues: any[] = [];
 
@@ -260,7 +260,7 @@ async function pdfBudget(
               },
               {
                 text: [
-                  "Pagamento parcelado no cartão de crédito em até ",
+                  "Pagamento parcelado sendo sinal de 30% e saldo em até  ",
                   { text: parcel, color: "#137173", bold: true },
                   { text: "x ", color: "#137173", bold: true },
                   "sem juros.\n",
