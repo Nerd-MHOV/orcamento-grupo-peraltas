@@ -13,7 +13,7 @@ export const PrivateRole = ({ level }: { level: number }) => {
   const api = useApi();
   const verifyAllowed = async () => {
     api
-      .getaUser(userLogin)
+      .user.getById(userLogin)
       .then((res) => {
         if (res.level >= level) {
           setAllowed(true);

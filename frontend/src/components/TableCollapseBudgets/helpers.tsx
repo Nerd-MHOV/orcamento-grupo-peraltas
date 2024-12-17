@@ -105,7 +105,7 @@ export function Row(props: {
         const deal_id = budgets[0].arrComplete?.responseForm.rd_client;
         let name: string;
         name = "";
-        if (typeof deal_id === "string") api.rdGetaDeal(deal_id)
+        if (typeof deal_id === "string") api.rd.getDealById(deal_id)
             .then((response) => {
                 name = response?.name || "undefined";
             })
@@ -118,7 +118,7 @@ export function Row(props: {
         if (budgets.length < 1) {
             return;
         }
-        const arrUser = await api.findUniqueUser(userLogin);
+        const arrUser = await api.user.getById(userLogin);
         await pdfBudget(budgets, arrUser.name, arrUser.email, arrUser.phone,);
     }
 

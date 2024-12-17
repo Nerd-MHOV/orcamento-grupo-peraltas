@@ -1,14 +1,11 @@
-import { Alert, AlertTitle, TextField } from "@mui/material";
-import { Stack } from "@mui/system";
-import serialize from "form-serialize";
+import { TextField } from "@mui/material";
 import InputMask from "react-input-mask";
-import { ReactNode, useState } from "react";
+import { useState } from "react";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { useApi } from "../../hooks/api/api";
 import Btn from "../Btn";
 import { ErrorComponent } from "./ErrorComponent";
 import "./style.scss";
-import { ReactJSXElement } from "@emotion/react/types/jsx-namespace";
 import { useNavigate } from "react-router-dom";
 import { ApiUserProps } from "../../hooks/api/interfaces";
 
@@ -21,7 +18,7 @@ export const FormEditCollaborator = ({ fields }: { fields: ApiUserProps }) => {
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     const name = `${data.firstname} ${data.lastname}`;
     api
-      .updateUser(
+      .user.update(
         fields.id,
         name,
         data.email,

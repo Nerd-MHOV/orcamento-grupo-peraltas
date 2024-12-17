@@ -1,5 +1,5 @@
 import axios from "axios";
-import {selectionRange} from "../../context/generateTariff/functions/handleForm";
+import { selectionRange } from "../../context/generateTariff/functions/handleForm";
 import RowModalDiscount from "../../context/generateTariff/interfaces/rowModalDiscount";
 import RequirementSubmitProps from "../../context/generateTariff/interfaces/requirementSubmitProps";
 import DataContentProps from "../../context/generateTariff/interfaces/tableBudgetDataContentProps";
@@ -8,7 +8,6 @@ import {
     ApiDiscountProps,
     ApiRequirementsProps,
     ApiSavedBudgetsProps,
-    ApiUserProps,
     CheckInValuesProps,
     CorporateBodyResponseBudget,
     FindHolidaysProps,
@@ -19,7 +18,10 @@ import {
 } from "./interfaces";
 import { CorporateBodySendBudget } from "../../context/generateTariff/interfaces/corporateProps";
 import { API_URL } from "../../config";
-import { insights } from "./all/insights";
+import { insights } from "./all/insights.api";
+import { auth } from "./all/auth.api";
+import { user } from "./all/user.api";
+import { rd } from "./all/rd.api";
 
 const storageData = localStorage.getItem("authToken");
 
@@ -32,27 +34,9 @@ const api = axios.create({
 
 export const useApi = () => ({
     insights: insights(api),
-
-
-    validateToken: async () => {
-        const response = await api.get("/validate");
-        return response.data;
-    },
-
-    login: async (username: string, password: string) => {
-        const response = await api.post("/login", {username, password});
-        return response.data;
-    },
-
-    getUsers: async (): Promise<ApiUserProps[]> => {
-        const response = await api.get("/user");
-        return response.data;
-    },
-
-    getaUser: async (id: string): Promise<ApiUserProps> => {
-        const response = await api.post("/unique-user", {id});
-        return response.data;
-    },
+    auth: auth(api),
+    user: user(api),
+    rd: rd(api),
 
     getSavedBudgets: async (
         query: string,
@@ -146,11 +130,6 @@ export const useApi = () => ({
         return response.data;
     },
 
-    findUniqueUser: async (id: string) => {
-        const response = await api.post("/unique-user", {id});
-        return response.data;
-    },
-
     findAllHousingUnits: async () => {
         const response = await api.get("/housing-units");
         return response.data;
@@ -166,39 +145,17 @@ export const useApi = () => ({
         return response.data;
     },
 
-    createUser: async (
-        name: string,
-        email: string,
-        phone: string,
-        username: string,
-        password: string,
-        token_rd: string,
-        user_rd: string
-    ) => {
-        const response = await api.post("/user", {
-            name,
-            email,
-            phone,
-            username,
-            password,
-            token_rd,
-            user_rd,
-        });
-
-        return response;
-    },
-
     createCommonTariff: async (
         tariffs: AllTariffsProps[]
     ): Promise<"success" | "error"> => {
-        const response = await api.post("/common-date", {tariffs: tariffs});
+        const response = await api.post("/common-date", { tariffs: tariffs });
         return response.data.msg;
     },
 
     createSpecificTariff: async (
         tariffs: AllTariffsProps[]
     ): Promise<"success" | "error"> => {
-        const response = await api.post("/specific-date", {tariffs: tariffs});
+        const response = await api.post("/specific-date", { tariffs: tariffs });
         return response.data.msg;
     },
 
@@ -238,12 +195,7 @@ export const useApi = () => ({
     },
 
     deleteTariff: async (tariffs: string[]): Promise<"success" | "error"> => {
-        const response = await api.post("/tariff/delete", {tariffs: tariffs});
-        return response.data;
-    },
-
-    deleteUser: async (id: string): Promise<"success" | "error"> => {
-        const response = await api.delete("/user/" + id);
+        const response = await api.post("/tariff/delete", { tariffs: tariffs });
         return response.data;
     },
 
@@ -254,28 +206,6 @@ export const useApi = () => ({
 
     deleteDiscount: async (id: string) => {
         const response = await api.delete("/discount/" + id);
-        return response.data;
-    },
-
-    updateUser: async (
-        id: string,
-        name: string,
-        email: string,
-        phone: string,
-        username: string,
-        password: string,
-        token_rd: string,
-        user_rd: string
-    ): Promise<ApiUserProps> => {
-        const response = await api.put("/user/" + id, {
-            name,
-            email,
-            phone,
-            username,
-            password,
-            token_rd,
-            user_rd,
-        });
         return response.data;
     },
 
@@ -338,7 +268,7 @@ export const useApi = () => ({
     },
 
     changeOrderTariff: async (order_id: number, side: string) => {
-        const response = await api.post("/tariff/order", {order_id, side});
+        const response = await api.post("/tariff/order", { order_id, side });
         return response.data;
     },
 
@@ -406,42 +336,4 @@ export const useApi = () => ({
         return response.data;
     },
 
-
-    //RD
-    rdDeleteProduct: async (deal_id: string, deal_product_id: string) => {
-        const response = await api.post("/rd/delete_product", {
-            deal_id, deal_product_id
-        })
-        return response.data;
-    },
-    rdAddProduct: async (
-        deal_id: string,
-        product_id: string,
-        price: number,
-        amount = 1,
-    ) => {
-        const response = await api.post(
-            `/rd/add_product`,
-            {deal_id, product_id, price, amount}
-        );
-        return response.data;
-    },
-    rdChangeStage: async (deal_id: string, check_in: string, check_out: string, adt: number, chd: number[], pet: string[], corp = false) => {
-        const response = await api.post(`/rd/change_stage`, {
-            deal_id,
-            check_in,
-            check_out,
-            adt,
-            chd,
-            pet,
-            corp
-        });
-        return response.data;
-    },
-    rdGetaDeal: async (deal_id: string) => {
-        const response = await api.post(`/rd/get_a_deal`, {
-            deal_id
-        });
-        return response.data;
-    },
 });

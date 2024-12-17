@@ -7,7 +7,7 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { head, Row } from "./helpers";
 import { ApiDiscountProps } from "../../hooks/api/interfaces";
-import { ActionsInsightsApi } from "../../hooks/api/all/insights";
+import { ActionsInsightsApi } from "../../hooks/api/all/insights.api";
 import { useState } from "react";
 import InsightCloud from "./insights-cloud";
 

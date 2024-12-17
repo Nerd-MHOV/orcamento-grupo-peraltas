@@ -6,7 +6,7 @@ const useClientName = () => {
     const [clientName, setClientName] = useState("")
 
     async function getClientName(id: string) {
-        return api.rdGetaDeal(id)
+        return api.rd.getDealById(id)
             .then(res => {
               setClientName(res.name + "")
               return res.name + ""

@@ -21,7 +21,7 @@ export const FormNewCollaborator = () => {
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     const name = `${data.firstname} ${data.lastname}`;
     api
-      .createUser(
+      .user.create(
         name,
         data.email,
         data.phone,

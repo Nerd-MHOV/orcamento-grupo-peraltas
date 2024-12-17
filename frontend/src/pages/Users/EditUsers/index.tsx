@@ -14,7 +14,7 @@ export const EditUsers = () => {
   const [user, setUser] = useState<ApiUserProps | undefined>();
 
   const getUser = async () => {
-    const responseUser = await api.getaUser(id as string);
+    const responseUser = await api.user.getById(id as string);
     setUser(responseUser);
   };
 

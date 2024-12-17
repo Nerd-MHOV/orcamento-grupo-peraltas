@@ -16,7 +16,7 @@ export const UsersPage = () => {
   const [rows, setRows] = useState<dataUserProps[]>([]);
 
   const getUsers = async () => {
-    const users = await api.getUsers();
+    const users = await api.user.get();
     makeRows(users);
   };
 

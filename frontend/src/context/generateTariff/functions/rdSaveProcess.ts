@@ -48,7 +48,7 @@ export async function rdSaveProcess(budgets: DataContentProps[], group = false) 
             );
     }
 
-    await api.rdChangeStage(
+    await api.rd.changeStage(
         dealId, 
         format(realBudget.arrComplete?.selectionRange.startDate!, "dd/MM/yyyy"), 
         format(realBudget.arrComplete?.selectionRange.endDate!, "dd/MM/yyyy"), 
@@ -76,7 +76,7 @@ export async function rdSaveProcessCorp(budget: CorporateBodyResponseBudget) {
         budget.rowsValues.total.total,
         idClient,
     );
-    await api.rdChangeStage(
+    await api.rd.changeStage(
         idClient,
         format(dateIn, "dd/MM/yyyy"),
         format(dateOut, "dd/MM/yyyy"),
@@ -90,9 +90,9 @@ export async function rdSaveProcessCorp(budget: CorporateBodyResponseBudget) {
 async function deleteOldProd(dealId: string) {
     const api = useApi();
     // delete old products
-    const productsToDelete = (await api.rdGetaDeal(dealId)).deal_products
+    const productsToDelete = (await api.rd.getDealById(dealId)).deal_products
     for (const prod of productsToDelete) {
-        await api.rdDeleteProduct(dealId, prod.id)
+        await api.rd.deleteProduct(dealId, prod.id)
     }
 }
 async function apiAddProd(
@@ -106,7 +106,7 @@ async function apiAddProd(
             .getTariffORM(dateIn, dateOut)
             .then((tariff_id) => {
                 // pipe.addFile();
-                api.rdAddProduct(dealId, tariff_id.product_rd, total)
+                api.rd.addProduct(dealId, tariff_id.product_rd, total)
             })
     } catch (error) {}
 }

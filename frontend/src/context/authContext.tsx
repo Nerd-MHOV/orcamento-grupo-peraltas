@@ -16,7 +16,7 @@ export const AuthContextProvider: React.FC<ChildrenProps> = ({ children }) => {
     const storageData = localStorage.getItem("authToken");
     if (storageData) {
       await api
-        .validateToken()
+        .auth.validateToken()
         .then((data) => {
           if (data.id) setUserLogin(data.id);
           setLoading(false);
@@ -37,7 +37,7 @@ export const AuthContextProvider: React.FC<ChildrenProps> = ({ children }) => {
 
   const login = async (user: string, passwd: string) => {
     try {
-      const data = await api.login(user, passwd);
+      const data = await api.auth.login(user, passwd);
       if (data.user && data.token) {
         setUserLogin(data.user.id);
         setToken(data.token, data.user.id);

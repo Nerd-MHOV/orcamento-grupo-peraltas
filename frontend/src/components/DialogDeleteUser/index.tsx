@@ -36,7 +36,7 @@ export function DialogDeleteUser({
   const getUser = async () => {
     if (id === undefined) return handleClose();
 
-    const user = await api.getaUser(id);
+    const user = await api.user.getById(id);
 
     if (!user) {
       return handleClose();

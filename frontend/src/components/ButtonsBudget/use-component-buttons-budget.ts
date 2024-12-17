@@ -57,7 +57,7 @@ export function useComponentButtonsBudget(corporate: boolean) {
         return;
       }
       await rdSaveProcessCorp(bodyResponseBudget);
-      const arrUser = await api.findUniqueUser(userLogin);
+      const arrUser = await api.user.getById(userLogin);
       await pdfBudgetCorp(
         bodyResponseBudget!,
         arrUser.name,
@@ -70,7 +70,7 @@ export function useComponentButtonsBudget(corporate: boolean) {
       // save budget
       const deal_id = bodyResponseBudget.idClient;
       let response;
-      if (deal_id) response = await api.rdGetaDeal(deal_id);
+      if (deal_id) response = await api.rd.getDealById(deal_id);
       api.saveBudgetCorp(userLogin, bodyResponseBudget, true, response?.name);
   
       handleCloseBackdrop();
@@ -89,7 +89,7 @@ export function useComponentButtonsBudget(corporate: boolean) {
       ) {
         return;
       }
-      const arrUser = await api.findUniqueUser(userLogin);
+      const arrUser = await api.user.getById(userLogin);
       await pdfBudget(
         budgets,
         arrUser.name,
@@ -99,7 +99,7 @@ export function useComponentButtonsBudget(corporate: boolean) {
   
       const deal_id = budgets[0].arrComplete?.responseForm.rd_client;
       let response;
-      if (deal_id) response = await api.rdGetaDeal(deal_id);
+      if (deal_id) response = await api.rd.getDealById(deal_id);
   
       api.saveBudget(userLogin, budgets, true, response?.name)
   
@@ -115,7 +115,7 @@ export function useComponentButtonsBudget(corporate: boolean) {
       }
       const deal_id = bodyResponseBudget.idClient;
       let response;
-      if (deal_id) response = await api.rdGetaDeal(deal_id);
+      if (deal_id) response = await api.rd.getDealById(deal_id);
       let name = response?.name || "undefined";
       await pdfDescriptionCorp(dataTable, bodyResponseBudget, name);
       handleCloseBackdrop()
@@ -132,7 +132,7 @@ export function useComponentButtonsBudget(corporate: boolean) {
       handleOpenBackdrop()
       const deal_id = budgets[0].arrComplete?.responseForm.rd_client;
       let response;
-      if (deal_id) response = await api.rdGetaDeal(deal_id);
+      if (deal_id) response = await api.rd.getDealById(deal_id);
       let name = response?.name || "undefined";
       await pdfDescription(budgets, name);
       handleCloseBackdrop()

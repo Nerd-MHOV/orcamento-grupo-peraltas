@@ -6,7 +6,7 @@ import CollapsibleTableDiscounts from "../../components/TableDiscounts";
 import { useApi } from "../../hooks/api/api";
 import { ApiDiscountProps } from "../../hooks/api/interfaces";
 import "./style.scss";
-import { ActionsInsightsApi } from "../../hooks/api/all/insights";
+import { ActionsInsightsApi } from "../../hooks/api/all/insights.api";
 
 export const DiscountsPage = () => {
   const api = useApi();
