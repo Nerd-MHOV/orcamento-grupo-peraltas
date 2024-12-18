@@ -44,7 +44,10 @@ export interface InfoBudgetGTCP {
 }
 
 export interface LoadingGTCP {
-    handleOpenBackdrop: VoidFunction;
+    handleOpenBackdrop: (
+        message?: string | undefined,
+        canClose?: boolean | undefined,
+    ) => void;
     handleCloseBackdrop: VoidFunction;
 }
 export interface DatePartGTCP {

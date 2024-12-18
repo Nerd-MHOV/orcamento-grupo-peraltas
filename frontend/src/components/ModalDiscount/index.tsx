@@ -8,6 +8,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import { TextField } from "@mui/material";
 import "./style.scss";
 import { useGenerateTariff } from "../../context/generateTariff/generateTariff";
+import { getDiscountLimit } from "../FormOrc/partForm/get_discount_limit";
 
 export function ModalDiscount() {
   const {
@@ -17,6 +18,9 @@ export function ModalDiscount() {
     discountBeingEdited,
     addUnitaryDiscount,
     actionSelected,
+    stateApp,
+    handleOpenBackdrop,
+    handleCloseBackdrop
   } = useGenerateTariff();
 
   const [password, setPassword] = React.useState("");
@@ -25,7 +29,12 @@ export function ModalDiscount() {
   const [discount, setDiscount] = React.useState<number | null>(null);
 
   const handleChangeDiscount = async (value: number) => {
-    let limit = actionSelected?.percent_unitary ?? 0;
+    let limit = (actionSelected?.percent_unitary && getDiscountLimit({
+      action: actionSelected.percent_unitary,
+      stateApp,
+      handleOpenBackdrop,
+      handleCloseBackdrop,
+    })) ?? 0;
 
     if (value > limit) {
       setPassIsRequired(true);
@@ -42,8 +51,8 @@ export function ModalDiscount() {
     if (password !== "admin@2355" && passIsRequired) {
       // if (password == "ajuste" && discount && discount <= 20) {
       // } else {
-        setError(true);
-        return;
+      setError(true);
+      return;
       // }
     }
 

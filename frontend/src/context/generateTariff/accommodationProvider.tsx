@@ -17,7 +17,6 @@ import useInfoBudgets from "./hooks/useInfoBudgets";
 
 const AccommodadtionProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   
-  const [openBackdrop, setOpenBackdrop] = useState(false)
   
   const permissionHook = usePermission();
   const unitaryDiscountHook = useUnitaryDiscount();
@@ -31,9 +30,17 @@ const AccommodadtionProvider: React.FC<{ children: ReactNode }> = ({ children })
   const infoBudgetHook = useInfoBudgets();
 
   //Loading Component
-  const handleOpenBackdrop = () => {
+  const [openBackdrop, setOpenBackdrop] = useState(false)
+  const [messageBackdrop, setMessageBackdrop] = useState('Carregando...');
+  const [canCloseBackdrop, setCanColseBackdrop] = useState(true);
+  const handleOpenBackdrop = (
+    message = 'Carregando...',
+    canClose = true,
+  ) => {
+    setCanColseBackdrop(canClose);
+    setMessageBackdrop(message);
     setOpenBackdrop(true);
-  }
+  };
 
   const handleCloseBackdrop = () => {
     setOpenBackdrop(false);
@@ -84,9 +91,12 @@ const AccommodadtionProvider: React.FC<{ children: ReactNode }> = ({ children })
       <Backdrop
         sx={{ color: '#54a0ff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
         open={openBackdrop}
-        onClick={handleCloseBackdrop}
+        onClick={canCloseBackdrop ? handleCloseBackdrop : undefined}
       >
         <CircularProgress color="inherit" />
+        <p style={{
+          marginLeft: '10px',
+        }} >{messageBackdrop}</p>
       </Backdrop>
 
 

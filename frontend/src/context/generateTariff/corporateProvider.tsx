@@ -22,7 +22,17 @@ const CorporateProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const api = useApi();
     //Loading Component
     const [openBackdrop, setOpenBackdrop] = useState(false)
-    const handleOpenBackdrop = () => { setOpenBackdrop(true) }
+    const [messageBackdrop, setMessageBackdrop] = useState('Carregando...');
+    const [canCloseBackdrop, setCanColseBackdrop] = useState(true);
+    const handleOpenBackdrop = (
+        message = 'Carregando...',
+        canClose = true,
+    ) => {
+        setCanColseBackdrop(canClose);
+        setMessageBackdrop(message);
+        setOpenBackdrop(true);
+    };
+
     const handleCloseBackdrop = () => { setOpenBackdrop(false) }
     const loadingComponent = {
         handleOpenBackdrop,
@@ -121,10 +131,14 @@ const CorporateProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
             <Backdrop
                 sx={{ color: '#54a0ff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
                 open={openBackdrop}
-                onClick={handleCloseBackdrop}
+                onClick={canCloseBackdrop ? handleCloseBackdrop : undefined}
             >
                 <CircularProgress color="inherit" />
+                <p style={{
+                    marginLeft: '10px',
+                }} >{messageBackdrop}</p>
             </Backdrop>
+
 
 
             {children}

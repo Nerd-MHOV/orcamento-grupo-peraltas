@@ -46,39 +46,39 @@ const InsightCloud = (props: {
       <h4 style={{ margin: 0, padding: 0, color: '#333' }}>Insights</h4>
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
         <span>Total</span>
-        <span>{props.insights.total}</span>
+        <span>{props.insights?.total || '--'}</span>
       </div>
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
         <span>Total Util</span>
-        <span>{props.insights.totalUtil}</span>
+        <span>{props.insights?.totalUtil || '--'}</span>
       </div>
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
         <span><span style={circleStyle('green')}></span>Ganho</span>
-        <span>{props.insights.ganho}</span>
+        <span>{props.insights?.ganho || '--'}</span>
       </div>
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
         <span><span style={circleStyle('red')}></span>Perdido</span>
-        <span>{props.insights.perdido}</span>
+        <span>{props.insights?.perdido || '--'}</span>
       </div>
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
         <span><span style={circleStyle('blue')}></span>Em Andamento</span>
-        <span>{props.insights.emAndamento}</span>
+        <span>{props.insights?.emAndamento || '--'}</span>
       </div>
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
         <span><span style={circleStyle('orange')}></span>Vencido</span>
-        <span>{props.insights.vencido}</span>
+        <span>{props.insights?.vencido || '--'}</span>
       </div>
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
         <span><span style={circleStyle('purple')}></span>Aguardando</span>
-        <span>{props.insights.aguardando}</span>
+        <span>{props.insights?.aguardando || '--'}</span>
       </div>
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
         <span><span style={circleStyle('gray')}></span>Refeito</span>
-        <span>{props.insights.refeito}</span>
+        <span>{props.insights?.refeito || '--'}</span>
       </div>
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
         <span><span style={circleStyle('white')}></span>None</span>
-        <span>{props.insights.none}</span>
+        <span>{props.insights?.none || '--'}</span>
       </div>
     </div>
   );

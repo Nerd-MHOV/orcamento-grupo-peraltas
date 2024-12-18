@@ -8,6 +8,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import { TextField } from "@mui/material";
 import "./style.scss";
 import { useGenerateTariff, useGenerateTariffCorporate } from "../../context/generateTariff/generateTariff";
+import { getDiscountLimit } from "../FormOrc/partForm/get_discount_limit";
 
 export function ModalDiscount() {
   const {
@@ -16,6 +17,9 @@ export function ModalDiscount() {
     openModalDiscount: open,
     discountBeingEdited,
     addUnitaryDiscount,
+    stateApp,
+    handleCloseBackdrop,
+    handleOpenBackdrop,
     actionSelected,
   } = useGenerateTariffCorporate();
 
@@ -25,7 +29,13 @@ export function ModalDiscount() {
   const [discount, setDiscount] = React.useState<number | null>(null);
 
   const handleChangeDiscount = async (value: number) => {
-    let limit = actionSelected?.percent_unitary ?? 0;
+    let limit = (actionSelected?.percent_unitary && getDiscountLimit({
+          action: actionSelected.percent_unitary,
+          stateApp,
+          handleOpenBackdrop,
+          handleCloseBackdrop,
+        })) ?? 0;
+
 
     if (value > limit) {
       setPassIsRequired(true);
