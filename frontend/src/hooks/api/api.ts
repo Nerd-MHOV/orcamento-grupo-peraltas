@@ -171,8 +171,14 @@ export const useApi = () => ({
 
     createDiscount: async (
         name: string,
-        percent_general: number,
-        percent_unitary: number,
+        percent_general: {
+            occupancy: number;
+            percent: number;
+        }[],
+        percent_unitary: {
+            occupancy: number;
+            percent: number;
+        }[],
         daily_minimum: number,
         daily_maximum: number,
         payers_minimum: number,
@@ -245,8 +251,14 @@ export const useApi = () => ({
 
     updateDiscount: async (
         id: string,
-        percent_general: number,
-        percent_unitary: number,
+        percent_general: {
+            occupancy: number;
+            percent: number;
+        }[],
+        percent_unitary: {
+            occupancy: number;
+            percent: number;
+        }[],
         dates: { date: string }[]
     ): Promise<"success" | "error"> => {
         const response = await api.put("/discount/" + id, {

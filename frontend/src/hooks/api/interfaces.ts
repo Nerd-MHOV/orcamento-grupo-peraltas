@@ -22,8 +22,14 @@ export interface AllTariffsProps {
 export interface ApiDiscountProps {
   id: string;
   name: string;
-  percent_general: number;
-  percent_unitary: number;
+  percent_general: {
+    occupancy: number,
+    percent: number,
+  }[];
+  percent_unitary: {
+    occupancy: number,
+    percent: number,
+  }[];
   daily_courtesy: boolean;
   daily_minimum: number;
   daily_maximum: number;

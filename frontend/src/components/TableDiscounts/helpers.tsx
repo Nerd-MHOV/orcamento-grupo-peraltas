@@ -106,8 +106,28 @@ export function Row(props: {
         <TableCell component="th" scope="row" onMouseEnter={props.onMouseEnter} onMouseLeave={props.onMouseLeave}>
           {row.name}
         </TableCell>
-        <TableCell>{row.percent_general}%</TableCell>
-        <TableCell>{row.percent_unitary}%</TableCell>
+        <TableCell>
+          {
+            row.percent_general.map((percent, index) => {
+              return (
+                <div key={index}>
+                  {percent.occupancy} - {percent.percent}%
+                </div>
+              );  
+            })
+          }
+        </TableCell>
+        <TableCell>
+        {
+            row.percent_unitary.map((percent, index) => {
+              return (
+                <div key={index}>
+                  {percent.occupancy} - {percent.percent}%
+                </div>
+              );  
+            })
+          }
+        </TableCell>
         <TableCell>
           <IconButton
             aria-label="expand row"

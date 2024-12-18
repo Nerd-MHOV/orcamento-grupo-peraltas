@@ -211,8 +211,8 @@ model BudgetsFavorites {
 model Discounts {
   id              String          @id @default(uuid())
   name            String          @unique
-  percent_general Float
-  percent_unitary Float
+  percent_general Json
+  percent_unitary Json
   daily_courtesy  Boolean
   daily_minimum   Int
   daily_maximum   Int
