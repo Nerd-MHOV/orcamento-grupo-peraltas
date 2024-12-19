@@ -22,7 +22,7 @@ export const SpecificMonth = () => {
   const [holidays, setHolidays] = useState<FindHolidaysProps[]>([]);
 
   const getHolidays = async () => {
-    const response = await api.findHolidays();
+    const response = await api.tariff.specific.getHolidays();
     console.log(response);
     setHolidays(response);
   };

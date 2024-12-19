@@ -36,7 +36,7 @@ export function DialogDeleteRequirement({
   const getRequirement = async () => {
     if (id === undefined) return handleClose();
 
-    const requirement = await api.getaRequirement(id);
+    const requirement = await api.requirement.getByName(id);
 
     if (!requirement) {
       return handleClose();

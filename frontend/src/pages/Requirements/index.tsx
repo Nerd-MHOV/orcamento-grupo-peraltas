@@ -16,7 +16,7 @@ export const RequirementsPage = () => {
   const [rows, setRows] = useState<dataRequirementsProps[]>([]);
 
   const getRequirements = async () => {
-    const requirements = await api.getRequirements();
+    const requirements = await api.requirement.get();
     makeRows(requirements);
   };
 
@@ -34,7 +34,7 @@ export const RequirementsPage = () => {
             requirement.price,
             requirement.type,
             requirement.typeModal,
-            requirement.active,
+            requirement.active
           )
         );
     });

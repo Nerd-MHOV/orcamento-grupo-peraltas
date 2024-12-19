@@ -148,7 +148,7 @@ export function Row(props: {
     let arrTariff = common
       ? [common.tariff_to_midweek_id, common.tariff_to_weekend_id]
       : [specific.tariffs_id];
-    const result = await api.deleteTariff(arrTariff);
+    const result = await api.tariff.delete(arrTariff);
     reloadRows();
     handleDeleteClose();
   };

@@ -22,7 +22,7 @@ export const CommonMonths = () => {
     nowMonth.setMonth(0);
     let maxMonth = addYears(nowMonth, 2);
     let monthOptions = [];
-    const selectedMonths = await api.findMonthWithTariff();
+    const selectedMonths = await api.tariff.common.get();
 
     while (nowMonth < maxMonth) {
       let disabled = false;
@@ -69,7 +69,6 @@ export const CommonMonths = () => {
         disabled: false,
       };
     });
-
 
     setSelected(selectDates);
   }, [options]);

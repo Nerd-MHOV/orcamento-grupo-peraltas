@@ -42,7 +42,7 @@ export const EditTariff = () => {
   };
 
   const getTariff = async () => {
-    const tariffResponse = await api.getaTariff(id as string);
+    const tariffResponse = await api.tariff.getById(id as string);
     setTariff(tariffResponse);
   };
 

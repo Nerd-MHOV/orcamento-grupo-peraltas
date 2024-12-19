@@ -14,7 +14,7 @@ export const DiscountsPage = () => {
   const [insights, setInsights] = useState<ActionsInsightsApi>({});
 
   const getDiscounts = async () => {
-    const response = await api.getAllDiscounts();
+    const response = await api.discount.get();
     const insResponse = await api.insights.actions();
     setInsights(insResponse);
     setDiscounts(response);
@@ -27,7 +27,7 @@ export const DiscountsPage = () => {
   return (
     <LayoutBudget>
       <div className="p20">
-        <div className="containerBx" style={{ marginBottom: '100px'}}>
+        <div className="containerBx" style={{ marginBottom: "100px" }}>
           <div className="top">
             <div className="titleContainerBx">Gerenciar Ação</div>
             <Link to="/discounts/create" className="link">

@@ -32,28 +32,33 @@ export function createRequirementsData(
   typeModal: string,
   active: boolean
 ) {
-
-  return { name, type: translateType(type), typeModal: translateTypeModal(typeModal), price, active };
+  return {
+    name,
+    type: translateType(type),
+    typeModal: translateTypeModal(typeModal),
+    price,
+    active,
+  };
 }
 
 const translateType = (type: string) => {
   const translations: { [key: string]: string } = {
-    accommodation: 'Hospedagem',
-    corporate: 'Corporativo',
-    location: 'Locação',
-    both: 'Ambos'
+    accommodation: "Hospedagem",
+    corporate: "Corporativo",
+    location: "Locação",
+    both: "Ambos",
   };
   return translations[type] || type;
-}
+};
 const translateTypeModal = (type: string) => {
   const translations: { [key: string]: string } = {
-    ticket: 'Ingresso',
-    person: 'Especial não usar',
-    amount: 'Quantidade',
-    participant: 'Participante'
+    ticket: "Ingresso",
+    person: "Especial não usar",
+    amount: "Quantidade",
+    participant: "Participante",
   };
   return translations[type] || type;
-}
+};
 
 export default function TableRequirements({
   rows,
@@ -77,7 +82,7 @@ export default function TableRequirements({
           setOpenEdit(false);
         }}
         confirm={async (price: number) => {
-          const response = await api.priceRequirement(requirementId, price);
+          const response = await api.requirement.price(requirementId, price);
           att();
           return true;
         }}
@@ -137,7 +142,7 @@ export default function TableRequirements({
                   style={{ cursor: "pointer" }}
                   className="css-1pe4mpk-MuiButtonBase-root-MuiIconButton-root"
                   onClick={() => {
-                    api.activeRequirement(row.name).finally(() => {
+                    api.requirement.active(row.name).finally(() => {
                       att();
                     });
                   }}

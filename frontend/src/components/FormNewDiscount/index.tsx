@@ -53,9 +53,6 @@ export const FormNewDiscount = () => {
   const [actionRuleOccupancy, setActionRuleOccupancy] = useState(1);
 
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
-
-   
-
     if (!applicableIn) {
       setErrForm("Selecione a onde deseja aplicar a ação");
       return;
@@ -84,22 +81,26 @@ export const FormNewDiscount = () => {
       return !duplicated;
     });
 
-    const generalPercent = Array.from({ length: actionRuleOccupancy }).map((_, i) => {
-      return {
-        occupancy: +data["occypancy_"+i],
-        percent: +data["generalPercent_"+i],
+    const generalPercent = Array.from({ length: actionRuleOccupancy }).map(
+      (_, i) => {
+        return {
+          occupancy: +data["occypancy_" + i],
+          percent: +data["generalPercent_" + i],
+        };
       }
-    });
+    );
 
-    const unitaryPercent = Array.from({ length: actionRuleOccupancy }).map((_, i) => {
-      return {
-        occupancy: +data["occypancy_"+i],
-        percent: +data["unitaryPercent_"+i],
+    const unitaryPercent = Array.from({ length: actionRuleOccupancy }).map(
+      (_, i) => {
+        return {
+          occupancy: +data["occypancy_" + i],
+          percent: +data["unitaryPercent_" + i],
+        };
       }
-    });
+    );
 
-    api
-      .createDiscount(
+    api.discount
+      .create(
         data.name,
         generalPercent,
         unitaryPercent,
@@ -147,8 +148,12 @@ export const FormNewDiscount = () => {
     setDatesRange([...arr]);
   };
 
-  const addRuleOccupancy = () => { setActionRuleOccupancy(prev => prev + 1) }
-  const removeRuleOccupancy = () => { setActionRuleOccupancy(prev => prev > 1 ? prev - 1 : prev) }
+  const addRuleOccupancy = () => {
+    setActionRuleOccupancy((prev) => prev + 1);
+  };
+  const removeRuleOccupancy = () => {
+    setActionRuleOccupancy((prev) => (prev > 1 ? prev - 1 : prev));
+  };
 
   return (
     <div className="new-requirement">
@@ -167,23 +172,22 @@ export const FormNewDiscount = () => {
             />
             {Array.from({ length: actionRuleOccupancy }).map((_, i) => (
               <>
-                {
-                  (i == actionRuleOccupancy - 1 && actionRuleOccupancy > 1) && 
+                {i == actionRuleOccupancy - 1 && actionRuleOccupancy > 1 && (
                   <AddButton remove onClick={removeRuleOccupancy} />
-                }
+                )}
                 <Box gap={2} display="flex">
                   <TextField
                     required
                     margin="dense"
-                    {...register("occypancy_"+i)}
-                    label='Ocupação'
+                    {...register("occypancy_" + i)}
+                    label="Ocupação"
                     type="number"
                     variant="outlined"
                   />
                   <TextField
                     required
                     margin="dense"
-                    {...register("generalPercent_"+i)}
+                    {...register("generalPercent_" + i)}
                     label="% limite Geral"
                     type="number"
                     variant="outlined"
@@ -191,16 +195,14 @@ export const FormNewDiscount = () => {
                   <TextField
                     required
                     margin="dense"
-                    {...register("unitaryPercent_"+i)}
+                    {...register("unitaryPercent_" + i)}
                     label="% limite unitário"
                     type="number"
                     variant="outlined"
                   />
                 </Box>
-
               </>
-            )
-            )}
+            ))}
             <AddButton onClick={addRuleOccupancy} />
             <Box gap={2} display="flex">
               <TextField
@@ -294,28 +296,24 @@ export const FormNewDiscount = () => {
         </Box>
 
         <div className="button">
-          <Btn action="Cadastrar" color="whiteBlue" onClick={() => { }} />
+          <Btn action="Cadastrar" color="whiteBlue" onClick={() => {}} />
         </div>
       </form>
     </div>
   );
 };
 
-
-const AddButton = ({
-  remove = false,
-  onClick = () => { }
-}) => (
+const AddButton = ({ remove = false, onClick = () => {} }) => (
   <div className="add-line">
     <div className="button-add-line">
-      {
-        remove
-          ? <Remove onClick={onClick} fontSize='small' />
-          : <Add onClick={onClick} fontSize='small' />
-      }
+      {remove ? (
+        <Remove onClick={onClick} fontSize="small" />
+      ) : (
+        <Add onClick={onClick} fontSize="small" />
+      )}
     </div>
     <div className="line">
       <Divider />
     </div>
   </div>
-)
+);

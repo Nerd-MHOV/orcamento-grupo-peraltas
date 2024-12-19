@@ -3,5 +3,5 @@ import { useApi } from "../../hooks/api/api";
 
 export async function deleteRequirement(id: string) {
   const api = useApi();
-  await api.deleteRequirement(id);
+  await api.requirement.delete(id);
 }

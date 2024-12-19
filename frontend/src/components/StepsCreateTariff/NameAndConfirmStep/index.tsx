@@ -29,7 +29,7 @@ export const NameAndConfirmStep = () => {
   const [tariffs, setTariffs] = useState<AllTariffsProps[]>([]);
 
   const getTariffs = async () => {
-    const response = await api.getAllTariffs();
+    const response = await api.tariff.get();
     setTariffs(response);
   };
 

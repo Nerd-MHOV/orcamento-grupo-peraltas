@@ -210,12 +210,12 @@ export const CreateTariffContextProvider = ({
 
   const createTariff = async () => {
     if (arrTariffs.type === "common") {
-      api.createCommonTariff(relationTariffs).then((response) => {
+      api.tariff.common.create(relationTariffs).then((response) => {
         setLoading(false);
         setStateResponse(response);
       });
     } else {
-      api.createSpecificTariff(relationTariffs).then((response) => {
+      api.tariff.specific.create(relationTariffs).then((response) => {
         setLoading(false);
         setStateResponse(response);
       });

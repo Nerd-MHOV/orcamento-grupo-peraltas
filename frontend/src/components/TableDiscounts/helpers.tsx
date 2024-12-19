@@ -47,8 +47,8 @@ export function Row(props: {
   row: ApiDiscountProps;
   ButtonsOn: boolean;
   reloadRows: VoidFunction;
-  onMouseEnter?: React.MouseEventHandler<HTMLTableCellElement>
-  onMouseLeave?: React.MouseEventHandler<HTMLTableCellElement>
+  onMouseEnter?: React.MouseEventHandler<HTMLTableCellElement>;
+  onMouseLeave?: React.MouseEventHandler<HTMLTableCellElement>;
 }) {
   const api = useApi();
   const { row, ButtonsOn, reloadRows } = props;
@@ -60,12 +60,12 @@ export function Row(props: {
   const [deleteOpenModal, setDeleteOpenModal] = React.useState(false);
 
   const handleToggleActive = async (id: string) => {
-    await api.toggleActiveDiscount(id);
+    await api.discount.toggleActive(id);
     reloadRows();
   };
 
   const handleToggleDailyCourtesy = async (id: string) => {
-    await api.toggleDailyCourtesy(id);
+    await api.discount.toggleDailyCourtesy(id);
     reloadRows();
   };
 
@@ -80,7 +80,7 @@ export function Row(props: {
 
   const handleDelete = async () => {
     if (rowToDelete === undefined) return;
-    await api.deleteDiscount(rowToDelete.id);
+    await api.discount.delete(rowToDelete.id);
     handleCloseModal();
     reloadRows();
   };
@@ -103,30 +103,31 @@ export function Row(props: {
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
         </TableCell>
-        <TableCell component="th" scope="row" onMouseEnter={props.onMouseEnter} onMouseLeave={props.onMouseLeave}>
+        <TableCell
+          component="th"
+          scope="row"
+          onMouseEnter={props.onMouseEnter}
+          onMouseLeave={props.onMouseLeave}
+        >
           {row.name}
         </TableCell>
         <TableCell>
-          {
-            row.percent_general.map((percent, index) => {
-              return (
-                <div key={index}>
-                  {percent.occupancy} - {percent.percent}%
-                </div>
-              );  
-            })
-          }
+          {row.percent_general.map((percent, index) => {
+            return (
+              <div key={index}>
+                {percent.occupancy} - {percent.percent}%
+              </div>
+            );
+          })}
         </TableCell>
         <TableCell>
-        {
-            row.percent_unitary.map((percent, index) => {
-              return (
-                <div key={index}>
-                  {percent.occupancy} - {percent.percent}%
-                </div>
-              );  
-            })
-          }
+          {row.percent_unitary.map((percent, index) => {
+            return (
+              <div key={index}>
+                {percent.occupancy} - {percent.percent}%
+              </div>
+            );
+          })}
         </TableCell>
         <TableCell>
           <IconButton

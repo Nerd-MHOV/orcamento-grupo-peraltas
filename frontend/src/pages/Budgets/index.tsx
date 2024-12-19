@@ -20,7 +20,7 @@ export const BudgetsPage = () => {
   const [onlyFavorites, setOnlyFavorites] = useState(false);
 
   const getBudgets = async () => {
-    const response = await api.getSavedBudgets(search, onlyFavorites);
+    const response = await api.budget.getSaved(search, onlyFavorites);
     setBudgets(response);
   };
 
@@ -51,7 +51,7 @@ export const BudgetsPage = () => {
           uhs: uhs,
           favorites: bud.favorites,
           name: bud.name,
-          status: bud.status
+          status: bud.status,
         })
       );
     });
@@ -66,8 +66,6 @@ export const BudgetsPage = () => {
   useEffect(() => {
     getBudgets();
   }, [search, onlyFavorites]);
-
-
 
   return (
     <LayoutBudget>

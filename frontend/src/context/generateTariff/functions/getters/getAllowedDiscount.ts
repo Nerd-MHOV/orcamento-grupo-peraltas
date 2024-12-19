@@ -11,7 +11,7 @@ export const getAllowedDiscount = async (
   payers: number
 ) => {
   const api = useApi();
-  const discountData = await api.getAllDiscounts();
+  const discountData = await api.discount.get();
   let initialDate = selectionRange.startDate;
   let finalDate = selectionRange.endDate;
   let days = differenceInDays(finalDate, initialDate);

@@ -194,7 +194,7 @@ export const EditTariffContextProvider = ({
   const updateTariff = async () => {
     if (tariff === undefined) return;
     if (getTariffType() !== "specific") {
-      const response = await api.updateCommonTariff(
+      const response = await api.tariff.common.update(
         tariff.name,
         tariff.product_rd,
         tariff.TariffValues as TariffValuesProps[],
@@ -205,7 +205,7 @@ export const EditTariffContextProvider = ({
       setStateResponse(response.msg);
       setLoading(false);
     } else {
-      const response = await api.updateSpecificTariff(
+      const response = await api.tariff.specific.update(
         tariff.name,
         tariff.product_rd,
         tariff.TariffValues as TariffValuesProps[],
