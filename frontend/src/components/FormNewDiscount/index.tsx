@@ -180,7 +180,7 @@ export const FormNewDiscount = () => {
                     required
                     margin="dense"
                     {...register("occypancy_" + i)}
-                    label="Ocupação"
+                    label="UHs vendidas"
                     type="number"
                     variant="outlined"
                   />
