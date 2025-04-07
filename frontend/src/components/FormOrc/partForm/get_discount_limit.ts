@@ -32,5 +32,5 @@ export function getDiscountLimit({
             return item.percent;
         }
         return acc;
-    }, 0);
+    }, sorted[0].percent);
 }
