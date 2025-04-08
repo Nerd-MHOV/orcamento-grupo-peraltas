@@ -63,8 +63,8 @@ export const FormNewDiscount = () => {
       let lastDay = range.endDate;
 
       while (initDay <= lastDay) {
-        arrayDates.push({ date: format(initDay, "yyyy-MM-dd") });
         initDay = addDays(initDay, 1);
+        arrayDates.push({ date: format(initDay, "yyyy-MM-dd") });
       }
     });
 
