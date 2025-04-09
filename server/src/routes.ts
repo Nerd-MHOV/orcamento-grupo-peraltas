@@ -49,12 +49,13 @@ import { UpdateUserController } from "./controllers/Users/UpdateUsersController"
 import { ValidateUsersController } from "./controllers/Users/ValidateUsersController";
 import { authMiddleware } from "./middlewares/authMiddleware";
 import { isAdmin } from "./middlewares/isAdmin";
-import {RDController} from "./controllers/RdStation/RDController";
-import {RoutinesAutomations} from "./controllers/RoutinesAutomations/RoutinesAutomations";
+import { RDController } from "./controllers/RdStation/RDController";
+import { RoutinesAutomations } from "./controllers/RoutinesAutomations/RoutinesAutomations";
 import assist48hInWalking from "./crons/DBStatus/assist48hInWalking";
-import {assistDBStatus} from "./crons/DBStatus/assistDBStatus";
+import { assistDBStatus } from "./crons/DBStatus/assistDBStatus";
 import { CalcBudgetCorpController } from "./controllers/Budget/CalcBudgetCorpController";
 import { Actions } from "./controllers/Insights/actions";
+import { AppHotel } from "./controllers/ReservAppHotel/getPeriodController";
 
 const routes = express.Router();
 
@@ -120,6 +121,7 @@ const daily_courtesy = new ToggleDailyCourtesyController();
 const deleteDiscount = new DeleteDiscountController();
 const rd = new RDController();
 const routinesAutomations = new RoutinesAutomations();
+const appHotel = new AppHotel();
 
 const insightsActions = new Actions();
 
@@ -134,7 +136,9 @@ routes.get("/routines/assist-48h-in-walked", routinesAutomations.assist48hInWalk
 routes.get("/routines/assist-24h-in-expend", routinesAutomations.assist24hInExpend)
 routes.get("/routines/days-to-dead-line", routinesAutomations.daysToDeadLine)
 routes.get("/routines/google-forms", routinesAutomations.googleForms)
+routes.get("/routines/att-app-hotel", routinesAutomations.attAppHotel);
 
+routes.get("/app-hotel", appHotel.getPeriod);
 
 routes.use(authMiddleware);
 routes.delete("/user/:id", isAdmin, deleteUser.handle);
@@ -207,6 +211,7 @@ routes.post("/rd/change_stage", rd.changeStage)
 
 routes.get("/insights/actions/:action", insightsActions.action);
 routes.get("/insights/actions", insightsActions.all);
+
 
 
 // routes.post("/pipedrive", changeDeal.handle);

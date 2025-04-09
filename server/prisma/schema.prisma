@@ -11,16 +11,16 @@ datasource db {
 }
 
 model User {
-  id              String             @id @default(uuid())
-  email           String             @unique
-  phone           String
-  name            String             @unique
-  username        String             @unique
-  password        String
-  user_rd         String
-  token_rd        String
-  level           Float              @default(1)
-  active          Boolean            @default(true)
+  id       String  @id @default(uuid())
+  email    String  @unique
+  phone    String
+  name     String  @unique
+  username String  @unique
+  password String
+  user_rd  String
+  token_rd String
+  level    Float   @default(1)
+  active   Boolean @default(true)
 
   SaveBudgets     SaveBudgets[]
   Favorites       BudgetsFavorites[]
@@ -247,4 +247,16 @@ model Deals {
   check_out     String?
   win           String?
   amount_total  String?
+}
+
+model ReservsAppHotel {
+  id               String   @id @default(uuid())
+  type_reserv_code String
+  reserv_code      String
+  date_init        DateTime
+  date_end         DateTime
+  adt              Int
+  chd              Int
+  room             String
+  situation        String
 }

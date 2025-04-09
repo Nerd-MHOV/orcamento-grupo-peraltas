@@ -185,7 +185,7 @@ export const assistOpportunity = async (page = 1) => {
             last_deal: deal.id,
           },
         })
-        .catch(async (err) => {
+        .catch(async () => {
           await prismaClient.routines.create({
             data: {
               routine: "opportunity",

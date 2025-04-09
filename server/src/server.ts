@@ -13,6 +13,7 @@ import { createBullBoard } from "@bull-board/api";
 import { BullAdapter } from "@bull-board/api/bullAdapter";
 import { fsAssistDaysDeadLine } from "./crons/fsAssistDaysDeadLine";
 import { fsAssistGoogleForms } from "./crons/fsAssistGoogleForms";
+import { fsAttDataAppHotel } from "./crons/fsAttDataAppHotel";
 
 require("dotenv").config();
 
@@ -67,6 +68,8 @@ cron.schedule("0 */2 * * *", fsAssistDBStatus); // a cada 2h
 // cron.schedule("0 10 * * *", assist24hInExpend) // 10h da manhã
 cron.schedule("0 3 * * *", fsAssistDaysDeadLine); // 3h da manhã
 cron.schedule("0 2 * * *", fsAssistGoogleForms); // 2h da manhã
+
+cron.schedule("0 23 * * *", fsAttDataAppHotel); // 23h da noite
 
 //app.use(errorMiddleware);
 app.listen(port, () => {
