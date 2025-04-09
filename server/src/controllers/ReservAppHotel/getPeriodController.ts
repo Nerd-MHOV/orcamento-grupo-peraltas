@@ -9,24 +9,21 @@ const unidades = ['100', '101', '102', '103', '104', '105', '106', '107', '108',
 export class AppHotel {
     async getPeriod(request: Request, response: Response) {
         let { start, end } = request.body;
-
+        console.log("[ APP HOTEL ] INFO - Start date:", start);
+        console.log("[ APP HOTEL ] INFO - End date:", end);
         try {
             if (!start.includes(":")) start = `${start}T16:00:00-03:00`;
             if (!end.includes(":")) end = `${end}T16:00:00-03:00`;
             const startDate = new Date(start);
             const endDate = new Date(end);
 
-            console.log("Start Date:", startDate.toLocaleString());
-            console.log("End Date:", endDate.toLocaleString());
-
-
-            console.log("Unidades:", unidades.length);
             const reservations = await prismaClient.reservsAppHotel.findMany({
                 where: {
                     AND: [
                         { date_init: { lte: endDate } },
                         { date_end: { gte: startDate } },
                         { room: { in: unidades } }
+                        // essa verificação já é feita no servidor do app, se for passado ?unidade=true mas ta esquisito....
                     ]
                 },
             });

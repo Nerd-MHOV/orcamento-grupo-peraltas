@@ -138,7 +138,7 @@ routes.get("/routines/days-to-dead-line", routinesAutomations.daysToDeadLine)
 routes.get("/routines/google-forms", routinesAutomations.googleForms)
 routes.get("/routines/att-app-hotel", routinesAutomations.attAppHotel);
 
-routes.get("/app-hotel", appHotel.getPeriod);
+routes.post("/app-hotel", appHotel.getPeriod);
 
 routes.use(authMiddleware);
 routes.delete("/user/:id", isAdmin, deleteUser.handle);

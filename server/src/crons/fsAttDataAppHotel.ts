@@ -11,7 +11,7 @@ const config = {
 export async function fsAttDataAppHotel() {
     console.log("[ APP HOTEL ] INFO - Starting data update");
     const { init: date_init, end: date_end } = getInitAndEnd(config);
-    const url = `https://servicesapp.brotasecoresort.com.br:8009/testes/get_uhs.php?check_in=${date_init}&check_out=${date_end}`;
+    const url = `https://servicesapp.brotasecoresort.com.br:8009/testes/get_uhs.php?check_in=${date_init}&check_out=${date_end}&unidade=true`;
 
     // Create an HTTPS agent that bypasses certificate verification
     const agent = new https.Agent({ rejectUnauthorized: false });
