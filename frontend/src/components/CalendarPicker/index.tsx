@@ -1,24 +1,26 @@
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import { useEffect} from "react";
+import { useEffect } from "react";
 import { DateRangePicker } from "react-date-range";
-import { useGenerateTariff, useGenerateTariffCorporate } from "../../context/generateTariff/generateTariff";
+import {
+  useGenerateTariff,
+  useGenerateTariffCorporate,
+} from "../../context/generateTariff/generateTariff";
 import useQuery from "../../hooks/urlQuery/query";
 import { getUnitUsing } from "../../context/generateTariff/functions/getters/getUnitUsing";
-import SelectionRangeProps from "../../context/generateTariff/interfaces/selectionRangeProps";
-import { selectionRangeInitial } from "../../context/generateTariff/initial";
 
 export const CalendarPicker = ({ corporate = false }) => {
-  const { 
-    handleSelectDate, 
-    holidays, 
-    monthsWithTariffs, 
+  const {
+    handleSelectDate,
+    holidays,
+    monthsWithTariffs,
     selectionRange,
     setUnitUsing,
     setStateApp,
-    callHandleForm,
     staff,
-  } = corporate ? useGenerateTariffCorporate() : {...useGenerateTariff(), staff: false};
+  } = corporate
+    ? useGenerateTariffCorporate()
+    : { ...useGenerateTariff(), staff: false };
 
   const query = useQuery();
   function customDayContent(day: Date) {
@@ -47,7 +49,7 @@ export const CalendarPicker = ({ corporate = false }) => {
   }
 
   function customDisableDays(day: Date) {
-    if (holidays.includes(format(day, "yyyy-MM-dd")))  return false;
+    if (holidays.includes(format(day, "yyyy-MM-dd"))) return false;
     else if (monthsWithTariffs.includes(format(day, "yyyy-MM"))) return false;
     return true;
   }
@@ -59,53 +61,57 @@ export const CalendarPicker = ({ corporate = false }) => {
     setUnitUsing(response.units);
   }
 
-    useEffect(() => {
-        if(query.get("check-in") && query.get("check-out")) {
-            setTimeout(() => {
-                handleSelectDate({
-                    selection: {
-                        startDate: new Date(query.get("check-in")!),
-                        endDate: new Date(query.get("check-out")!),
-                        key: "selection"
-                    }
-                })
-            }, 1000)
-        }
-    }, []);
-
-    useEffect( () => {
-      whenChangeSelectionRange()
-      // callHandleForm()
-    }, [selectionRange])
-
-    useEffect( () => {
-      if(staff) {
+  useEffect(() => {
+    if (query.get("check-in") && query.get("check-out")) {
+      setTimeout(() => {
         handleSelectDate({
-          second: {
-            startDate: selectionRange[0].startDate,
-            endDate: selectionRange[0].startDate,
-            key: 'second',
-            color: '#2b9364bf',
-          }
-        })
-      } else {
-        handleSelectDate({clear: true});
-      }
-    }, [staff] )
+          selection: {
+            startDate: new Date(query.get("check-in")!),
+            endDate: new Date(query.get("check-out")!),
+            key: "selection",
+          },
+        });
+      }, 1000);
+    }
+  }, []);
+
+  useEffect(() => {
+    whenChangeSelectionRange();
+    // callHandleForm()
+  }, [selectionRange]);
+
+  useEffect(() => {
+    if (staff) {
+      handleSelectDate({
+        second: {
+          startDate: selectionRange[0].startDate,
+          endDate: selectionRange[0].startDate,
+          key: "second",
+          color: "#2b9364bf",
+        },
+      });
+    } else {
+      handleSelectDate({ clear: true });
+    }
+  }, [staff]);
 
   return (
     <>
-    <DateRangePicker
-      ranges={selectionRange}
-      onChange={handleSelectDate}
-      months={2}
-      showDateDisplay={corporate}
-      disabledDay={customDisableDays}
-      dayContentRenderer={customDayContent}
-      direction="horizontal"
-      locale={ptBR}
-    />
-    <input type="hidden" value={JSON.stringify(selectionRange)} name='rangeDate' />
+      <DateRangePicker
+        ranges={selectionRange}
+        onChange={handleSelectDate}
+        months={2}
+        showDateDisplay={corporate}
+        disabledDay={customDisableDays}
+        dayContentRenderer={customDayContent}
+        direction="horizontal"
+        locale={ptBR}
+      />
+      <input
+        type="hidden"
+        value={JSON.stringify(selectionRange)}
+        name="rangeDate"
+      />
     </>
   );
 };

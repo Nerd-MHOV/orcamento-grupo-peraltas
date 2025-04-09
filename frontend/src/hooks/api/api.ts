@@ -1,22 +1,4 @@
 import axios from "axios";
-import { selectionRange } from "../../context/generateTariff/functions/handleForm";
-import RowModalDiscount from "../../context/generateTariff/interfaces/rowModalDiscount";
-import RequirementSubmitProps from "../../context/generateTariff/interfaces/requirementSubmitProps";
-import DataContentProps from "../../context/generateTariff/interfaces/tableBudgetDataContentProps";
-import {
-  AllTariffsProps,
-  ApiDiscountProps,
-  ApiRequirementsProps,
-  ApiSavedBudgetsProps,
-  CheckInValuesProps,
-  CorporateBodyResponseBudget,
-  FindHolidaysProps,
-  FindMonthWithTariffProps,
-  FoodProps,
-  SpecificTariffProps,
-  TariffValuesProps,
-} from "./interfaces";
-import { CorporateBodySendBudget } from "../../context/generateTariff/interfaces/corporateProps";
 import { API_URL } from "../../config";
 import { insights } from "./all/insights.api";
 import { auth } from "./all/auth.api";
@@ -28,6 +10,7 @@ import { budgetCorp } from "./all/budgetCorp.api";
 import { requirement } from "./all/requirement.api";
 import { tariff } from "./all/tariff.api";
 import { discount } from "./all/discount.api";
+import { appHotel } from "./all/appHotel.api";
 
 const storageData = localStorage.getItem("authToken");
 
@@ -49,4 +32,5 @@ export const useApi = () => ({
   requirement: requirement(api),
   tariff: tariff(api),
   discount: discount(api),
+  appHotel: appHotel(api),
 });

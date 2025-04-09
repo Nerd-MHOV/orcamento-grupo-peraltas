@@ -1,4 +1,3 @@
-import { ApiDiscountProps } from "../../../hooks/api/interfaces";
 import { AppHotelProps } from "../../../hooks/appHotel/interfaces";
 
 export function getDiscountLimit({
@@ -18,7 +17,7 @@ export function getDiscountLimit({
     if (action.length === 1)
         return action[0].percent;
 
-    if (!stateApp?.qntdReservas) {
+    if (!stateApp?.qtd_reservas) {
         handleOpenBackdrop(
             "Verificando ocupação...",
         );
@@ -28,7 +27,7 @@ export function getDiscountLimit({
     const sorted = action.sort((a, b) => a.occupancy - b.occupancy);
 
     return sorted.reduce((acc, item) => {
-        if (stateApp.qntdReservas >= item.occupancy) {
+        if (stateApp.qtd_reservas >= item.occupancy) {
             return item.percent;
         }
         return acc;

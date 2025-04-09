@@ -1,12 +1,19 @@
 export interface AppHotelProps {
-  reservas?: {
-    unidade: string;
-    [key: string]: any;
+  reservas: {
+    id: string,
+    type_reserv_code: string,
+    reserv_code: string,
+    date_init: string,
+    date_end: string,
+    adt: number,
+    chd: number,
+    room: string,
+    situation: string,
   };
-  qntdReservas: number;
+  qtd_reservas: number;
   processadas: number;
   confirmadas: number;
   bloqueios: number;
-  qntdAdt: number;
-  qntdChd: number;
+  adt: number;
+  chd: number;
 }
