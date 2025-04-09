@@ -6,7 +6,7 @@ export async function getUnitUsing(date: SelectionRangeProps) {
   const api = useApi();
   const response = await api.appHotel.getPeriodOccupancy(
     {
-      start: `${format(date.startDate, "yyyy-MM-dd")} 16:00:00`,
+      start: `${format(date.startDate, "yyyy-MM-dd")} 21:00:00`,
       end: `${format(date.endDate, "yyyy-MM-dd")} 16:00:00`,
     }
   );
