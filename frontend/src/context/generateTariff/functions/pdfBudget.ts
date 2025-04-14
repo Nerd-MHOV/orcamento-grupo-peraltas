@@ -17,7 +17,7 @@ async function pdfBudget(
 ) {
   const now = format(new Date(), "dd/MM/yyyy HH:mm");
   const validate = format(addDays(new Date(), 3), "dd/MM/yyyy");
-  
+
   const parcel = budgets.reduce((acc, curr) => {
     const currParcel = curr.arrComplete?.responseForm.parcel;
     const accParcel = acc.arrComplete?.responseForm.parcel;
@@ -119,12 +119,36 @@ async function pdfBudget(
       bold: true,
     });
     rowBudget.push({
-      text:
-        "R$ " +
-        total.toLocaleString("pt-BR", {
-          minimumFractionDigits: 2,
-          maximumFractionDigits: 2,
-        }),
+      text: [
+
+        {
+          text:
+            "R$ " +
+            total.toLocaleString("pt-BR", {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            })
+        },
+
+        ...[
+          total !== totalNoDiscount ?
+            {
+              text: [
+                {
+                  text: "\nR$ " + totalNoDiscount.toLocaleString("pt-BR", {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  }),
+                  color: "#646464",
+                  fontSize: 8,
+                  decoration: "lineThrough",
+                },
+              ]
+            } : {}
+          ,
+        ],
+
+      ],
       style: "tbody",
       border: [false, false, false, true],
       borderColor: "#e9e9e9",
@@ -181,7 +205,7 @@ async function pdfBudget(
         style: "vendedora",
         margin: [0, 0, 0, 8],
       },
-      
+
       {
         layout: "noBorders",
         fillColor: "#137173",
