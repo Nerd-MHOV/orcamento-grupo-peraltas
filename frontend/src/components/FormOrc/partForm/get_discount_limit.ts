@@ -17,7 +17,7 @@ export function getDiscountLimit({
     if (action.length === 1)
         return action[0].percent;
 
-    if (!stateApp?.qtd_reservas) {
+    if (!stateApp?.reservas) {
         handleOpenBackdrop(
             "Verificando ocupação...",
         );
