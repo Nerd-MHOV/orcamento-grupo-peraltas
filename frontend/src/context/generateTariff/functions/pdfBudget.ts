@@ -328,7 +328,7 @@ async function pdfBudget(
                   {
                     text: [
                       `No período de baixa temporada recebemos alguns grupos escolares, pode acontecer de termos crianças durante sua estadia. Nesse cenário temos uma adequação quanto a equipe de lazer.`,
-                      `Eventuais manutenções ou imprevistos operacionais podem ocorrer sem aviso prévio, sem direito a reembolso ou desconto.`,
+                      `\nEventuais manutenções ou imprevistos operacionais podem ocorrer sem aviso prévio, sem direito a reembolso ou desconto.`,
                     ],
                     border: [false, false, false, true],
                     borderColor: ["", "", "", "#e9e9e9"],
