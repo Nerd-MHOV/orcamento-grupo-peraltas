@@ -15,14 +15,17 @@ export const DiscountInputForm = () => {
     stateApp,
   } = useGenerateTariff();
   const [discount, setDiscount] = useState<number | null>(null);
+  const [change, setChange] = useState<number | null>(null);
   const handleChangeDiscount = async (value: number) => {
-    let limit = (actionSelected?.percent_general && getDiscountLimit({
-      action: actionSelected.percent_general,
-      stateApp,
-      handleOpenBackdrop,
-      handleCloseBackdrop,
-    })) ?? 0;
-    
+    let limit =
+      (actionSelected?.percent_general &&
+        getDiscountLimit({
+          action: actionSelected.percent_general,
+          stateApp,
+          handleOpenBackdrop,
+          handleCloseBackdrop,
+        })) ??
+      0;
 
     if (value > limit) {
       verifyPermission(value);
@@ -53,9 +56,13 @@ export const DiscountInputForm = () => {
       className="textField"
       variant="standard"
       value={discount}
-      onChange={(e) => {
-        handleChangeDiscount(+e.target.value);
+      onBlur={() => {
+        if (discount !== change) {
+          setChange(discount);
+          handleChangeDiscount(discount || -1);
+        }
       }}
+      onChange={(e) => setDiscount(Number(e.target.value))}
     />
   );
 };
