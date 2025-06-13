@@ -7,6 +7,7 @@ import getLayoutRooms from "./file-part/getLayoutRooms";
 (<any>pdfMake).vfs = pdfFonts && pdfFonts.pdfMake ? pdfFonts.pdfMake.vfs : globalThis.pdfMake.vfs;
 
 import { PATH_IMAGES } from "../../../config";
+import { de } from "date-fns/locale";
 const imagePath = PATH_IMAGES;
 
 async function pdfBudget(
@@ -15,8 +16,41 @@ async function pdfBudget(
   email: string,
   numberPhone: string,
 ) {
+  console.log(budgets);
   const now = format(new Date(), "dd/MM/yyyy HH:mm");
   const validate = format(addDays(new Date(), 3), "dd/MM/yyyy");
+  const pensionOption = budgets[0].arrComplete?.responseForm.pension;
+
+  let pensionText;
+  switch (pensionOption) {
+    case "simples":
+      pensionText = [
+        { text: "PENSÃO SIMPLES:", bold: true },
+        ` Inclui apenas o café da manhã.`,
+        ` Essa opção oferece um início de manhã especial, com um café preparado com muito cuidado e sabor.`,
+        ` Servimos pães artesanais, bolos caseiros e outras delícias produzidas aqui mesmo, com ingredientes frescos e receitas que valorizam as memórias afetivas. Frutas da estação, sucos naturais e itens variados completam essa experiência aconchegante e cheia de carinho.`,
+        `Demais refeições e bebidas podem ser adquiridas à parte.`,
+      ];
+      break;
+    case "meia":
+      pensionText = [
+        { text: "MEIA PENSÃO:", bold: true },
+        ` Inclui café da manhã e jantar, com suco natural do dia e sobremesa no jantar.`,
+        ` Outras bebidas e consumos são cobrados à parte. As refeições seguem uma proposta de gastronomia afetiva, com pratos temáticos, ingredientes frescos e naturais, muitos deles produzidos na própria fazenda.`,
+        { text: " IMPORTANTE:", bold: true },
+        ` Para hospedagens com 21 apartamentos ou mais, o serviço é oferecido em sistema buffet self-service à vontade. Com menor ocupação, o serviço é à la carte, mas com reposição livre.`,
+      ];
+      break;
+    default:
+      pensionText = [
+        { text: "PENSÃO COMPLETA:", bold: true },
+        ` Inclui café da manhã, almoço e jantar, com suco natural do dia e sobremesa nas principais refeições.`,
+        ` Outras bebidas e consumos são cobrados à parte. As refeições seguem uma proposta de gastronomia afetiva, com pratos temáticos, ingredientes frescos e naturais, muitos deles produzidos na própria fazenda.`,
+        { text: " IMPORTANTE:", bold: true },
+        ` Para hospedagens com 21 apartamentos ou mais, o serviço é oferecido em sistema buffet self-service à vontade. Com menor ocupação, o serviço é à la carte, mas com reposição livre.`,
+      ];
+  }
+
 
   const parcel = budgets.reduce((acc, curr) => {
     const currParcel = curr.arrComplete?.responseForm.parcel;
@@ -378,13 +412,7 @@ async function pdfBudget(
                     noWrap: true,
                   },
                   {
-                    text: [
-                      { text: "PENSÃO COMPLETA:", bold: true },
-                      ` Café da manhã, almoço e jantar + suco natural do dia e sobremesa (outras bebidas e consumos cobrados à parte).`,
-                      ` Contamos com refeições temáticas com pratos ecléticos e feitos com ingredientes naturais da fazenda.`,
-                      { text: "IMPORTANTE:", bold: true },
-                      ` Trabalhamos com regime de pensão completa no sistema "Buffet SelfService" à vontade acima de 21 apartamentos. Quando há um fluxo menor de hóspedes, servimos o sistema "À La Carte" com a opção também à vontade.`,
-                    ],
+                    text: pensionText,
                     border: [false, false, false, true],
                     borderColor: ["", "", "", "#e9e9e9"],
                     fontSize: 9,
