@@ -352,17 +352,18 @@ async function pdfBudget(
               body: [
                 [
                   {
-                    text: "Informação importante",
+                    text: "Informações importantes",
                     border: [false, false, false, true],
                     borderColor: ["", "", "", "#e9e9e9"],
                     bold: true,
                     fontSize: 9,
-                    margin: [40, 10, 40, 10],
+                    margin: [40, 25, 40, 25],
                   },
                   {
                     text: [
                       `No período de baixa temporada recebemos alguns grupos escolares, pode acontecer de termos crianças durante sua estadia. Nesse cenário temos uma adequação quanto a equipe de lazer.`,
                       `\nEventuais manutenções ou imprevistos operacionais podem ocorrer sem aviso prévio, sem direito a reembolso ou desconto.`,
+                      `\nDescontos não são cumulativos com outras promoções. Valores sujeitos a alterações sem aviso prévio. Não oferecemos serviço de quarto e nem transporte de malas.`,
                     ],
                     border: [false, false, false, true],
                     borderColor: ["", "", "", "#e9e9e9"],
