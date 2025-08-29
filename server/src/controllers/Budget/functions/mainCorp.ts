@@ -54,10 +54,12 @@ export async function mainCorp(bodyRequest: CorporateBodySendBudget) {
 
     // requirement to budget ( all rooms )
     let requirementRows = await requirementBudget({ adult: 0 }, requirements, bodyRequest.unitaryDiscount, completePeriod, completePeriod, 0, true);
-    const rowsFinal: RowsProps[] = [...calcTotalBudgets(newRooms), ...requirementRows];
+    const roomsRows = calcTotalBudgets(newRooms);
+    const rowsFinal: RowsProps[] = [...roomsRows, ...requirementRows];
 
     if (agency && agency > 0) {
-        const totalNeto = calcTotal(rowsFinal, bodyRequest.discount)
+        // apartir de 29/08/2025 vai ser calculado apenas o valor da hospedagem para a agencia;
+        const totalNeto = calcTotal(roomsRows, bodyRequest.discount)
         const totalAgency = calcTotalAgency(totalNeto, agency)
         rowsFinal.push(totalAgency);
     }
