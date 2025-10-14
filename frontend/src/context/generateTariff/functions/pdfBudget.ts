@@ -81,14 +81,23 @@ async function pdfBudget(
     let requirementTourism = true;
     let requirementDecoration = true;
     let requirementCheckIn = true;
+    const addedRequirements = new Set<string>();
 
     for (let rowRequirement of budget.rows) {
+      // Verifica se é uma linha de requerimento (não é hospedagem, não é ADT, não é CHD, não é PET padrão)
+      const isRequirement = rowRequirement.type === 'requirement' || 
+                           (!rowRequirement.desc.match(/^ADT/) && 
+                            !rowRequirement.desc.match(/^CHD [2-9]/) && 
+                            !rowRequirement.desc.match(/^PET/) &&
+                            rowRequirement.desc.length > 0);
+
       if (rowRequirement.desc.match(/observação C.E.U/) && requirementObsCeu) {
         requirementString.push({
           text: "\n+Observação C.E.U",
           style: "descRoom",
         });
         requirementObsCeu = false;
+        addedRequirements.add(rowRequirement.desc);
       } else if (
         (rowRequirement.desc.match(/Eco A./) ||
           rowRequirement.desc.match(/Território/)) &&
@@ -96,6 +105,7 @@ async function pdfBudget(
       ) {
         requirementString.push({ text: "\n+Turismo", style: "descRoom" });
         requirementTourism = false;
+        addedRequirements.add(rowRequirement.desc);
       } else if (
         rowRequirement.desc.match(/decoração romântica./) &&
         requirementDecoration
@@ -105,6 +115,7 @@ async function pdfBudget(
           style: "descRoom",
         });
         requirementDecoration = false;
+        addedRequirements.add(rowRequirement.desc);
       } else if (
         rowRequirement.desc.match(/check-in às./) &&
         requirementCheckIn
@@ -114,6 +125,7 @@ async function pdfBudget(
           style: "descRoom",
         });
         requirementCheckIn = false;
+        addedRequirements.add(rowRequirement.desc);
       } else if (
         rowRequirement.desc.match(/CHD 1/) &&
         requirementChild &&
@@ -124,6 +136,21 @@ async function pdfBudget(
           style: "descRoom",
         });
         requirementChild = false;
+        addedRequirements.add(rowRequirement.desc);
+      } else if (isRequirement && 
+                 !addedRequirements.has(rowRequirement.desc) &&
+                 rowRequirement.desc.trim() !== '' &&
+                 !rowRequirement.desc.match(/^ADT/) &&
+                 !rowRequirement.desc.match(/^Adulto/) &&
+                 !rowRequirement.desc.match(/^voucher/) &&
+                 !rowRequirement.desc.match(/^CHD [2-9]/) &&
+                 !rowRequirement.desc.match(/^PET/)) {
+        // Adiciona outros requerimentos que não foram capturados pelos casos específicos
+        requirementString.push({
+          text: `\n+${rowRequirement.desc}`,
+          style: "descRoom",
+        });
+        addedRequirements.add(rowRequirement.desc);
       }
     }
 
