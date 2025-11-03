@@ -25,6 +25,7 @@ export interface ArrComplete {
         discount?: string | number;
         action?: string;
     }
+    dailyCourtesy?: boolean;
 }
 
 export default DataContentProps

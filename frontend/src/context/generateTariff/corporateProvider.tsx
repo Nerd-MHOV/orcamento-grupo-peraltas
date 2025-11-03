@@ -104,6 +104,7 @@ const CorporateProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
           rd_client: responseBudget.idClient || "",
           housingUnit: `${responseBudget.rooms.length} quartos`,
         },
+        dailyCourtesy: false,
       });
     }
   }
