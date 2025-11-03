@@ -75,6 +75,17 @@ async function pdfBudget(
       totalNoDiscount += Number(row.totalNoDiscount);
     });
 
+    // Verifica se tem diária cortesia (última diária de ADT com valor 0)
+    let hasDailyCourtesy = false;
+    const adtRow = budget.rows.find((row: any) => row.desc && row.desc.match(/^ADT/));
+    if (adtRow && adtRow.values && adtRow.values.length > 1) {
+      const lastValue = adtRow.values[adtRow.values.length - 1];
+      // Verifica se a última diária é 0 e se há pelo menos uma diária com valor maior que 0
+      if (lastValue === 0 && adtRow.values.some((val: number) => val > 0)) {
+        hasDailyCourtesy = true;
+      }
+    }
+
     let requirementString = [];
     let requirementChild = true;
     let requirementObsCeu = true;
@@ -152,6 +163,14 @@ async function pdfBudget(
         });
         addedRequirements.add(rowRequirement.desc);
       }
+    }
+
+    // Adiciona diária cortesia se detectada
+    if (hasDailyCourtesy) {
+      requirementString.push({
+        text: "\n+diária cortesia",
+        style: "descRoom",
+      });
     }
 
     rowBudget.push({
