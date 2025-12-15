@@ -12,22 +12,7 @@ export async function duGenerateBudget(
   let tariffBudget = 0;
   let tariffName = "";
 
-  if (arrForm.category.match(/Full/)) {
-    if (isWeekend(date)) {
-      tariffName = "Day-Use 2023 - Full - FDS";
-    } else {
-      tariffName = "Day-Use 2023 - Full - MDS";
-    }
-  }
-
-  if (arrForm.category.match(/Tradicional/)) {
-    if (isWeekend(date)) {
-      tariffName = "Day-Use 2023 - Tradicional - FDS";
-    } else {
-      tariffName = "Day-Use 2023 - Tradicional - MDS";
-    }
-  }
-
+  // verifica se é feriado ( sempre final de semana )
   const responseSpecific = await prismaClient.specificDates.findFirst({
     where: {
       date: format(date, "yyyy-MM-dd"),
@@ -42,10 +27,32 @@ export async function duGenerateBudget(
     },
   });
 
-  if (responseSpecific) {
-    if (arrForm.category.match(/Full/))
-      tariffName = "Day-Use 2023 - Full - FDS";
-    else tariffName = "Day-Use 2023 - Tradicional - FDS";
+  if (arrForm.category.match(/Full/)) {
+    if (isWeekend(date) || responseSpecific) {
+      if (date.getFullYear() < 2026) tariffName = "Day-Use 2023 - Full - FDS";
+      if (date.getMonth() < 6) tariffName = "Day-Use 2026 Janeiro - Full - FDS";
+      tariffName = "Day-Use 2026 Julho - Full - FDS";
+    } else {
+      if (date.getFullYear() < 2026) tariffName = "Day-Use 2023 - Full - MDS";
+      if (date.getMonth() < 6) tariffName = "Day-Use 2026 Janeiro - Full - MDS";
+      tariffName = "Day-Use 2026 Julho - Full - MDS";
+    }
+  }
+
+  if (arrForm.category.match(/Tradicional/)) {
+    if (isWeekend(date) || responseSpecific) {
+      if (date.getFullYear() < 2026)
+        tariffName = "Day-Use 2023 - Tradicional - FDS";
+      if (date.getMonth() < 6)
+        tariffName = "Day-Use 2026 Janeiro - Tradicional - FDS";
+      tariffName = "Day-Use 2026 Julho - Tradicional - FDS";
+    } else {
+      if (date.getFullYear() < 2026)
+        tariffName = "Day-Use 2023 - Tradicional - MDS";
+      if (date.getMonth() < 6)
+        tariffName = "Day-Use 2026 Janeiro - Tradicional - MDS";
+      tariffName = "Day-Use 2026 Julho - Tradicional - MDS";
+    }
   }
 
   let tariffs = await prismaClient.dUTariff.findUnique({
