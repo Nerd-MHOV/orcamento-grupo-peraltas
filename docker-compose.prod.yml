@@ -1,0 +1,65 @@
+version: '3.8'
+
+services:
+  frontend:
+    image: ${DOCKER_REGISTRY:-ghcr.io}/${GITHUB_REPOSITORY:-your-user/orcamento}/frontend:${TAG:-latest}
+    networks:
+      - traefik-public
+      - orcamento-network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.orcamento-frontend.rule=Host(`${FRONTEND_DOMAIN:-orcamento.example.com}`)"
+      - "traefik.http.routers.orcamento-frontend.entrypoints=websecure"
+      - "traefik.http.routers.orcamento-frontend.tls.certresolver=letsencrypt"
+      - "traefik.http.services.orcamento-frontend.loadbalancer.server.port=3000"
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+
+  backend:
+    image: ${DOCKER_REGISTRY:-ghcr.io}/${GITHUB_REPOSITORY:-your-user/orcamento}/backend:${TAG:-latest}
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+      - REDIS_HOST=${REDIS_HOST:-redis}
+      - REDIS_PORT=${REDIS_PORT:-6379}
+      - PORT_SERVER=3333
+      - RD_TOKEN=${RD_TOKEN}
+      - RD_API_URL=${RD_API_URL}
+      - CG_KEY=${CG_KEY}
+      - CG_ACCOUNT_ID=${CG_ACCOUNT_ID}
+      - CG_PHONE_ID=${CG_PHONE_ID}
+      - CG_BASE_URL=${CG_BASE_URL}
+    networks:
+      - traefik-public
+      - orcamento-network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.orcamento-backend.rule=Host(`${BACKEND_DOMAIN:-api.orcamento.example.com}`)"
+      - "traefik.http.routers.orcamento-backend.entrypoints=websecure"
+      - "traefik.http.routers.orcamento-backend.tls.certresolver=letsencrypt"
+      - "traefik.http.services.orcamento-backend.loadbalancer.server.port=3333"
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+
+  redis:
+    image: redis:7-alpine
+    volumes:
+      - redis_data:/data
+    networks:
+      - orcamento-network
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+
+networks:
+  traefik-public:
+    external: true
+  orcamento-network:
+    driver: overlay
+
+volumes:
+  redis_data:
