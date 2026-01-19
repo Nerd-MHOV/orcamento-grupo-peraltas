@@ -30,14 +30,21 @@ FROM node:20-alpine
 
 WORKDIR /app
 
-# Install serve globally
-RUN npm install -g serve
+# Install serve globally and gettext for envsubst
+RUN npm install -g serve && apk add --no-cache gettext
 
 # Copy built assets from builder
 COPY --from=builder /app/dist ./dist
 
+# Copy config.js as template
+RUN cp /app/dist/config.js /app/dist/config.js.template
+
+# Copy entrypoint script
+COPY entrypoint.sh /app/entrypoint.sh
+RUN chmod +x /app/entrypoint.sh
+
 # Expose port 3000
 EXPOSE 3000
 
-# Serve the app with SPA fallback
-CMD ["serve", "-s", "dist", "-l", "3000"]
+# Use entrypoint to inject runtime env vars
+ENTRYPOINT ["/app/entrypoint.sh"]
