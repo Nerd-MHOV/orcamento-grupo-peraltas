@@ -47,6 +47,7 @@ const whiteList = [
   "http://localhost:4173",
   "http://192.168.10.87:5173",
   "http://127.0.0.1:5500",
+  "https://orcamento.grupoperaltas.com.br",
 ];
 app.use(
   cors({
