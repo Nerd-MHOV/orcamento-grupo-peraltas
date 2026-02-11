@@ -15,13 +15,17 @@ export const DiscountsPage = () => {
 
   const getDiscounts = async () => {
     const response = await api.discount.get();
-    const insResponse = await api.insights.actions();
-    setInsights(insResponse);
     setDiscounts(response);
   };
 
+  const getInsights = async () => {
+    const response = await api.insights.actions();
+    setInsights(response);
+  }
+
   useEffect(() => {
     getDiscounts();
+    getInsights();
   }, []);
 
   return (
