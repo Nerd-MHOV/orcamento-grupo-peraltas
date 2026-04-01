@@ -262,7 +262,7 @@ async function pdfBudget(
     images: {
       verify: { url: `${imagePath}verifica.png` },
       top: {
-        url: "https://i.postimg.cc/C1cGv2Bd/top.jpg",
+        url: `${imagePath}top.jpeg`,
       },
     },
     content: [
