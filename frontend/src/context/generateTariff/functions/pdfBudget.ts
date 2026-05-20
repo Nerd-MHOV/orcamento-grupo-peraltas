@@ -88,11 +88,11 @@ async function pdfBudget(
 
     for (let rowRequirement of budget.rows) {
       // Verifica se é uma linha de requerimento (não é hospedagem, não é ADT, não é CHD, não é PET padrão)
-      const isRequirement = rowRequirement.type === 'requirement' || 
-                           (!rowRequirement.desc.match(/^ADT/) && 
-                            !rowRequirement.desc.match(/^CHD [2-9]/) && 
-                            !rowRequirement.desc.match(/^PET/) &&
-                            rowRequirement.desc.length > 0);
+      const isRequirement = rowRequirement.type === 'requirement' ||
+        (!rowRequirement.desc.match(/^ADT/) &&
+          !rowRequirement.desc.match(/^CHD/) &&
+          !rowRequirement.desc.match(/^PET/) &&
+          rowRequirement.desc.length > 0);
 
       if (rowRequirement.desc.match(/observação C.E.U/) && requirementObsCeu) {
         requirementString.push({
@@ -140,14 +140,14 @@ async function pdfBudget(
         });
         requirementChild = false;
         addedRequirements.add(rowRequirement.desc);
-      } else if (isRequirement && 
-                 !addedRequirements.has(rowRequirement.desc) &&
-                 rowRequirement.desc.trim() !== '' &&
-                 !rowRequirement.desc.match(/^ADT/) &&
-                 !rowRequirement.desc.match(/^Adulto/) &&
-                 !rowRequirement.desc.match(/^voucher/) &&
-                 !rowRequirement.desc.match(/^CHD [2-9]/) &&
-                 !rowRequirement.desc.match(/^PET/)) {
+      } else if (isRequirement &&
+        !addedRequirements.has(rowRequirement.desc) &&
+        rowRequirement.desc.trim() !== '' &&
+        !rowRequirement.desc.match(/^ADT/) &&
+        !rowRequirement.desc.match(/^Adulto/) &&
+        !rowRequirement.desc.match(/^voucher/) &&
+        !rowRequirement.desc.match(/^CHD [2-9]/) &&
+        !rowRequirement.desc.match(/^PET/)) {
         // Adiciona outros requerimentos que não foram capturados pelos casos específicos
         requirementString.push({
           text: `\n+${rowRequirement.desc}`,
