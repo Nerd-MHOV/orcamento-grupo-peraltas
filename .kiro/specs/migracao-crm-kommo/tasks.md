@@ -1,0 +1,147 @@
+# Implementation Plan
+
+> Pré-requisito externo bloqueante: token Kommo de longa duração **com escopo "Access to files"** e descoberta dos `field_id` (tarefa 1.3) antes de implementar PUSH/PULL/upload.
+
+- [ ] 1. Fundação: testes, configuração, cliente Kommo e infra
+- [x] 1.1 Configurar a infraestrutura de testes
+  - Adicionar e configurar o runner de testes no backend (jest + ts-jest) e no frontend (vitest), cada um com seu script `test`.
+  - Incluir um teste smoke trivial em cada lado para provar que o runner executa.
+  - Observável: rodar a suíte no backend e no frontend executa e o teste de exemplo passa em ambos; habilita as tarefas de teste 6.1–6.3.
+  - _Requirements: 5.4_
+- [ ] 1.2 Configurar ambiente do Kommo e o mapa de configuração
+  - Ler as variáveis de ambiente do Kommo já presentes (`CRM_TOKEN`, `CRM_BASE_URL`) e expor base URL (`/api/v4`) e drive; remover as do RD Station do exemplo de ambiente e do compose de produção.
+  - Definir o objeto de configuração com o mapa de campos personalizados já confirmado (ver `research.md`: check-in 804864, check-out 804868, adulto 786330, qtd CHD 786328, idades 786322, qtd PET 786324, porte PET 786326 com enums, tarifários→Condições comerciais 805299).
+  - Observável: o backend sobe lendo as credenciais do Kommo do ambiente; o mapa de configuração contém os `field_id` reais; nenhuma referência a `RD_*` permanece no exemplo de ambiente nem no compose.
+  - _Requirements: 1.2, 2.1, 9.1_
+- [ ] 1.3 Implementar o cliente HTTP Kommo com autenticação e limite de taxa
+  - Criar a instância autenticada por Bearer (token único da conta) e um cliente separado para o drive de arquivos.
+  - Adicionar a dependência de throttling (`bottleneck`) e limitar as chamadas a no máximo 7 requisições por segundo.
+  - Normalizar os erros HTTP do Kommo em um tipo discriminado (auth, não encontrado, rate limited, rede, desconhecido).
+  - Observável: uma chamada de teste autentica via header Bearer; com token ausente/inválido o cliente retorna erro tipado `auth` sem expor o token.
+  - _Requirements: 1.1, 1.3, 1.5, 5.4_
+- [ ] 1.4 Criar o script de descoberta de campos e fixar os IDs no config
+  - Criar um script administrativo que lista os campos personalizados de lead do Kommo (id e rótulo) para auditoria futura.
+  - Confirmar que o mapa de configuração reflete os `field_id` reais já descobertos.
+  - Observável: o script imprime a lista de campos da conta e o mapa de configuração contém os IDs reais (PUSH/PULL não dependem de placeholders).
+  - _Requirements: 2.2_
+- [ ] 1.5 Migrar o schema para remover as credenciais RD por usuário
+  - Remover os campos de token/identificador RD do usuário e ajustar a criação, atualização e seeds de usuário para não os gravarem mais.
+  - Tratar com segurança o drop das colunas não-nulas em dados existentes (backfill/default antes do drop).
+  - Observável: a migração aplica limpa sobre uma base com usuários existentes e a criação de usuário funciona sem os campos RD.
+  - _Requirements: 1.4_
+- [ ] 1.6 Adicionar o parser multipart para upload de arquivo
+  - Introduzir a dependência de parsing multipart (`multer`) e o middleware base para receber um arquivo binário em um endpoint.
+  - Observável: um endpoint de teste recebe um arquivo enviado via multipart e expõe seu buffer ao handler.
+  - _Requirements: 4.1_
+
+- [ ] 2. Núcleo backend: módulo Kommo
+- [ ] 2.1 (P) Implementar o mapeador de campos do orçamento
+  - Converter os dados do orçamento para o formato de valores de campos personalizados do Kommo (datas como timestamp unix, números como string).
+  - Ler os campos de um lead retornando vazio quando um campo mapeado não existir, sem falhar.
+  - Observável: dado um orçamento de exemplo, o mapeador produz os valores no formato esperado; dado um lead sem certo campo, a leitura retorna vazio para aquele campo.
+  - _Requirements: 2.1, 2.3, 3.1, 3.2, 3.3_
+  - _Boundary: fieldMapper_
+  - _Depends: 1.2, 1.3_
+- [ ] 2.2 (P) Implementar o upload e anexação de PDF ao lead (Files API)
+  - Implementar o fluxo multi-etapas: criar sessão de upload, enviar o arquivo em partes e anexar o arquivo resultante ao lead.
+  - Tratar a ausência do escopo de arquivos como erro de autenticação tratável.
+  - Observável: dado um lead e um PDF, o serviço sobe o arquivo e o anexa ao lead (visível na mídia do lead); sem o escopo de arquivos, retorna erro tipado.
+  - _Requirements: 4.1, 4.4_
+  - _Boundary: files_
+  - _Depends: 1.3, 1.6_
+- [ ] 2.3 Implementar a leitura e a escrita de orçamento no lead
+  - Ler um lead (nome e campos de pré-preenchimento) e atualizar um lead com os campos do orçamento e o valor, usando atualização parcial.
+  - Garantir que a atualização nunca envia etapa/estágio de pipeline.
+  - Observável: atualizar um lead grava valor e campos do orçamento preservando os demais; a requisição enviada não contém `status_id`; um lead inexistente propaga erro "não encontrado".
+  - _Requirements: 3.1, 3.2, 3.3, 3.4, 3.5, 6.1_
+  - _Boundary: leads_
+  - _Depends: 2.1_
+- [ ] 2.4 Expor os endpoints Kommo e remover os endpoints RD
+  - Disponibilizar os endpoints autenticados de leitura de lead, atualização do orçamento no lead e upload de PDF; remover os endpoints do RD.
+  - Manter o token apenas no servidor (nunca em resposta) e registrar de forma estruturada as falhas de integração (endpoint, lead, tipo de erro) para auditoria.
+  - Observável: os três endpoints respondem atrás do middleware de autenticação (sem auth → 401); falhas do CRM retornam status de erro distinto e geram log estruturado sem token.
+  - _Requirements: 3.7, 4.2, 5.3, 6.1, 7.5_
+  - _Depends: 2.2, 2.3_
+
+- [ ] 3. Núcleo frontend
+- [ ] 3.1 (P) Criar o cliente de API Kommo no frontend
+  - Expor os métodos para ler lead, salvar o orçamento no lead e enviar o PDF, consumindo os endpoints do backend.
+  - Observável: cada método chama o endpoint correspondente e retorna/propaga o resultado de forma tipada.
+  - _Requirements: 3.1, 3.2, 4.1, 6.1_
+  - _Boundary: kommo.api_
+  - _Depends: 2.4_
+- [ ] 3.2 (P) Persistir os tarifários usados no objeto de orçamento
+  - Registrar a lista de tarifários usados durante o cálculo do orçamento, de modo a estar disponível no momento de salvar.
+  - Observável: após calcular um orçamento, o objeto resultante contém a lista de tarifários usados.
+  - _Requirements: 3.3_
+  - _Boundary: calc_
+- [ ] 3.3 (P) Expor o blob do PDF gerado
+  - Permitir que o PDF gerado seja obtido como blob pelos chamadores, além de continuar abrindo-o em nova aba.
+  - Observável: o gerador de PDF disponibiliza o blob para upload mantendo a abertura em nova aba inalterada.
+  - _Requirements: 4.1_
+  - _Boundary: pdfBudget_
+- [ ] 3.4 (P) Adicionar o mecanismo de notificação de falha
+  - Introduzir um provider/snackbar reutilizável para exibir avisos de falha de sincronização ao usuário.
+  - Observável: disparar uma notificação exibe uma mensagem visível e auto-dispensável ao consultor.
+  - _Requirements: 5.1, 5.2_
+  - _Boundary: notification_
+- [ ] 3.5 Reescrever a montagem do orçamento para o lead
+  - Derivar os dados do orçamento e o valor a partir dos budgets, aplicando a regra de valor: grupo → soma dos totais; simples → o mais barato; corporativo conforme seus totais.
+  - Incluir os tarifários usados e remover por completo a lógica de produtos e troca de etapa.
+  - Observável: salvar um orçamento de grupo envia a soma; um simples envia o mais barato; orçamento sem lead vinculado não chama o CRM.
+  - _Requirements: 3.1, 3.2, 3.3, 3.7_
+  - _Depends: 3.1, 3.2_
+- [ ] 3.6 Pré-preencher o orçamento a partir do lead
+  - Ao abrir com referência de lead, buscar o lead e popular as datas, ocupação e nome do cliente; manter os parâmetros de URL como fallback.
+  - Tratar lead inexistente abrindo o formulário vazio com aviso.
+  - Observável: abrir com um lead válido exibe o formulário preenchido e o nome do cliente; com lead inexistente, o formulário abre vazio e um aviso é exibido.
+  - _Requirements: 6.1, 6.2, 6.3, 6.4_
+  - _Depends: 3.1_
+- [ ] 3.7 Integrar o fluxo de geração: PDF, sincronização e salvamento resiliente
+  - Reordenar para gerar e abrir o PDF localmente, então, em melhor-esforço e isolado, gravar os dados no lead e anexar o PDF, e por fim salvar o orçamento localmente usando o nome do lead obtido no pré-preenchimento.
+  - Exibir notificação quando a sincronização com o Kommo falhar, sem bloquear o PDF nem o salvamento; não acionar nenhuma mensageria legada no fluxo.
+  - Observável: com o Kommo indisponível, o PDF abre e o orçamento é salvo, e um aviso de falha de sincronização aparece; com o Kommo disponível, o lead recebe os campos, o valor e o PDF anexado.
+  - _Requirements: 3.6, 4.1, 4.2, 4.3, 4.5, 5.1, 5.2_
+  - _Depends: 3.3, 3.4, 3.5, 3.6_
+
+- [ ] 4. Extensão de navegador
+- [ ] 4.1 Refazer a extensão para o Kommo
+  - Atualizar o manifesto com as permissões de host do Kommo e reescrever o script para detectar a página de lead do Kommo, extrair o identificador do lead e abrir o app pré-preenchido (hospedagem e corporativo) e a lista de orçamentos filtrada pelo lead.
+  - Remover por completo o token, a chamada síncrona e os IDs de campo do RD.
+  - Observável: na página de um lead do Kommo, acionar a extensão abre o app com o orçamento pré-preenchido (e a opção de lista filtra pelo lead); fora de página de lead, nada acontece; a extensão não contém token nem faz chamada de CRM.
+  - _Requirements: 7.1, 7.2, 7.3, 7.4_
+  - _Depends: 3.6_
+
+- [ ] 5. Decomissão do RD Station e do ChatGuru
+- [ ] 5.1 Desativar os cronjobs que escrevem no RD
+  - Desativar as rotinas periódicas de status vencido e de automação de pós-venda que escrevem no RD, e neutralizar seus gatilhos manuais públicos correspondentes.
+  - Manter ativas e inalteradas as rotinas que não tocam o CRM.
+  - Observável: as duas rotinas RD não rodam mais nem por agendamento nem por gatilho manual; as rotinas de formulários e do app do hotel permanecem registradas e funcionais.
+  - _Requirements: 8.1, 8.2, 8.3, 8.4_
+- [ ] 5.2 Remover o código do RD Station e a chamada ao ChatGuru
+  - Remover os serviços, a configuração, o controller e o código de sincronização do RD, o cliente e a montagem de salvamento do RD no frontend, e a chamada ao ChatGuru no fluxo de salvar.
+  - Observável: o código não contém mais caminhos que chamem o RD Station ou o ChatGuru nos fluxos de gerar, salvar e pré-preencher; a aplicação compila e os fluxos migrados funcionam sem eles.
+  - _Requirements: 3.6, 9.1, 9.3, 9.4, 9.5_
+  - _Depends: 2.4, 3.5, 3.7, 5.1_
+- [ ] 5.3 (P) Rotacionar e remover os segredos versionados
+  - Rotacionar/invalidar as credenciais sensíveis commitadas no repositório e removê-las do versionamento.
+  - Observável: os segredos antigos não constam mais do arquivo versionado e foram rotacionados/invalidados.
+  - _Requirements: 9.2_
+  - _Boundary: secrets_
+
+- [ ] 6. Validação
+- [ ] 6.1 (P) Testes unitários do mapeador e do cliente
+  - Cobrir a conversão de campos (timestamp/string, omissão de vazios), a leitura tolerante a ausente, a injeção do Bearer, o limite de taxa e o mapeamento de erros.
+  - Observável: a suíte passa cobrindo esses casos.
+  - _Requirements: 1.1, 1.5, 2.1, 2.3, 3.3, 5.4_
+  - _Boundary: fieldMapper, KommoClient_
+- [ ] 6.2 (P) Testes de integração de leitura, escrita e upload
+  - Verificar que a atualização envia valor e campos sem etapa, que o upload segue a ordem sessão→partes→anexo, e que o endpoint de leitura exige autenticação.
+  - Observável: a suíte passa; a requisição de atualização não contém estágio de pipeline e o endpoint de leitura retorna 401 sem auth.
+  - _Requirements: 3.4, 3.5, 4.1, 4.4, 6.1, 7.5_
+  - _Boundary: leads, files, KommoController_
+- [ ] 6.3 Testes E2E dos fluxos de hospedagem e corporativo
+  - Cobrir: gerar PDF anexa o documento, o valor e os campos ao lead; Kommo indisponível não bloqueia o PDF nem o salvamento; pré-preenchimento via extensão; lead inexistente abre vazio; e ausência de chamadas ao RD nos fluxos migrados.
+  - Observável: os cenários passam para hospedagem e corporativo, incluindo a verificação de que nenhum fluxo migrado chama o RD Station.
+  - _Requirements: 3.1, 3.2, 4.1, 4.5, 5.1, 5.2, 6.1, 6.4, 7.1, 9.4_
+  - _Depends: 3.7, 4.1, 5.2_
