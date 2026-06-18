@@ -8,7 +8,7 @@
   - Incluir um teste smoke trivial em cada lado para provar que o runner executa.
   - Observável: rodar a suíte no backend e no frontend executa e o teste de exemplo passa em ambos; habilita as tarefas de teste 6.1–6.3.
   - _Requirements: 5.4_
-- [ ] 1.2 Configurar ambiente do Kommo e o mapa de configuração
+- [x] 1.2 Configurar ambiente do Kommo e o mapa de configuração
   - Ler as variáveis de ambiente do Kommo já presentes (`CRM_TOKEN`, `CRM_BASE_URL`) e expor base URL (`/api/v4`) e drive; remover as do RD Station do exemplo de ambiente e do compose de produção.
   - Definir o objeto de configuração com o mapa de campos personalizados já confirmado (ver `research.md`: check-in 804864, check-out 804868, adulto 786330, qtd CHD 786328, idades 786322, qtd PET 786324, porte PET 786326 com enums, tarifários→Condições comerciais 805299).
   - Observável: o backend sobe lendo as credenciais do Kommo do ambiente; o mapa de configuração contém os `field_id` reais; nenhuma referência a `RD_*` permanece no exemplo de ambiente nem no compose.

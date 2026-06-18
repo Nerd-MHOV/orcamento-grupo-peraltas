@@ -24,8 +24,8 @@ services:
       - REDIS_HOST=${REDIS_HOST:-redis}
       - REDIS_PORT=${REDIS_PORT:-6379}
       - PORT_SERVER=3333
-      - RD_TOKEN=${RD_TOKEN}
-      - RD_API_URL=${RD_API_URL}
+      - CRM_TOKEN=${CRM_TOKEN}
+      - CRM_BASE_URL=${CRM_BASE_URL}
       - CG_KEY=${CG_KEY}
       - CG_ACCOUNT_ID=${CG_ACCOUNT_ID}
       - CG_PHONE_ID=${CG_PHONE_ID}
