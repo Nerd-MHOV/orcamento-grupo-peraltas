@@ -4,8 +4,7 @@ import bcrypt from "bcrypt";
 
 export class UpdateUserController {
   async handle(request: Request, response: Response) {
-    const { name, email, password, phone, username, token_rd, user_rd } =
-      request.body;
+    const { name, email, password, phone, username } = request.body;
     const { id } = request.params;
 
     console.log(password);
@@ -20,8 +19,6 @@ export class UpdateUserController {
               email,
               phone,
               username,
-              token_rd,
-              user_rd,
             },
             where: {
               id,
@@ -35,8 +32,6 @@ export class UpdateUserController {
               password: hashPassword,
               phone,
               username,
-              token_rd,
-              user_rd,
             },
             where: {
               id,

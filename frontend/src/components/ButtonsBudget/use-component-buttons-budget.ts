@@ -139,7 +139,7 @@ export function useComponentButtonsBudget(corporate: boolean) {
     }
     const deal_id = bodyResponseBudget.idClient;
     let response;
-    if (deal_id) response = await api.rd.getDealById(deal_id);
+    if (deal_id) response = await api.kommo.getLead(Number(deal_id));
     let name = response?.name || "undefined";
     await pdfDescriptionCorp(dataTable, bodyResponseBudget, name);
     handleCloseBackdrop();
@@ -156,7 +156,7 @@ export function useComponentButtonsBudget(corporate: boolean) {
     handleOpenBackdrop();
     const deal_id = budgets[0].arrComplete?.responseForm.rd_client;
     let response;
-    if (deal_id) response = await api.rd.getDealById(deal_id);
+    if (deal_id) response = await api.kommo.getLead(Number(deal_id));
     let name = response?.name || "undefined";
     await pdfDescription(budgets, name);
     handleCloseBackdrop();

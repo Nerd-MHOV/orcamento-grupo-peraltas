@@ -4,8 +4,7 @@ import bcrypt from "bcrypt";
 
 export class CreateUserController {
   async handle(request: Request, response: Response) {
-    const { name, email, password, phone, username, token_rd, user_rd } =
-      request.body;
+    const { name, email, password, phone, username } = request.body;
 
     await bcrypt
       .hash(password, 10)
@@ -17,8 +16,6 @@ export class CreateUserController {
             password: hashPassword,
             phone,
             username,
-            token_rd,
-            user_rd,
           },
         })
       })

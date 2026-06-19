@@ -4,9 +4,6 @@ import cors from "cors";
 import morgan from "morgan";
 import cron from "node-cron";
 import Queue from "./lib/Queue";
-import { fsAssistOpportunity } from "./crons/fsAssistOpportunity";
-import assist48hInWalking from "./crons/DBStatus/assist48hInWalking";
-import assist24hInExpend from "./crons/DBStatus/assist24hInExpend";
 import { ExpressAdapter } from "@bull-board/express";
 import { createBullBoard } from "@bull-board/api";
 import { BullAdapter } from "@bull-board/api/bullAdapter";
@@ -61,9 +58,6 @@ app.use(morgan("short"));
 app.use(routes);
 // app.use(basePath, serverAdapter.getRouter())
 
-// cron.schedule("*/20 * * * * *", fsAssistOpportunity); // a cada 1min
-// cron.schedule("0 9 * * *", assist48hInWalking) // 9h da manhã
-// cron.schedule("0 10 * * *", assist24hInExpend) // 10h da manhã
 cron.schedule("0 2 * * *", fsAssistGoogleForms); // 2h da manhã
 
 cron.schedule("0 23 * * *", fsAttDataAppHotel); // 23h da noite

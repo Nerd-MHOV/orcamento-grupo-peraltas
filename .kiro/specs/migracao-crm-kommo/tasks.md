@@ -24,7 +24,7 @@
   - Confirmar que o mapa de configuração reflete os `field_id` reais já descobertos.
   - Observável: o script imprime a lista de campos da conta e o mapa de configuração contém os IDs reais (PUSH/PULL não dependem de placeholders).
   - _Requirements: 2.2_
-- [ ] 1.5 Migrar o schema para remover as credenciais RD por usuário
+- [x] 1.5 Migrar o schema para remover as credenciais RD por usuário
   - Remover os campos de token/identificador RD do usuário e ajustar a criação, atualização e seeds de usuário para não os gravarem mais.
   - Tratar com segurança o drop das colunas não-nulas em dados existentes (backfill/default antes do drop).
   - Observável: a migração aplica limpa sobre uma base com usuários existentes e a criação de usuário funciona sem os campos RD.
@@ -121,7 +121,7 @@
   - Manter ativas e inalteradas as rotinas que não tocam o CRM.
   - Observável: as duas rotinas RD não rodam mais nem por agendamento nem por gatilho manual; as rotinas de formulários e do app do hotel permanecem registradas e funcionais.
   - _Requirements: 8.1, 8.2, 8.3, 8.4_
-- [ ] 5.2 Remover o código do RD Station e a chamada ao ChatGuru
+- [x] 5.2 Remover o código do RD Station e a chamada ao ChatGuru
   - Remover os serviços, a configuração, o controller e o código de sincronização do RD, o cliente e a montagem de salvamento do RD no frontend, e a chamada ao ChatGuru no fluxo de salvar.
   - Observável: o código não contém mais caminhos que chamem o RD Station ou o ChatGuru nos fluxos de gerar, salvar e pré-preencher; a aplicação compila e os fluxos migrados funcionam sem eles.
   - _Requirements: 3.6, 9.1, 9.3, 9.4, 9.5_

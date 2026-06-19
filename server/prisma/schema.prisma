@@ -17,8 +17,6 @@ model User {
   name     String  @unique
   username String  @unique
   password String
-  user_rd  String
-  token_rd String
   level    Float   @default(1)
   active   Boolean @default(true)
 
