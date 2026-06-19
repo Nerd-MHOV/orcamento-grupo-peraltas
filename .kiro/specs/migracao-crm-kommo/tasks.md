@@ -51,7 +51,7 @@
   - _Requirements: 4.1, 4.4_
   - _Boundary: files_
   - _Depends: 1.3, 1.6_
-- [ ] 2.3 Implementar a leitura e a escrita de orçamento no lead
+- [x] 2.3 Implementar a leitura e a escrita de orçamento no lead
   - Ler um lead (nome e campos de pré-preenchimento) e atualizar um lead com os campos do orçamento e o valor, usando atualização parcial.
   - Garantir que a atualização nunca envia etapa/estágio de pipeline.
   - Observável: atualizar um lead grava valor e campos do orçamento preservando os demais; a requisição enviada não contém `status_id`; um lead inexistente propaga erro "não encontrado".

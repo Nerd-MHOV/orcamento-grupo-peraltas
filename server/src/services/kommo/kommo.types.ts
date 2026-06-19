@@ -143,6 +143,18 @@ export interface FieldMapper {
 }
 
 /**
+ * Contrato do serviço de leitura/escrita de orçamento no lead (design.md → leads).
+ * - `getLead` resolve `name` + campos de prefill (GET /leads/{id}, Req 6.1). Um
+ *   `404` propaga `KommoError{kind:'not_found'}` (Req 6.4, tratado upstream).
+ * - `updateLeadBudget` envia `{ price, custom_fields_values }` via PATCH parcial
+ *   (Req 3.1–3.4) e NUNCA `status_id`/`pipeline_id`/`deal_stage_id` (Req 3.5).
+ */
+export interface LeadsService {
+  getLead(id: number): Promise<LeadPrefill>;
+  updateLeadBudget(id: number, input: BudgetLeadInput): Promise<void>;
+}
+
+/**
  * Contrato do serviço de upload + anexação de PDF ao lead (design.md → files).
  * Orquestra o fluxo da Files API: descobrir drive → criar sessão → enviar
  * partes → anexar o uuid ao lead. Requer escopo "files" no token (Req 4.4).
