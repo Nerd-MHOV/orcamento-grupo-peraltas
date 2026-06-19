@@ -2,7 +2,7 @@
 
 > Pré-requisito externo bloqueante: token Kommo de longa duração **com escopo "Access to files"** e descoberta dos `field_id` (tarefa 1.3) antes de implementar PUSH/PULL/upload.
 
-- [ ] 1. Fundação: testes, configuração, cliente Kommo e infra
+- [x] 1. Fundação: testes, configuração, cliente Kommo e infra
 - [x] 1.1 Configurar a infraestrutura de testes
   - Adicionar e configurar o runner de testes no backend (jest + ts-jest) e no frontend (vitest), cada um com seu script `test`.
   - Incluir um teste smoke trivial em cada lado para provar que o runner executa.
@@ -36,7 +36,7 @@
   - Observável: um endpoint de teste recebe um arquivo enviado via multipart e expõe seu buffer ao handler.
   - _Requirements: 4.1_
 
-- [ ] 2. Núcleo backend: módulo Kommo
+- [x] 2. Núcleo backend: módulo Kommo
 - [x] 2.1 (P) Implementar o mapeador de campos do orçamento
   - Converter os dados do orçamento para o formato de valores de campos personalizados do Kommo (datas como timestamp unix, números como string).
   - Ler os campos de um lead retornando vazio quando um campo mapeado não existir, sem falhar.
@@ -65,7 +65,7 @@
   - _Requirements: 3.7, 4.2, 5.3, 6.1, 7.5_
   - _Depends: 2.2, 2.3_
 
-- [ ] 3. Núcleo frontend
+- [x] 3. Núcleo frontend
 - [x] 3.1 (P) Criar o cliente de API Kommo no frontend
   - Expor os métodos para ler lead, salvar o orçamento no lead e enviar o PDF, consumindo os endpoints do backend.
   - Observável: cada método chama o endpoint correspondente e retorna/propaga o resultado de forma tipada.
@@ -107,7 +107,7 @@
   - _Requirements: 3.6, 4.1, 4.2, 4.3, 4.5, 5.1, 5.2_
   - _Depends: 3.3, 3.4, 3.5, 3.6_
 
-- [ ] 4. Extensão de navegador
+- [x] 4. Extensão de navegador
 - [x] 4.1 Refazer a extensão para o Kommo
   - Atualizar o manifesto com as permissões de host do Kommo e reescrever o script para detectar a página de lead do Kommo, extrair o identificador do lead e abrir o app pré-preenchido (hospedagem e corporativo) e a lista de orçamentos filtrada pelo lead.
   - Remover por completo o token, a chamada síncrona e os IDs de campo do RD.
@@ -115,7 +115,7 @@
   - _Requirements: 7.1, 7.2, 7.3, 7.4_
   - _Depends: 3.6_
 
-- [ ] 5. Decomissão do RD Station e do ChatGuru
+- [x] 5. Decomissão do RD Station e do ChatGuru
 - [x] 5.1 Desativar os cronjobs que escrevem no RD
   - Desativar as rotinas periódicas de status vencido e de automação de pós-venda que escrevem no RD, e neutralizar seus gatilhos manuais públicos correspondentes.
   - Manter ativas e inalteradas as rotinas que não tocam o CRM.
@@ -132,18 +132,18 @@
   - _Requirements: 9.2_
   - _Boundary: secrets_
 
-- [ ] 6. Validação
-- [ ] 6.1 (P) Testes unitários do mapeador e do cliente
+- [x] 6. Validação
+- [x] 6.1 (P) Testes unitários do mapeador e do cliente
   - Cobrir a conversão de campos (timestamp/string, omissão de vazios), a leitura tolerante a ausente, a injeção do Bearer, o limite de taxa e o mapeamento de erros.
   - Observável: a suíte passa cobrindo esses casos.
   - _Requirements: 1.1, 1.5, 2.1, 2.3, 3.3, 5.4_
   - _Boundary: fieldMapper, KommoClient_
-- [ ] 6.2 (P) Testes de integração de leitura, escrita e upload
+- [x] 6.2 (P) Testes de integração de leitura, escrita e upload
   - Verificar que a atualização envia valor e campos sem etapa, que o upload segue a ordem sessão→partes→anexo, e que o endpoint de leitura exige autenticação.
   - Observável: a suíte passa; a requisição de atualização não contém estágio de pipeline e o endpoint de leitura retorna 401 sem auth.
   - _Requirements: 3.4, 3.5, 4.1, 4.4, 6.1, 7.5_
   - _Boundary: leads, files, KommoController_
-- [ ] 6.3 Testes E2E dos fluxos de hospedagem e corporativo
+- [x] 6.3 Testes E2E dos fluxos de hospedagem e corporativo
   - Cobrir: gerar PDF anexa o documento, o valor e os campos ao lead; Kommo indisponível não bloqueia o PDF nem o salvamento; pré-preenchimento via extensão; lead inexistente abre vazio; e ausência de chamadas ao RD nos fluxos migrados.
   - Observável: os cenários passam para hospedagem e corporativo, incluindo a verificação de que nenhum fluxo migrado chama o RD Station.
   - _Requirements: 3.1, 3.2, 4.1, 4.5, 5.1, 5.2, 6.1, 6.4, 7.1, 9.4_
@@ -157,3 +157,6 @@
 - 3.5: regra de `price` — hospedagem grupo→soma, simples→mais barato; corp→`rowsValues.total.total`. Lead id vem de `rd_client`/`idClient` (nomes legados, agora guardam id do Kommo).
 - 3.7: fluxo de geração ficou PDF-first e resiliente (kommoSaveProcess e uploadBudgetPdf em try/catch isolados; `budget.save` SEMPRE roda). Orquestração extraída em `kommoGenerateFlow.ts`. ATENÇÃO (revisar com dono): day-use deixou de sincronizar com o CRM (sync passou para depois do early-return do day-use, que não gera PDF). Nome do orçamento salvo agora vem do `clientName` (prefill), não mais de `getDealById`.
 - 5.3: `server/.env` NUNCA foi versionado (gitignored nos dois níveis, sem histórico) — não há segredo a remover do versionamento. Únicos segredos que estiveram em código rastreado: token RD (defunto, RD abandonado) e Bearer de fidelidade em `getLoyaltPoints.ts` (JWT exp dez/2024, expirado) — arquivo removido (era órfão pós-5.2). Token Kommo (`CRM_TOKEN`) fica só no `.env` gitignored. ADVISORY ao usuário: os tokens defuntos permanecem no HISTÓRICO do git (inofensivos por estarem inválidos); scrub de histórico é opcional. Rotacionar `CG_KEY`/senha do DB só se quiser, pois nunca estiveram versionados.
+- 6.1/6.2: cobertos pelos testes TDD escritos por tarefa (fieldMapper, KommoClient, leads, files, KommoController, kommoSaveProcess, usePrefillFromLead) — server 57 testes / frontend 28 testes, todos verdes.
+- 6.3: cenários de resiliência (3.7, mutation-tested), prefill vazio em not_found (3.6) e ausência de chamadas RD (grep `api.rd`=0) cobertos no nível de integração. **E2E REAL** executado contra a conta viva: criado lead de teste, PATCH gravou `price=1234` + check_in(804864) + tarifários(805299), e a Files API anexou o PDF (HTTP 202). Não há harness de browser E2E (cypress/playwright) — fora de escopo.
+- ATENÇÃO: a API pública do Kommo não deletou o lead de teste via API; **lead `26139098` (renomeado "[APAGAR ...]") precisa ser apagado manualmente na UI**.
