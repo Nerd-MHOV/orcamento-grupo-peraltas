@@ -126,7 +126,7 @@
   - Observável: o código não contém mais caminhos que chamem o RD Station ou o ChatGuru nos fluxos de gerar, salvar e pré-preencher; a aplicação compila e os fluxos migrados funcionam sem eles.
   - _Requirements: 3.6, 9.1, 9.3, 9.4, 9.5_
   - _Depends: 2.4, 3.5, 3.7, 5.1_
-- [ ] 5.3 (P) Rotacionar e remover os segredos versionados
+- [x] 5.3 (P) Rotacionar e remover os segredos versionados
   - Rotacionar/invalidar as credenciais sensíveis commitadas no repositório e removê-las do versionamento.
   - Observável: os segredos antigos não constam mais do arquivo versionado e foram rotacionados/invalidados.
   - _Requirements: 9.2_
@@ -156,3 +156,4 @@
 - 3.5: contrato de data frontend→backend: frontend envia `checkIn/checkOut` como ISO `YYYY-MM-DD`; o `KommoController.updateBudget` coage string→`Date` (o `fieldMapper` só grava data com `instanceof Date`). Sem essa coerção as datas não persistem.
 - 3.5: regra de `price` — hospedagem grupo→soma, simples→mais barato; corp→`rowsValues.total.total`. Lead id vem de `rd_client`/`idClient` (nomes legados, agora guardam id do Kommo).
 - 3.7: fluxo de geração ficou PDF-first e resiliente (kommoSaveProcess e uploadBudgetPdf em try/catch isolados; `budget.save` SEMPRE roda). Orquestração extraída em `kommoGenerateFlow.ts`. ATENÇÃO (revisar com dono): day-use deixou de sincronizar com o CRM (sync passou para depois do early-return do day-use, que não gera PDF). Nome do orçamento salvo agora vem do `clientName` (prefill), não mais de `getDealById`.
+- 5.3: `server/.env` NUNCA foi versionado (gitignored nos dois níveis, sem histórico) — não há segredo a remover do versionamento. Únicos segredos que estiveram em código rastreado: token RD (defunto, RD abandonado) e Bearer de fidelidade em `getLoyaltPoints.ts` (JWT exp dez/2024, expirado) — arquivo removido (era órfão pós-5.2). Token Kommo (`CRM_TOKEN`) fica só no `.env` gitignored. ADVISORY ao usuário: os tokens defuntos permanecem no HISTÓRICO do git (inofensivos por estarem inválidos); scrub de histórico é opcional. Rotacionar `CG_KEY`/senha do DB só se quiser, pois nunca estiveram versionados.
