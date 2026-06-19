@@ -150,7 +150,7 @@
   - _Depends: 3.7, 4.1, 5.2_
 
 ## Implementation Notes
-- 2.1: datas (check-in/out) convertidas em unix **start-of-day UTC**; readLead devolve `YYYY-MM-DD`. Frontend (3.x) deve tratar as datas como UTC para round-trip consistente.
+- 2.1: datas (check-in/out) convertidas em unix **MEIO-DIA UTC** (`toUnixDateNoon`); readLead devolve `YYYY-MM-DD`. **Motivo (verificado na API real)**: o Kommo normaliza o campo de data para a meia-noite do fuso DA CONTA (UTC-3); 00:00 UTC rolava p/ o dia anterior. O prefill (`usePrefillFromLead.parseLocalDate`) parseia `YYYY-MM-DD` no fuso LOCAL, não `new Date(string)` (UTC), senão o calendário rola -1. Corrigido em 2026-06-19 (commit fix do deslocamento -1).
 - 2.1: `price` NÃO é custom field — é o campo nativo do lead, setado pelo leads service (2.3), não pelo fieldMapper.
 - 3.2: `collectUsedTariffs` replica a regra weekend/midweek de `generateBudget.ts` (Sex/Sáb/Dom + Qui em jul/jan). Omite os args de special-case Dez-2024/Jan-2025 do getTariff (datas passadas, "REMOVE LATER") — sem efeito em orçamentos atuais/futuros. `tariffsUsed` é opcional/aditivo em todo o caminho.
 - 3.5: contrato de data frontend→backend: frontend envia `checkIn/checkOut` como ISO `YYYY-MM-DD`; o `KommoController.updateBudget` coage string→`Date` (o `fieldMapper` só grava data com `instanceof Date`). Sem essa coerção as datas não persistem.
