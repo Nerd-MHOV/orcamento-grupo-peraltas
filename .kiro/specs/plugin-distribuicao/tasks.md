@@ -1,6 +1,6 @@
 # Implementation Plan
 
-- [ ] 1. Mover e rebrandar a extensão
+- [x] 1. Mover e rebrandar a extensão
 - [x] 1.1 Mover o fonte da extensão para dentro do frontend
   - Mover `rd-plugin/` para `frontend/extension/` preservando os arquivos (manifest, script, popup, teste) e o comportamento (extração de lead-id e os 3 fluxos).
   - Confirmar que o destino do app continua no domínio de produção e sem IP fixo, num único ponto de configuração.
@@ -16,7 +16,7 @@
   - Observável: existe um README de instalação no fonte da extensão que será incluído no pacote baixado.
   - _Requirements: 5.1, 5.2, 5.3_
 
-- [ ] 2. Empacotamento automático no build
+- [x] 2. Empacotamento automático no build
 - [x] 2.1 Script de empacotamento da extensão
   - Criar um script Node (usando uma biblioteca de zip multiplataforma) que gera o pacote da extensão a partir do fonte, incluindo o README e excluindo arquivos de teste, e que falha com código de erro se o fonte estiver ausente ou o pacote não puder ser escrito.
   - Observável: executar o script gera o pacote em `frontend/public/` contendo o manifesto, o script e o README, sem os arquivos de teste; uma falha de empacotamento retorna código ≠ 0.
@@ -27,7 +27,7 @@
   - _Requirements: 3.2, 3.3, 4.3_
   - _Depends: 2.1_
 
-- [ ] 3. Download e limpeza
+- [x] 3. Download e limpeza
 - [x] 3.1 Atualizar o ponto de download no frontend
   - Apontar o link de download do `Navbar` para o novo nome de artefato e rótulo "Orçamento Peraltas", mantendo um único ponto de download.
   - Observável: o botão de download entrega o novo pacote com rótulo "Orçamento Peraltas"; não há referência ao nome antigo no frontend.
@@ -39,8 +39,8 @@
   - _Requirements: 1.2_
   - _Depends: 1.1_
 
-- [ ] 4. Validação
-- [ ] 4.1 Testes de empacotamento e preservação de comportamento
+- [x] 4. Validação
+- [x] 4.1 Testes de empacotamento e preservação de comportamento
   - Cobrir: o pacote gerado contém manifesto/script/README e exclui os testes; o `extractLeadId` continua passando a partir do novo local.
   - Observável: a suíte passa verificando o conteúdo do pacote e a extração de lead-id.
   - _Requirements: 3.1, 5.1, 6.1_
