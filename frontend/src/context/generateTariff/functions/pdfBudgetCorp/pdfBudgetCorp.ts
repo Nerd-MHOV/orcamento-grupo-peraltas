@@ -13,6 +13,7 @@ import { layoutPageCollaborators } from "./LayoutPageCollaborator";
 import { breakPage } from "./breakPage";
 import { doBodyLocations } from "./location";
 import { PATH_IMAGES_BUDGET } from "../../../../config";
+import pdfToBlob from "../pdfToBlob";
 (<any>pdfMake).vfs = pdfFonts && pdfFonts.pdfMake ? pdfFonts.pdfMake.vfs : globalThis.pdfMake.vfs;
 
 const slideImagesPath = PATH_IMAGES_BUDGET;
@@ -24,7 +25,7 @@ async function pdfBudgetCorp(
   numberPhone: string,
   descriptionBudget: Content[],
   linesToBreakPage: number,
-) {
+): Promise<Blob> {
   const now = format(new Date(), "dd/MM/yyyy HH:mm");
   const validate = format(addDays(new Date(), 3), "dd/MM/yyyy");
   const slidesContent = []
@@ -154,19 +155,8 @@ async function pdfBudgetCorp(
   const pdf = pdfMake.createPdf(docDefinitions);
   //pdf.open();
 
-  pdf.getBlob((blob) => {
-    // Converte o blob em uma URL de dados
-    const url = URL.createObjectURL(blob);
-    // Define o tamanho e posição da janela pop-up
-    const width = 1000; // Largura da janela em pixels
-    const height = 650; // Altura da janela em pixels
-    const left = (window.innerWidth - width) / 2; // Centraliza a janela horizontalmente
-    const top = (window.innerHeight - height) / 2; // Centraliza a janela verticalmente
-    const features = `width=${width},height=${height},left=${left},top=${top},resizable=yes,scrollbars=yes`;
-
-    // Abre a janela pop-up com o PDF
-    window.open(url, '_blank', features);
-  });
+  // Abre o PDF em pop-up (comportamento existente) e expõe o Blob para upload.
+  return pdfToBlob(pdf);
 }
 
 export default pdfBudgetCorp;

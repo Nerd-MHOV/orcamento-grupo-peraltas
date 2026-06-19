@@ -78,7 +78,7 @@
   - Observável: a resposta de cálculo inclui a lista de tarifários; após gerar um orçamento, o objeto resultante carrega `tariffsUsed` com os nomes corretos (incluindo múltiplos quando a faixa de datas/quarto usa mais de um).
   - _Requirements: 3.3_
   - _Boundary: Budget calc (backend), generateTariff context (frontend) — tarefa de integração cross-boundary_
-- [ ] 3.3 (P) Expor o blob do PDF gerado
+- [x] 3.3 (P) Expor o blob do PDF gerado
   - Permitir que o PDF gerado seja obtido como blob pelos chamadores, além de continuar abrindo-o em nova aba.
   - Observável: o gerador de PDF disponibiliza o blob para upload mantendo a abertura em nova aba inalterada.
   - _Requirements: 4.1_
