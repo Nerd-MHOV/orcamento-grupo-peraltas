@@ -19,7 +19,7 @@
   - Normalizar os erros HTTP do Kommo em um tipo discriminado (auth, não encontrado, rate limited, rede, desconhecido).
   - Observável: uma chamada de teste autentica via header Bearer; com token ausente/inválido o cliente retorna erro tipado `auth` sem expor o token.
   - _Requirements: 1.1, 1.3, 1.5, 5.4_
-- [ ] 1.4 Criar o script de descoberta de campos e fixar os IDs no config
+- [x] 1.4 Criar o script de descoberta de campos e fixar os IDs no config
   - Criar um script administrativo que lista os campos personalizados de lead do Kommo (id e rótulo) para auditoria futura.
   - Confirmar que o mapa de configuração reflete os `field_id` reais já descobertos.
   - Observável: o script imprime a lista de campos da conta e o mapa de configuração contém os IDs reais (PUSH/PULL não dependem de placeholders).
