@@ -28,12 +28,12 @@
   - _Depends: 2.1_
 
 - [ ] 3. Download e limpeza
-- [ ] 3.1 Atualizar o ponto de download no frontend
+- [x] 3.1 Atualizar o ponto de download no frontend
   - Apontar o link de download do `Navbar` para o novo nome de artefato e rótulo "Orçamento Peraltas", mantendo um único ponto de download.
   - Observável: o botão de download entrega o novo pacote com rótulo "Orçamento Peraltas"; não há referência ao nome antigo no frontend.
   - _Requirements: 1.3, 4.1, 4.2_
   - _Depends: 2.2_
-- [ ] 3.2 Remover a pasta antiga e atualizar notas relacionadas
+- [x] 3.2 Remover a pasta antiga e atualizar notas relacionadas
   - Remover a pasta `rd-plugin/` da raiz (conteúdo já movido) e atualizar as notas/documentos que referenciam o local antigo da extensão.
   - Observável: a pasta raiz antiga não existe mais; o build e o teste do plugin seguem verdes a partir do novo local.
   - _Requirements: 1.2_
