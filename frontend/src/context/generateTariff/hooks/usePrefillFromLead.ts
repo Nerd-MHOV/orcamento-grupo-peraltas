@@ -16,6 +16,17 @@ export interface PrefillFormSetters {
   }) => void;
 }
 
+/**
+ * Converte `YYYY-MM-DD` em uma data no fuso LOCAL (meia-noite local).
+ * `new Date("2026-07-25")` seria interpretado como meia-noite UTC e, exibido no
+ * calendário em UTC-3, cairia para o dia anterior (24). Construir a data pelos
+ * componentes mantém o dia pretendido no calendário.
+ */
+function parseLocalDate(iso: string): Date {
+  const [year, month, day] = iso.split("-").map(Number);
+  return new Date(year, (month ?? 1) - 1, day ?? 1);
+}
+
 export interface UsePrefillFromLeadResult {
   /** Nome do cliente associado ao lead (Req 6.2). Vazio quando não houve prefill. */
   name: string;
@@ -65,8 +76,8 @@ const usePrefillFromLead = (
         if (lead.checkIn && lead.checkOut) {
           setters.handleSelectDate({
             selection: {
-              startDate: new Date(lead.checkIn),
-              endDate: new Date(lead.checkOut),
+              startDate: parseLocalDate(lead.checkIn),
+              endDate: parseLocalDate(lead.checkOut),
               key: "selection",
             },
           });
