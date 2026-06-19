@@ -37,7 +37,7 @@
   - _Requirements: 4.1_
 
 - [ ] 2. Núcleo backend: módulo Kommo
-- [ ] 2.1 (P) Implementar o mapeador de campos do orçamento
+- [x] 2.1 (P) Implementar o mapeador de campos do orçamento
   - Converter os dados do orçamento para o formato de valores de campos personalizados do Kommo (datas como timestamp unix, números como string).
   - Ler os campos de um lead retornando vazio quando um campo mapeado não existir, sem falhar.
   - Observável: dado um orçamento de exemplo, o mapeador produz os valores no formato esperado; dado um lead sem certo campo, a leitura retorna vazio para aquele campo.
@@ -147,3 +147,7 @@
   - Observável: os cenários passam para hospedagem e corporativo, incluindo a verificação de que nenhum fluxo migrado chama o RD Station.
   - _Requirements: 3.1, 3.2, 4.1, 4.5, 5.1, 5.2, 6.1, 6.4, 7.1, 9.4_
   - _Depends: 3.7, 4.1, 5.2_
+
+## Implementation Notes
+- 2.1: datas (check-in/out) convertidas em unix **start-of-day UTC**; readLead devolve `YYYY-MM-DD`. Frontend (3.x) deve tratar as datas como UTC para round-trip consistente.
+- 2.1: `price` NÃO é custom field — é o campo nativo do lead, setado pelo leads service (2.3), não pelo fieldMapper.

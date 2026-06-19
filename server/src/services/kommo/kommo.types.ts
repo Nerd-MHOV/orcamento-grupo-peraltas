@@ -49,6 +49,69 @@ export interface KommoFileLink {
 }
 
 /**
+ * Valor de um campo personalizado no formato de leitura/escrita do Kommo.
+ * - Escrita texto/número/data: `{ field_id, values: [{ value }] }`.
+ * - Escrita/leitura de select: `{ field_id, values: [{ enum_id }] }`.
+ * - Leitura de select: o Kommo também retorna `value` (rótulo) junto do `enum_id`.
+ * (research.md → Data Contracts & Integration; MAPA FINAL DE CAMPOS.)
+ */
+export interface KommoCustomFieldValue {
+  field_id: number;
+  values: Array<{ value?: string | number; enum_id?: number }>;
+}
+
+/**
+ * Lead do Kommo no shape consumido pelo `fieldMapper.readLead`.
+ * `GET /api/v4/leads/{id}` retorna ao menos `id`, `name`, `price` e
+ * `custom_fields_values` (research.md). `custom_fields_values` pode vir
+ * ausente/`null` em leads sem campos preenchidos — o mapeador tolera isso.
+ */
+export interface KommoLead {
+  id: number;
+  name: string;
+  price?: number;
+  custom_fields_values?: KommoCustomFieldValue[] | null;
+}
+
+/**
+ * Entrada de orçamento a ser escrita no lead (design.md → fieldMapper).
+ * - `price` vai para o campo nativo `price` do lead (NÃO custom field) — tratado
+ *   pelo serviço de leads, não pelo `toCustomFields`.
+ * - `tariffs` é a lista de tarifários usados, persistida no orçamento.
+ */
+export interface BudgetLeadInput {
+  checkIn: Date;
+  checkOut: Date;
+  adt: number;
+  chdAges: number[];
+  petSizes: string[];
+  price: number;
+  tariffs: string[];
+}
+
+/**
+ * Dados extraídos do lead para pré-preencher o formulário (PULL).
+ * Campos opcionais ausentes no lead vêm `undefined` (Req 2.3, sem exceção).
+ */
+export interface LeadPrefill {
+  id: number;
+  name: string;
+  checkIn?: string;
+  checkOut?: string;
+  adt?: number;
+  chdAges?: number[];
+  petSizes?: string[];
+}
+
+/**
+ * Contrato do mapeador de campos do orçamento ↔ Kommo (design.md → fieldMapper).
+ */
+export interface FieldMapper {
+  toCustomFields(input: BudgetLeadInput): KommoCustomFieldValue[];
+  readLead(lead: KommoLead): LeadPrefill;
+}
+
+/**
  * Contrato do cliente HTTP autenticado e limitado em taxa do Kommo.
  * Toda chamada ao Kommo passa por aqui (design.md → KommoClient).
  */
