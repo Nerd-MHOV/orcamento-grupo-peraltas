@@ -22,8 +22,11 @@ interface GenerateTariffContextProps extends
     dataTable: DataContentProps;
     getClientName: (id: string) => Promise<string>;
     clientName: string;
+    setClientName: React.Dispatch<React.SetStateAction<string>>;
+    /** Adultos vindos do prefill do lead (Req 6.1); undefined quando não houve prefill. */
+    prefillAdt: number | undefined;
 
-    
+
     callHandleForm: VoidFunction;
 }
 
@@ -36,7 +39,7 @@ export type occupacyUHProps = {
 }
 
 export interface InfoBudgetGTCP {
-    addRows(rows: any[], arrComplete: ArrComplete): void;
+    addRows(rows: any[], arrComplete: ArrComplete, tariffsUsed?: string[]): void;
     deleteLine(indexDelete: number): void;
     handleSaveBudget: () => Promise<void>;
     clearTariffs: () => Promise<void>;

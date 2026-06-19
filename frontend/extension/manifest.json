@@ -1,0 +1,11 @@
+{
+  "name": "Orçamento Peraltas",
+  "description": "Abre o orçamento pré-preenchido a partir de um lead do Kommo.",
+  "version": "2.1",
+  "manifest_version": 3,
+  "permissions": ["activeTab", "scripting", "tabs"],
+  "host_permissions": ["https://admperaltasturismo.kommo.com/*"],
+  "action": {
+    "default_popup": "index.html"
+  }
+}

@@ -14,9 +14,10 @@ const Navbar = () => {
 
             <div className="support">
                 <a
-                    href='/rd-plugin.zip'
-                    download='RD_Plugin'
+                    href='/orcamento-plugin.zip'
+                    download='Orcamento-Peraltas-Extensao'
                     target='_blank'
+                    title='Baixar a extensão Orçamento Peraltas'
                     >
                     <DownloadForOffline />
                 </a>

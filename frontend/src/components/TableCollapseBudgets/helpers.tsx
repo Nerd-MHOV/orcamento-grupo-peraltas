@@ -137,8 +137,8 @@ export function Row(props: {
     let name: string;
     name = "";
     if (typeof deal_id === "string")
-      api.rd
-        .getDealById(deal_id)
+      api.kommo
+        .getLead(Number(deal_id))
         .then((response) => {
           name = response?.name || "undefined";
         })

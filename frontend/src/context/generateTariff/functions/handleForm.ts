@@ -15,7 +15,7 @@ export async function handleForm(
   selectionRange: SelectionRangeProps,
   unitaryDiscount: RowModalDiscount[],
   dailyCourtesy: boolean,
-  addRows: (rows: any[], arrComplete: ArrComplete) => void
+  addRows: (rows: any[], arrComplete: ArrComplete, tariffsUsed?: string[]) => void
 ) {
   const api = useApi();
 
@@ -68,11 +68,15 @@ export async function handleForm(
     dailyCourtesy
   );
 
-  addRows(response.rows, {
-    responseForm,
-    childValue,
-    petValue,
-    selectionRange,
-    dailyCourtesy,
-  });
+  addRows(
+    response.rows,
+    {
+      responseForm,
+      childValue,
+      petValue,
+      selectionRange,
+      dailyCourtesy,
+    },
+    response.tariffs
+  );
 }

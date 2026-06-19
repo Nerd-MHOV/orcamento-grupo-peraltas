@@ -1,6 +1,7 @@
 import { useState } from "react";
 import DataContentProps, { ArrComplete } from "../interfaces/tableBudgetDataContentProps";
 import { calcTotal } from "../functions/calcTotal";
+import { buildBudgetTable } from "../functions/buildBudgetTable";
 import RowsProps from "../interfaces/tableBudgetRowsProps";
 import { dataInitial } from "../initial";
 
@@ -22,8 +23,8 @@ const useInfoBudgets = () => {
         setBudgets([]);
     }
 
-    function addRows(rows: RowsProps[], arrComplete?: ArrComplete) {
-        setDataTable((par) => ({...par, rows, arrComplete}));
+    function addRows(rows: RowsProps[], arrComplete?: ArrComplete, tariffsUsed?: string[]) {
+        setDataTable((par) => ({...par, ...buildBudgetTable(rows, arrComplete, tariffsUsed)}));
     }
     function clearRows() {
         addRows([]);

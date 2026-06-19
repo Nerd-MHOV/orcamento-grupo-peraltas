@@ -22,3 +22,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Artefato gerado no build (empacotamento da extensão)
+public/orcamento-plugin.zip

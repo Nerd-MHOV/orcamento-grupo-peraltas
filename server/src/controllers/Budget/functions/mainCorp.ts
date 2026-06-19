@@ -4,6 +4,7 @@ import { adultBudget } from "./adultBudget";
 import { calcTotal, calcTotalBudgets } from "./calcTotal";
 import { calcTotalAgency } from "./calcTotalAgency";
 import { childBudget } from "./childBudget";
+import { collectUsedTariffs } from "./collectUsedTariffs";
 import getPeriod from "./getPeriod";
 import { petBudget } from "./petBudget";
 import { requirementBudget } from "./requirementBudget";
@@ -65,6 +66,9 @@ export async function mainCorp(bodyRequest: CorporateBodySendBudget) {
     }
 
 
+    // tarifários efetivamente usados, agregados entre todos os quartos (deduplicados)
+    const tariffs = await collectUsedTariffs(completePeriod);
+
     const response: CorporateBodyResponseBudget = {
         ...bodyRequest,
         rooms: newRooms,
@@ -72,7 +76,8 @@ export async function mainCorp(bodyRequest: CorporateBodySendBudget) {
         rowsValues: {
             rows: rowsFinal,
             total: calcTotal(rowsFinal, bodyRequest.discount)
-        }
+        },
+        tariffs
     }
 
     return response;

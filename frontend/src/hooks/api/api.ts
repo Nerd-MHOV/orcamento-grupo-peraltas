@@ -3,7 +3,7 @@ import { API_URL } from "../../config";
 import { insights } from "./all/insights.api";
 import { auth } from "./all/auth.api";
 import { user } from "./all/user.api";
-import { rd } from "./all/rd.api";
+import { kommo } from "./all/kommo.api";
 import { budget } from "./all/budget.api";
 import { budgetDu } from "./all/budgetDu.api";
 import { budgetCorp } from "./all/budgetCorp.api";
@@ -25,7 +25,7 @@ export const useApi = () => ({
   insights: insights(api),
   auth: auth(api),
   user: user(api),
-  rd: rd(api),
+  kommo: kommo(api),
   budget: budget(api),
   budgetDu: budgetDu(api),
   budgetCorp: budgetCorp(api),

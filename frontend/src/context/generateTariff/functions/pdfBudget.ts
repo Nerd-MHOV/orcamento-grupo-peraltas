@@ -8,6 +8,7 @@ import getLayoutRooms from "./file-part/getLayoutRooms";
 
 import { PATH_IMAGES } from "../../../config";
 import { de } from "date-fns/locale";
+import pdfToBlob from "./pdfToBlob";
 const imagePath = PATH_IMAGES;
 
 async function pdfBudget(
@@ -15,7 +16,7 @@ async function pdfBudget(
   name: string,
   email: string,
   numberPhone: string,
-) {
+): Promise<Blob> {
   console.log(budgets);
   const now = format(new Date(), "dd/MM/yyyy HH:mm");
   const validate = format(addDays(new Date(), 3), "dd/MM/yyyy");
@@ -670,19 +671,8 @@ async function pdfBudget(
   const pdf = pdfMake.createPdf(docDefinitions);
   //pdf.open();
 
-  pdf.getBlob((blob) => {
-    // Converte o blob em uma URL de dados
-    const url = URL.createObjectURL(blob);
-    // Define o tamanho e posição da janela pop-up
-    const width = 1000; // Largura da janela em pixels
-    const height = 650; // Altura da janela em pixels
-    const left = (window.innerWidth - width) / 2; // Centraliza a janela horizontalmente
-    const top = (window.innerHeight - height) / 2; // Centraliza a janela verticalmente
-    const features = `width=${width},height=${height},left=${left},top=${top},resizable=yes,scrollbars=yes`;
-
-    // Abre a janela pop-up com o PDF
-    window.open(url, '_blank', features);
-  });
+  // Abre o PDF em pop-up (comportamento existente) e expõe o Blob para upload.
+  return pdfToBlob(pdf);
 }
 
 export default pdfBudget;
