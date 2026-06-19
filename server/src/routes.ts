@@ -131,10 +131,8 @@ routes.post("/login", loginUser.handle);
 
 routes.get("/routines/opportunities", routinesAutomations.getOpportunities)
 routes.get("/routines/assist-opportunities", routinesAutomations.assistOpportunities)
-routes.get("/routines/assist-db-status", routinesAutomations.assistDBStatus)
 routes.get("/routines/assist-48h-in-walked", routinesAutomations.assist48hInWalked)
 routes.get("/routines/assist-24h-in-expend", routinesAutomations.assist24hInExpend)
-routes.get("/routines/days-to-dead-line", routinesAutomations.daysToDeadLine)
 routes.get("/routines/google-forms", routinesAutomations.googleForms)
 routes.get("/routines/att-app-hotel", routinesAutomations.attAppHotel);
 

@@ -116,7 +116,7 @@
   - _Depends: 3.6_
 
 - [ ] 5. Decomissão do RD Station e do ChatGuru
-- [ ] 5.1 Desativar os cronjobs que escrevem no RD
+- [x] 5.1 Desativar os cronjobs que escrevem no RD
   - Desativar as rotinas periódicas de status vencido e de automação de pós-venda que escrevem no RD, e neutralizar seus gatilhos manuais públicos correspondentes.
   - Manter ativas e inalteradas as rotinas que não tocam o CRM.
   - Observável: as duas rotinas RD não rodam mais nem por agendamento nem por gatilho manual; as rotinas de formulários e do app do hotel permanecem registradas e funcionais.
