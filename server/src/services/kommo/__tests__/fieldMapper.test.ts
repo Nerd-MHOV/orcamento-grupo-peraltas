@@ -25,6 +25,7 @@ function makeConfig(overrides: Partial<KommoConfig> = {}): KommoConfig {
         Grande: 648190,
       },
       tariffs_used: 805299,
+      pdf_orcamento: 786340,
     },
     ...overrides,
   };

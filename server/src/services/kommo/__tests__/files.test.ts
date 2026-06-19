@@ -44,10 +44,14 @@ describe("FilesService.uploadPdfToLead", () => {
         max_part_size: 1024 * 1024, // 1MB → bem maior que o buffer
         max_file_size: 100 * 1024 * 1024,
       })
-      // Passo 3: única parte (final) → retorna uuid.
-      .mockResolvedValueOnce({ uuid: "file-uuid-final" });
+      // Passo 3: única parte (final) → retorna uuid/version/size.
+      .mockResolvedValueOnce({
+        uuid: "file-uuid-final",
+        version_uuid: "ver-final",
+        size: pdf.length,
+      });
 
-    client.putFilesLink.mockResolvedValueOnce(undefined);
+    client.patch.mockResolvedValueOnce(undefined);
 
     const service = createFilesService(client);
     await service.uploadPdfToLead(77, pdf, filename);
@@ -71,8 +75,25 @@ describe("FilesService.uploadPdfToLead", () => {
     // total de 2 drivePost: sessão + 1 parte.
     expect(client.drivePost).toHaveBeenCalledTimes(2);
 
-    // Passo 4: attach do uuid final ao lead.
-    expect(client.putFilesLink).toHaveBeenCalledWith(77, ["file-uuid-final"]);
+    // Passo 4: preenche o custom field file "PDF - Orçamento Hotel" (786340).
+    expect(client.patch).toHaveBeenCalledWith("/leads/77", {
+      custom_fields_values: [
+        {
+          field_id: 786340,
+          values: [
+            {
+              value: {
+                file_uuid: "file-uuid-final",
+                version_uuid: "ver-final",
+                file_name: filename,
+                file_size: pdf.length,
+              },
+            },
+          ],
+        },
+      ],
+    });
+    expect(client.putFilesLink).not.toHaveBeenCalled();
   });
 
   it("chunking: buffer > max_part_size resulta em várias partes e anexa o uuid final", async () => {
@@ -96,9 +117,13 @@ describe("FilesService.uploadPdfToLead", () => {
     client.drivePost
       .mockResolvedValueOnce({ next_url: NEXT_1 }) // parte 1
       .mockResolvedValueOnce({ next_url: NEXT_2 }) // parte 2
-      .mockResolvedValueOnce({ uuid: "chunked-uuid" }); // parte 3 (final)
+      .mockResolvedValueOnce({
+        uuid: "chunked-uuid",
+        version_uuid: "ver-chunk",
+        size: pdf.length,
+      }); // parte 3 (final)
 
-    client.putFilesLink.mockResolvedValueOnce(undefined);
+    client.patch.mockResolvedValueOnce(undefined);
 
     const service = createFilesService(client);
     await service.uploadPdfToLead(99, pdf, "grande.pdf");
@@ -110,8 +135,27 @@ describe("FilesService.uploadPdfToLead", () => {
     const partUrls = client.drivePost.mock.calls.slice(1).map((c) => c[0]);
     expect(partUrls).toEqual([UPLOAD_URL, NEXT_1, NEXT_2]);
 
-    // Anexa o uuid devolvido pela parte final.
-    expect(client.putFilesLink).toHaveBeenCalledWith(99, ["chunked-uuid"]);
+    // Preenche o campo file com o uuid devolvido pela parte final.
+    expect(client.patch).toHaveBeenCalledWith(
+      "/leads/99",
+      expect.objectContaining({
+        custom_fields_values: [
+          expect.objectContaining({
+            field_id: 786340,
+            values: [
+              {
+                value: {
+                  file_uuid: "chunked-uuid",
+                  version_uuid: "ver-chunk",
+                  file_name: "grande.pdf",
+                  file_size: pdf.length,
+                },
+              },
+            ],
+          }),
+        ],
+      })
+    );
   });
 
   it("propaga KommoError {kind:'auth'} (403 sem escopo 'files') sem engolir", async () => {
