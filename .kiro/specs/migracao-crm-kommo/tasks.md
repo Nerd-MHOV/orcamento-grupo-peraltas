@@ -66,7 +66,7 @@
   - _Depends: 2.2, 2.3_
 
 - [ ] 3. Núcleo frontend
-- [ ] 3.1 (P) Criar o cliente de API Kommo no frontend
+- [x] 3.1 (P) Criar o cliente de API Kommo no frontend
   - Expor os métodos para ler lead, salvar o orçamento no lead e enviar o PDF, consumindo os endpoints do backend.
   - Observável: cada método chama o endpoint correspondente e retorna/propaga o resultado de forma tipada.
   - _Requirements: 3.1, 3.2, 4.1, 6.1_
