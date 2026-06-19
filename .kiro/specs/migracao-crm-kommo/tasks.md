@@ -108,7 +108,7 @@
   - _Depends: 3.3, 3.4, 3.5, 3.6_
 
 - [ ] 4. Extensão de navegador
-- [ ] 4.1 Refazer a extensão para o Kommo
+- [x] 4.1 Refazer a extensão para o Kommo
   - Atualizar o manifesto com as permissões de host do Kommo e reescrever o script para detectar a página de lead do Kommo, extrair o identificador do lead e abrir o app pré-preenchido (hospedagem e corporativo) e a lista de orçamentos filtrada pelo lead.
   - Remover por completo o token, a chamada síncrona e os IDs de campo do RD.
   - Observável: na página de um lead do Kommo, acionar a extensão abre o app com o orçamento pré-preenchido (e a opção de lista filtra pelo lead); fora de página de lead, nada acontece; a extensão não contém token nem faz chamada de CRM.
