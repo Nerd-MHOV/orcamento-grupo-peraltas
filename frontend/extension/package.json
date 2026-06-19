@@ -1,0 +1,6 @@
+{
+  "name": "orcamento-peraltas-extension",
+  "private": true,
+  "type": "commonjs",
+  "description": "Marca o fonte da extensão como CommonJS (o frontend é ESM). Não é empacotado no zip; o Chrome carrega script.js como script clássico."
+}

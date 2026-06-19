@@ -1,7 +1,7 @@
 {
-  "name": "KOMMO PLUGIN PERALTAS",
-  "description": "Plugin para abrir o ORÇAMENTO pré-preenchido a partir de um lead do Kommo",
-  "version": "2.0",
+  "name": "Orçamento Peraltas",
+  "description": "Abre o orçamento pré-preenchido a partir de um lead do Kommo.",
+  "version": "2.1",
   "manifest_version": 3,
   "permissions": ["activeTab", "scripting", "tabs"],
   "host_permissions": ["https://admperaltasturismo.kommo.com/*"],

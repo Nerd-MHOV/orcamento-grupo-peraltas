@@ -1,17 +1,17 @@
 # Implementation Plan
 
 - [ ] 1. Mover e rebrandar a extensão
-- [ ] 1.1 Mover o fonte da extensão para dentro do frontend
+- [x] 1.1 Mover o fonte da extensão para dentro do frontend
   - Mover `rd-plugin/` para `frontend/extension/` preservando os arquivos (manifest, script, popup, teste) e o comportamento (extração de lead-id e os 3 fluxos).
   - Confirmar que o destino do app continua no domínio de produção e sem IP fixo, num único ponto de configuração.
   - Observável: o teste `extractLeadId` roda a partir do novo local e passa; `APP_BASE` aponta para o domínio de produção e não há mais o IP antigo no fonte.
   - _Requirements: 2.1, 2.2, 2.3, 6.1, 6.3, 6.4_
-- [ ] 1.2 Rebranding "Orçamento Peraltas" e melhoria da UI do popup
+- [x] 1.2 Rebranding "Orçamento Peraltas" e melhoria da UI do popup
   - Atualizar o nome/descrição da extensão para "Orçamento Peraltas" e remover qualquer referência a "RD" no manifesto e no popup.
   - Melhorar a interface do popup com rótulos claros das três ações (hospedagem, corporativo, lista do cliente).
   - Observável: ao abrir o popup, a extensão exibe "Orçamento Peraltas" e botões com rótulos claros; nenhuma string "RD" permanece no fonte da extensão.
   - _Requirements: 1.1, 1.2, 1.4_
-- [ ] 1.3 Guia de instalação dentro do pacote
+- [x] 1.3 Guia de instalação dentro do pacote
   - Adicionar um README de instalação no fonte da extensão descrevendo o passo a passo de "load unpacked" e deixando explícito que não há auto-atualização e como obter uma nova versão.
   - Observável: existe um README de instalação no fonte da extensão que será incluído no pacote baixado.
   - _Requirements: 5.1, 5.2, 5.3_

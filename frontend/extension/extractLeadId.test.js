@@ -1,5 +1,5 @@
 // Checagem Node-runnable da função pura extractLeadId.
-// Rodar: node rd-plugin/extractLeadId.test.js
+// Rodar: node frontend/extension/extractLeadId.test.js
 const assert = require("assert");
 const { extractLeadId } = require("./script.js");
 

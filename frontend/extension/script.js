@@ -12,7 +12,7 @@ const KOMMO_LEAD_URL_RE =
 /**
  * Função PURA: extrai o id numérico do lead a partir da URL do Kommo.
  * Retorna a string do id quando a URL é uma página de detalhe de lead,
- * ou null caso contrário (dashboard, RD, qualquer outra coisa).
+ * ou null caso contrário (dashboard ou qualquer outra página).
  * @param {string} url
  * @returns {string|null}
  */
@@ -35,6 +35,8 @@ if (typeof document !== "undefined" && typeof chrome !== "undefined") {
   const budget_button = document.getElementById("budget");
   const budget_corp_button = document.getElementById("budget-corp");
   const listBudget_button = document.getElementById("list-budgets");
+  const statusEl = document.getElementById("status");
+  const actionButtons = [budget_button, budget_corp_button, listBudget_button];
 
   // Configurações da janela popup (centralizada).
   const openPopup = (url) => {
@@ -55,27 +57,42 @@ if (typeof document !== "undefined" && typeof chrome !== "undefined") {
     return extractLeadId(tab?.url ?? "");
   };
 
-  // "orçamento" → app de hospedagem pré-preenchido pelo backend.
-  budget_button.addEventListener("click", async (e) => {
-    e.preventDefault();
-    const leadId = await getActiveLeadId();
-    if (!leadId) return; // Não é página de lead do Kommo → nada a fazer (Req 7.4).
-    openPopup(`${APP_BASE}/?client_id=${leadId}`);
-  });
+  const setStatus = (text, kind) => {
+    if (!statusEl) return;
+    statusEl.textContent = text;
+    statusEl.className = `status status--${kind}`;
+  };
 
-  // "orçamento corp" → app corporativo pré-preenchido pelo backend.
-  budget_corp_button.addEventListener("click", async (e) => {
-    e.preventDefault();
+  // Ao abrir o popup: detecta o lead e habilita/desabilita as ações com feedback.
+  const refreshState = async () => {
     const leadId = await getActiveLeadId();
-    if (!leadId) return;
-    openPopup(`${APP_BASE}/corporate?client_id=${leadId}`);
-  });
+    const enabled = Boolean(leadId);
+    actionButtons.forEach((btn) => {
+      if (btn) btn.disabled = !enabled;
+    });
+    if (enabled) {
+      setStatus(`Lead detectado: #${leadId}`, "ok");
+    } else {
+      setStatus("Abra um lead do Kommo para gerar o orçamento.", "warn");
+    }
+  };
 
-  // "lista" → lista de orçamentos filtrada pelo lead.
-  listBudget_button.addEventListener("click", async (e) => {
-    e.preventDefault();
-    const leadId = await getActiveLeadId();
-    if (!leadId) return;
-    openPopup(`${APP_BASE}/budgets?find=${leadId}`);
-  });
+  // Liga um botão a um fluxo do app; só age quando há um lead na aba (Req 6.3).
+  const wireAction = (button, buildUrl) => {
+    if (!button) return;
+    button.addEventListener("click", async (e) => {
+      e.preventDefault();
+      const leadId = await getActiveLeadId();
+      if (!leadId) return; // Não é página de lead do Kommo → nada a fazer.
+      openPopup(buildUrl(leadId));
+    });
+  };
+
+  wireAction(budget_button, (id) => `${APP_BASE}/?client_id=${id}`);
+  wireAction(budget_corp_button, (id) => `${APP_BASE}/corporate?client_id=${id}`);
+  wireAction(listBudget_button, (id) => `${APP_BASE}/budgets?find=${id}`);
+
+  document.addEventListener("DOMContentLoaded", refreshState);
+  // Caso o DOM já esteja pronto quando o script roda.
+  if (document.readyState !== "loading") refreshState();
 }
