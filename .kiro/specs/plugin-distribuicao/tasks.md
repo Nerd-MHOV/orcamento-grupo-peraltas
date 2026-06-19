@@ -17,11 +17,11 @@
   - _Requirements: 5.1, 5.2, 5.3_
 
 - [ ] 2. Empacotamento automático no build
-- [ ] 2.1 Script de empacotamento da extensão
+- [x] 2.1 Script de empacotamento da extensão
   - Criar um script Node (usando uma biblioteca de zip multiplataforma) que gera o pacote da extensão a partir do fonte, incluindo o README e excluindo arquivos de teste, e que falha com código de erro se o fonte estiver ausente ou o pacote não puder ser escrito.
   - Observável: executar o script gera o pacote em `frontend/public/` contendo o manifesto, o script e o README, sem os arquivos de teste; uma falha de empacotamento retorna código ≠ 0.
   - _Requirements: 3.1, 3.4, 5.1_
-- [ ] 2.2 Integrar o empacotamento ao build e remover o binário versionado
+- [x] 2.2 Integrar o empacotamento ao build e remover o binário versionado
   - Encadear o script de empacotamento ao `build` do frontend (rodando no build local e no Dockerfile, sem passo extra de CI); ignorar o artefato gerado no versionamento; e remover o `.zip` estático antigo do repositório.
   - Observável: `yarn build` no frontend produz o pacote servível em `dist/`; o artefato gerado está no `.gitignore`; o `.zip` antigo não está mais versionado.
   - _Requirements: 3.2, 3.3, 4.3_

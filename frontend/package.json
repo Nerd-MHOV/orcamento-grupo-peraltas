@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite --host",
-    "build": "tsc && vite build",
+    "package:plugin": "node scripts/package-extension.mjs",
+    "build": "node scripts/package-extension.mjs && tsc && vite build",
     "preview": "vite preview",
     "test": "vitest run"
   },
@@ -56,6 +57,7 @@
     "@types/react-dom": "^18.0.8",
     "@types/react-input-mask": "^3.0.2",
     "@vitejs/plugin-react": "^2.2.0",
+    "adm-zip": "^0.5.17",
     "jsdom": "^23.2.0",
     "typescript": "^4.6.4",
     "vite": "^3.2.3",
