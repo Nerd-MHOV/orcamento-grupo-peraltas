@@ -1,8 +1,8 @@
 // ============================================================================
 // APP_BASE — URL base do app de orçamento. ALTERE AQUI por ambiente.
-// (atualmente o servidor interno; troque para o domínio de produção quando aplicável)
+// Produção: domínio público do app de orçamento (HTTPS).
 // ============================================================================
-const APP_BASE = "http://192.168.10.87:83";
+const APP_BASE = "https://orcamento.grupoperaltas.com.br";
 
 // Conta Kommo da Peraltas. Padrão de URL do lead:
 //   https://admperaltasturismo.kommo.com/leads/detail/{id}
