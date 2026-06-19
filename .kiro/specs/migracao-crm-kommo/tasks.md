@@ -29,7 +29,9 @@
   - Tratar com segurança o drop das colunas não-nulas em dados existentes (backfill/default antes do drop).
   - Observável: a migração aplica limpa sobre uma base com usuários existentes e a criação de usuário funciona sem os campos RD.
   - _Requirements: 1.4_
-- [ ] 1.6 Adicionar o parser multipart para upload de arquivo
+  - _Nota de ordem: remover os campos do schema quebra o build do `RDController` (ainda presente). Executar esta tarefa no MESMO commit que a 5.2 (remoção do código RD) para manter o build verde._
+  - _Depends: 2.4, 3.5, 3.7, 5.1_
+- [x] 1.6 Adicionar o parser multipart para upload de arquivo
   - Introduzir a dependência de parsing multipart (`multer`) e o middleware base para receber um arquivo binário em um endpoint.
   - Observável: um endpoint de teste recebe um arquivo enviado via multipart e expõe seu buffer ao handler.
   - _Requirements: 4.1_
