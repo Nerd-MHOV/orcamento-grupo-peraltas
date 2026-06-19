@@ -83,7 +83,7 @@
   - Observável: o gerador de PDF disponibiliza o blob para upload mantendo a abertura em nova aba inalterada.
   - _Requirements: 4.1_
   - _Boundary: pdfBudget_
-- [ ] 3.4 (P) Adicionar o mecanismo de notificação de falha
+- [x] 3.4 (P) Adicionar o mecanismo de notificação de falha
   - Introduzir um provider/snackbar reutilizável para exibir avisos de falha de sincronização ao usuário.
   - Observável: disparar uma notificação exibe uma mensagem visível e auto-dispensável ao consultor.
   - _Requirements: 5.1, 5.2_
