@@ -13,7 +13,7 @@
   - Definir o objeto de configuração com o mapa de campos personalizados já confirmado (ver `research.md`: check-in 804864, check-out 804868, adulto 786330, qtd CHD 786328, idades 786322, qtd PET 786324, porte PET 786326 com enums, tarifários→Condições comerciais 805299).
   - Observável: o backend sobe lendo as credenciais do Kommo do ambiente; o mapa de configuração contém os `field_id` reais; nenhuma referência a `RD_*` permanece no exemplo de ambiente nem no compose.
   - _Requirements: 1.2, 2.1, 9.1_
-- [ ] 1.3 Implementar o cliente HTTP Kommo com autenticação e limite de taxa
+- [x] 1.3 Implementar o cliente HTTP Kommo com autenticação e limite de taxa
   - Criar a instância autenticada por Bearer (token único da conta) e um cliente separado para o drive de arquivos.
   - Adicionar a dependência de throttling (`bottleneck`) e limitar as chamadas a no máximo 7 requisições por segundo.
   - Normalizar os erros HTTP do Kommo em um tipo discriminado (auth, não encontrado, rate limited, rede, desconhecido).
