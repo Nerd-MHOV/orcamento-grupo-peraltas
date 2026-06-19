@@ -94,7 +94,7 @@
   - Observável: salvar um orçamento de grupo envia a soma; um simples envia o mais barato; orçamento sem lead vinculado não chama o CRM.
   - _Requirements: 3.1, 3.2, 3.3, 3.7_
   - _Depends: 3.1, 3.2_
-- [ ] 3.6 Pré-preencher o orçamento a partir do lead
+- [x] 3.6 Pré-preencher o orçamento a partir do lead
   - Ao abrir com referência de lead, buscar o lead e popular as datas, ocupação e nome do cliente; manter os parâmetros de URL como fallback.
   - Tratar lead inexistente abrindo o formulário vazio com aviso.
   - Observável: abrir com um lead válido exibe o formulário preenchido e o nome do cliente; com lead inexistente, o formulário abre vazio e um aviso é exibido.

@@ -6,18 +6,24 @@ const useClientName = () => {
     const [clientName, setClientName] = useState("")
 
     async function getClientName(id: string) {
-        return api.rd.getDealById(id)
+        const leadId = Number(id)
+        if (!Number.isInteger(leadId) || leadId <= 0) {
+          setClientName("")
+          return ""
+        }
+        return api.kommo.getLead(leadId)
             .then(res => {
               setClientName(res.name + "")
               return res.name + ""
             })
-            .catch(err => {
+            .catch(() => {
               setClientName("")
               return ""
             })
       }
     return ({
         clientName,
+        setClientName,
         getClientName,
     })
 }

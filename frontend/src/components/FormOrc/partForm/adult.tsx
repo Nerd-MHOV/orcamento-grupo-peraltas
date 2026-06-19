@@ -22,7 +22,7 @@ export const AdultFieldForm = ({value, onChange}: AdultFieldFormProps) => (
 
 export const AdultInputForm = () => {
   const [value, setValue] = useState<number>();
-  const { changeOccupancyWrong, callHandleForm, clearUnitaryDiscount } =
+  const { changeOccupancyWrong, callHandleForm, clearUnitaryDiscount, prefillAdt } =
     useGenerateTariff();
   const query = useQuery();
   const onChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -34,6 +34,10 @@ export const AdultInputForm = () => {
   useEffect(() => {
       if(query.get("adt")) setValue(Number(query.get("adt")))
   }, []);
+  // Prefill vindo do lead do Kommo (quando não há ?adt= na query).
+  useEffect(() => {
+      if(prefillAdt !== undefined) setValue(prefillAdt)
+  }, [prefillAdt]);
   return (
     <AdultFieldForm 
       value={value}

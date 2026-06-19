@@ -14,10 +14,11 @@ import { GenerateTariffContext } from "./generateTariff";
 import useActionsDiscount from "./hooks/useActionsDiscount";
 import useRoomLayout from "./hooks/useRoomLayout";
 import useInfoBudgets from "./hooks/useInfoBudgets";
+import usePrefillFromLead from "./hooks/usePrefillFromLead";
 
 const AccommodadtionProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  
-  
+
+
   const permissionHook = usePermission();
   const unitaryDiscountHook = useUnitaryDiscount();
   const clientNameHook = useClientName();
@@ -28,6 +29,18 @@ const AccommodadtionProvider: React.FC<{ children: ReactNode }> = ({ children })
   const actionsDiscountHook = useActionsDiscount();
   const roomLayoutHook = useRoomLayout();
   const infoBudgetHook = useInfoBudgets();
+
+  // Prefill a partir do lead do Kommo (client_id na query string).
+  const prefill = usePrefillFromLead({
+    setChildValue: roomLayoutHook.setChildValue,
+    setPetValue: roomLayoutHook.setPetValue,
+    handleSelectDate: selectionRangeHook.handleSelectDate,
+  });
+
+  // O nome vindo do lead alimenta o mesmo `clientName` já exibido por <GetClientName/>.
+  useEffect(() => {
+    if (prefill.name) clientNameHook.setClientName(prefill.name);
+  }, [prefill.name]);
 
   //Loading Component
   const [openBackdrop, setOpenBackdrop] = useState(false)
@@ -83,6 +96,7 @@ const AccommodadtionProvider: React.FC<{ children: ReactNode }> = ({ children })
         ...actionsDiscountHook,
         ...roomLayoutHook,
         ...infoBudgetHook,
+        prefillAdt: prefill.adt,
         callHandleForm,
         handleOpenBackdrop,
         handleCloseBackdrop,

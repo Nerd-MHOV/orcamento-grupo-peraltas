@@ -22,8 +22,11 @@ interface GenerateTariffContextProps extends
     dataTable: DataContentProps;
     getClientName: (id: string) => Promise<string>;
     clientName: string;
+    setClientName: React.Dispatch<React.SetStateAction<string>>;
+    /** Adultos vindos do prefill do lead (Req 6.1); undefined quando não houve prefill. */
+    prefillAdt: number | undefined;
 
-    
+
     callHandleForm: VoidFunction;
 }
 
