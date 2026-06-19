@@ -88,7 +88,7 @@
   - Observável: disparar uma notificação exibe uma mensagem visível e auto-dispensável ao consultor.
   - _Requirements: 5.1, 5.2_
   - _Boundary: notification_
-- [ ] 3.5 Reescrever a montagem do orçamento para o lead
+- [x] 3.5 Reescrever a montagem do orçamento para o lead
   - Derivar os dados do orçamento e o valor a partir dos budgets, aplicando a regra de valor: grupo → soma dos totais; simples → o mais barato; corporativo conforme seus totais.
   - Incluir os tarifários usados e remover por completo a lógica de produtos e troca de etapa.
   - Observável: salvar um orçamento de grupo envia a soma; um simples envia o mais barato; orçamento sem lead vinculado não chama o CRM.
@@ -153,3 +153,5 @@
 - 2.1: datas (check-in/out) convertidas em unix **start-of-day UTC**; readLead devolve `YYYY-MM-DD`. Frontend (3.x) deve tratar as datas como UTC para round-trip consistente.
 - 2.1: `price` NÃO é custom field — é o campo nativo do lead, setado pelo leads service (2.3), não pelo fieldMapper.
 - 3.2: `collectUsedTariffs` replica a regra weekend/midweek de `generateBudget.ts` (Sex/Sáb/Dom + Qui em jul/jan). Omite os args de special-case Dez-2024/Jan-2025 do getTariff (datas passadas, "REMOVE LATER") — sem efeito em orçamentos atuais/futuros. `tariffsUsed` é opcional/aditivo em todo o caminho.
+- 3.5: contrato de data frontend→backend: frontend envia `checkIn/checkOut` como ISO `YYYY-MM-DD`; o `KommoController.updateBudget` coage string→`Date` (o `fieldMapper` só grava data com `instanceof Date`). Sem essa coerção as datas não persistem.
+- 3.5: regra de `price` — hospedagem grupo→soma, simples→mais barato; corp→`rowsValues.total.total`. Lead id vem de `rd_client`/`idClient` (nomes legados, agora guardam id do Kommo).

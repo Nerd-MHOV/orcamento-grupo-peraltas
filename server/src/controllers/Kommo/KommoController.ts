@@ -61,10 +61,16 @@ export class KommoController {
       return response.status(400).json({ error: "invalid_lead_id" });
     }
 
-    const budget = body.budget as BudgetLeadInput | undefined;
-    if (budget === undefined || budget === null) {
+    const rawBudget = body.budget;
+    if (rawBudget === undefined || rawBudget === null) {
       return response.status(400).json({ error: "invalid_budget" });
     }
+
+    // O body chega como JSON: datas trafegam como STRING ISO e o
+    // `fieldMapper.toCustomFields` só grava a data quando é `instanceof Date`.
+    // Coage aqui (defensivo: datas inválidas são ignoradas) para que as datas
+    // de fato persistam no lead. Os numéricos são normalizados para number.
+    const budget = coerceBudget(rawBudget);
 
     try {
       await this.leads.updateLeadBudget(leadId, budget);
@@ -144,4 +150,51 @@ function parseLeadId(raw: unknown): number | null {
     return Number.isInteger(n) && n > 0 ? n : null;
   }
   return null;
+}
+
+/**
+ * Converte uma data ISO (string) em `Date`. Já-`Date` passa direto; valores
+ * ausentes/inválidos retornam `undefined` (defensivo: o mapper apenas omite a
+ * data nesse caso, sem quebrar).
+ */
+function coerceDate(raw: unknown): Date | undefined {
+  if (raw instanceof Date) {
+    return isNaN(raw.getTime()) ? undefined : raw;
+  }
+  if (typeof raw === "string" && raw.trim() !== "") {
+    const date = new Date(raw);
+    return isNaN(date.getTime()) ? undefined : date;
+  }
+  return undefined;
+}
+
+/** Garante um number (aceita string numérica do JSON); fallback `0`. */
+function coerceNumber(raw: unknown, fallback = 0): number {
+  if (typeof raw === "number" && Number.isFinite(raw)) {
+    return raw;
+  }
+  if (typeof raw === "string" && raw.trim() !== "") {
+    const n = Number(raw);
+    return Number.isFinite(n) ? n : fallback;
+  }
+  return fallback;
+}
+
+/**
+ * Normaliza o budget cru do body (JSON) em um `BudgetLeadInput` que o
+ * `fieldMapper` consegue persistir: datas viram `Date` (quando válidas),
+ * numéricos viram `number`. Campos de lista são preservados como vieram.
+ */
+function coerceBudget(raw: Record<string, unknown>): BudgetLeadInput {
+  const checkIn = coerceDate(raw.checkIn);
+  const checkOut = coerceDate(raw.checkOut);
+  return {
+    ...(raw as unknown as BudgetLeadInput),
+    // Só sobrescreve quando há data válida; senão mantém o valor original
+    // (string inválida/undefined) para o mapper apenas ignorá-lo via instanceof.
+    checkIn: (checkIn ?? raw.checkIn) as BudgetLeadInput["checkIn"],
+    checkOut: (checkOut ?? raw.checkOut) as BudgetLeadInput["checkOut"],
+    adt: coerceNumber(raw.adt),
+    price: coerceNumber(raw.price),
+  };
 }

@@ -171,7 +171,59 @@ describe("POST /kommo/lead/budget (updateBudget)", () => {
     expect(res.status).toBe(200);
     expect(res.body).toEqual({ ok: true });
     expect(leads.updateLeadBudget).toHaveBeenCalledTimes(1);
-    expect(leads.updateLeadBudget).toHaveBeenCalledWith(55, sampleBudget);
+
+    const [leadId, input] = leads.updateLeadBudget.mock.calls[0];
+    expect(leadId).toBe(55);
+    // Os demais campos chegam preservados; só as datas são coeridas.
+    expect(input.adt).toBe(2);
+    expect(input.chdAges).toEqual([6, 9]);
+    expect(input.petSizes).toEqual(["pequeno"]);
+    expect(input.price).toBe(1234.56);
+    expect(input.tariffs).toEqual(["Alta"]);
+  });
+
+  it("coage datas string ISO → Date no BudgetLeadInput (para o mapper persistir)", async () => {
+    const leads = makeLeads({
+      updateLeadBudget: jest.fn().mockResolvedValue(undefined),
+    });
+    const app = makeApp(leads, makeFiles());
+
+    const res = await request(app)
+      .post("/kommo/lead/budget")
+      .send({ leadId: 55, budget: sampleBudget });
+
+    expect(res.status).toBe(200);
+    const [, input] = leads.updateLeadBudget.mock.calls[0];
+    expect(input.checkIn).toBeInstanceOf(Date);
+    expect(input.checkOut).toBeInstanceOf(Date);
+    expect((input.checkIn as Date).toISOString()).toBe(
+      "2026-07-01T00:00:00.000Z"
+    );
+    expect((input.checkOut as Date).toISOString()).toBe(
+      "2026-07-05T00:00:00.000Z"
+    );
+    // Numéricos garantidos como number (defensivo p/ JSON com strings).
+    expect(typeof input.adt).toBe("number");
+    expect(typeof input.price).toBe("number");
+  });
+
+  it("datas inválidas/ausentes não viram Date e não quebram (defensivo)", async () => {
+    const leads = makeLeads({
+      updateLeadBudget: jest.fn().mockResolvedValue(undefined),
+    });
+    const app = makeApp(leads, makeFiles());
+
+    const res = await request(app)
+      .post("/kommo/lead/budget")
+      .send({
+        leadId: 55,
+        budget: { ...sampleBudget, checkIn: "nao-e-data", checkOut: undefined },
+      });
+
+    expect(res.status).toBe(200);
+    const [, input] = leads.updateLeadBudget.mock.calls[0];
+    expect(input.checkIn).not.toBeInstanceOf(Date);
+    expect(input.checkOut).not.toBeInstanceOf(Date);
   });
 
   it("leadId ausente/inválido → 400, sem chamar o serviço", async () => {
