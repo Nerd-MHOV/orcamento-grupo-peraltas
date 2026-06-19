@@ -24,7 +24,8 @@ export interface KommoPetSizeEnum {
  * - tariffs_used: texto ("Condições comerciais") → lista de tarifários como string.
  *
  * Não há custom field para o valor: usa-se o campo nativo `price` do lead.
- * O PDF não usa custom field: vai para a aba genérica de Arquivos via Files API.
+ * O PDF do orçamento (hospedagem e corporativo) vai para o custom field do tipo
+ * `file` "PDF - Orçamento Hotel" (`pdf_orcamento`), e não para a aba Arquivos.
  */
 export interface KommoFields {
   /** Check-in (grupo Brotas Eco) — date (unix timestamp) */
@@ -45,6 +46,8 @@ export interface KommoFields {
   pet_sizes_enum: KommoPetSizeEnum;
   /** Condições comerciais — text (lista de tarifários usados) */
   tariffs_used: number;
+  /** PDF - Orçamento Hotel — file (recebe o PDF do orçamento; hospedagem e corp) */
+  pdf_orcamento: number;
 }
 
 export interface KommoConfig {
@@ -76,5 +79,6 @@ export const kommoConfig: KommoConfig = {
       Grande: 648190,
     },
     tariffs_used: 805299,
+    pdf_orcamento: 786340,
   },
 };

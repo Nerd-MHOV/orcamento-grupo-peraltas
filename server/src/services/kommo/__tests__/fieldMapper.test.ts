@@ -25,6 +25,7 @@ function makeConfig(overrides: Partial<KommoConfig> = {}): KommoConfig {
         Grande: 648190,
       },
       tariffs_used: 805299,
+      pdf_orcamento: 786340,
     },
     ...overrides,
   };
@@ -39,8 +40,10 @@ function field(
 }
 
 // unix (segundos) do início do dia UTC de uma data YYYY-MM-DD.
-function startOfDayUtcSeconds(iso: string): number {
-  return Date.parse(`${iso}T00:00:00.000Z`) / 1000;
+// Datas são ancoradas ao MEIO-DIA UTC para não rolar de dia no fuso da conta
+// Kommo (UTC-3). Ver fieldMapper.toUnixDateNoon.
+function noonUtcSeconds(iso: string): number {
+  return Date.parse(`${iso}T12:00:00.000Z`) / 1000;
 }
 
 describe("fieldMapper.toCustomFields", () => {
@@ -62,13 +65,13 @@ describe("fieldMapper.toCustomFields", () => {
     expect(entry).toBeDefined();
     const value = entry!.values[0].value;
     expect(typeof value).toBe("number");
-    expect(value).toBe(startOfDayUtcSeconds("2026-03-01"));
+    expect(value).toBe(noonUtcSeconds("2026-03-01"));
   });
 
   it("check_out usa field_id 804868 com unix numérico", () => {
     const out = mapper.toCustomFields(sample);
     const entry = field(out, 804868);
-    expect(entry!.values[0].value).toBe(startOfDayUtcSeconds("2026-03-05"));
+    expect(entry!.values[0].value).toBe(noonUtcSeconds("2026-03-05"));
   });
 
   it("adt é escrito como string sob 786330", () => {
@@ -155,7 +158,7 @@ describe("fieldMapper.readLead", () => {
       custom_fields_values: [
         {
           field_id: 804864,
-          values: [{ value: startOfDayUtcSeconds("2026-03-01") }],
+          values: [{ value: noonUtcSeconds("2026-03-01") }],
         },
         { field_id: 786330, values: [{ value: "3" }] },
         { field_id: 786322, values: [{ value: "4,7" }] },

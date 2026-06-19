@@ -1,3 +1,4 @@
+import { kommoConfig } from "../../config/kommoConfig";
 import { createKommoClient } from "./kommoClient";
 import {
   FilesService,
@@ -19,9 +20,11 @@ import {
  *   3. Envia o binário ao `upload_url`. Se `file_size <= max_part_size`, um único
  *      POST do buffer inteiro; senão, fatia em partes ≤ `max_part_size` e POSTa
  *      sequencialmente, seguindo o `next_url` de cada resposta intermediária. A
- *      parte FINAL responde `{ uuid }`.
- *   4. `PUT /leads/{leadId}/files` com `[{ file_uuid: uuid }]` (via
- *      `client.putFilesLink`).
+ *      parte FINAL responde `{ uuid, version_uuid, size }`.
+ *   4. `PATCH /leads/{leadId}` preenchendo o custom field do tipo `file`
+ *      "PDF - Orçamento Hotel" (`pdf_orcamento`) com a referência do arquivo
+ *      `{ file_uuid, version_uuid, file_name, file_size }` (verificado na API real).
+ *      O PDF passa a aparecer NO CAMPO do lead (aba Brotas Eco), não na aba Arquivos.
  *
  * Resiliência (Req 4.4): em 403 (token sem escopo "files"), o `KommoClient` já
  * normaliza para `KommoError{kind:'auth'}`; aqui nada é capturado — o erro
@@ -57,28 +60,48 @@ class KommoFilesService implements FilesService {
       }
     );
 
-    // Passo 3: enviar o binário (uma ou várias partes) e obter o uuid final.
-    const uuid = await this.uploadParts(pdf, session);
+    // Passo 3: enviar o binário (uma ou várias partes) e obter o arquivo final.
+    const uploaded = await this.uploadParts(pdf, session);
+    if (uploaded.uuid === undefined) {
+      throw new Error("Kommo Files API: upload sem uuid na parte final");
+    }
 
-    // Passo 4: anexar o arquivo ao lead.
-    await this.client.putFilesLink(leadId, [uuid]);
+    // Passo 4: preencher o custom field do tipo `file` com a referência do arquivo.
+    await this.client.patch(`/leads/${leadId}`, {
+      custom_fields_values: [
+        {
+          field_id: kommoConfig.fields.pdf_orcamento,
+          values: [
+            {
+              value: {
+                file_uuid: uploaded.uuid,
+                version_uuid: uploaded.version_uuid,
+                file_name: filename,
+                file_size: uploaded.size ?? pdf.length,
+              },
+            },
+          ],
+        },
+      ],
+    });
   }
 
   /**
    * Envia o buffer em partes de no máximo `max_part_size` bytes, seguindo o
-   * `next_url` de cada resposta intermediária. Retorna o `uuid` da parte final.
+   * `next_url` de cada resposta intermediária. Retorna o arquivo da parte final
+   * (`uuid`/`version_uuid`/`size`).
    */
   private async uploadParts(
     pdf: Buffer,
     session: KommoUploadSession
-  ): Promise<string> {
+  ): Promise<KommoUploadedFile> {
     const headers = { "Content-Type": BINARY_CONTENT_TYPE };
     // `max_part_size` deveria ser sempre > 0; protege contra divisão por zero.
     const partSize =
       session.max_part_size > 0 ? session.max_part_size : pdf.length || 1;
 
     let nextUrl = session.upload_url;
-    let lastUuid: string | undefined;
+    let finalFile: KommoUploadedFile | undefined;
 
     for (let offset = 0; offset < pdf.length || offset === 0; offset += partSize) {
       const part = pdf.subarray(offset, offset + partSize);
@@ -89,7 +112,7 @@ class KommoFilesService implements FilesService {
       );
 
       if (response.uuid !== undefined) {
-        lastUuid = response.uuid;
+        finalFile = response;
       }
       if (response.next_url !== undefined) {
         nextUrl = response.next_url;
@@ -101,11 +124,11 @@ class KommoFilesService implements FilesService {
       }
     }
 
-    if (lastUuid === undefined) {
+    if (finalFile === undefined) {
       // A API não retornou uuid na parte final: upload incompleto/inesperado.
       throw new Error("Kommo Files API: upload sem uuid na parte final");
     }
-    return lastUuid;
+    return finalFile;
   }
 }
 

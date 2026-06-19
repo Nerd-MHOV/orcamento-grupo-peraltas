@@ -59,8 +59,10 @@ describe("usePrefillFromLead", () => {
     expect(handleSelectDate).toHaveBeenCalledWith(
       expect.objectContaining({
         selection: expect.objectContaining({
-          startDate: new Date("2026-07-01"),
-          endDate: new Date("2026-07-05"),
+          // Datas parseadas no fuso LOCAL (não UTC) para não rolar de dia no
+          // calendário; ver parseLocalDate em usePrefillFromLead.
+          startDate: new Date(2026, 6, 1),
+          endDate: new Date(2026, 6, 5),
           key: "selection",
         }),
       })

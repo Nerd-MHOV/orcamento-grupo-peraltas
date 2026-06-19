@@ -72,10 +72,13 @@ export interface KommoUploadSession {
 /**
  * Resposta de cada `POST` de parte para a sessão de upload:
  * - parte intermediária → `{ next_url }` (URL absoluta da próxima parte);
- * - parte FINAL → `{ uuid }` (id do arquivo no drive, usado no attach).
+ * - parte FINAL → `{ uuid, version_uuid, size, ... }` (arquivo no drive).
+ *   `uuid`/`version_uuid` são usados para preencher o custom field `file`.
  */
 export interface KommoUploadedFile {
   uuid?: string;
+  version_uuid?: string;
+  size?: number;
   next_url?: string;
 }
 

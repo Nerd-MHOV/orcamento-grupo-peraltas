@@ -23,12 +23,23 @@ import {
  * Campos com origem vazia/indefinida são omitidos (sem entradas vazias).
  */
 
-/** Segundos do início do dia (00:00:00 UTC) da data informada. */
-function toUnixStartOfDay(date: Date): number {
+/**
+ * Segundos do MEIO-DIA UTC (12:00:00) do dia informado.
+ *
+ * O Kommo normaliza campos de data para a meia-noite do fuso DA CONTA (UTC-3).
+ * Se enviássemos 00:00 UTC, o valor cairia para o dia anterior (00:00Z = 21:00
+ * do dia anterior em UTC-3). Ancorar ao meio-dia UTC garante que, para qualquer
+ * fuso entre UTC-11 e UTC+11, a data permaneça no dia pretendido. (Verificado
+ * contra a API real: 12:00Z de 25/07 é gravado como 25/07.)
+ */
+function toUnixDateNoon(date: Date): number {
   const ms = Date.UTC(
     date.getUTCFullYear(),
     date.getUTCMonth(),
-    date.getUTCDate()
+    date.getUTCDate(),
+    12,
+    0,
+    0
   );
   return Math.floor(ms / 1000);
 }
@@ -69,10 +80,10 @@ class FieldMapperImpl implements FieldMapper {
     const out: KommoCustomFieldValue[] = [];
 
     if (input.checkIn instanceof Date && !isNaN(input.checkIn.getTime())) {
-      out.push(valueField(fields.check_in, toUnixStartOfDay(input.checkIn)));
+      out.push(valueField(fields.check_in, toUnixDateNoon(input.checkIn)));
     }
     if (input.checkOut instanceof Date && !isNaN(input.checkOut.getTime())) {
-      out.push(valueField(fields.check_out, toUnixStartOfDay(input.checkOut)));
+      out.push(valueField(fields.check_out, toUnixDateNoon(input.checkOut)));
     }
 
     if (typeof input.adt === "number" && input.adt > 0) {
