@@ -49,6 +49,37 @@ export interface KommoFileLink {
 }
 
 /**
+ * Resposta de `GET /api/v4/account?with=drive_url`.
+ * Só o `drive_url` é consumido pelo upload de PDF (Files API). O host do drive
+ * NUNCA é hardcoded — é descoberto a cada upload (research.md → Files API).
+ */
+export interface KommoAccountDrive {
+  drive_url: string;
+}
+
+/**
+ * Resposta da criação de sessão de upload:
+ * `POST {drive_url}/v1.0/sessions` → `{ session_id, upload_url, max_part_size, max_file_size }`.
+ * `upload_url` é absoluta (sobrepõe o baseURL do drive em `drivePost`).
+ */
+export interface KommoUploadSession {
+  session_id: string;
+  upload_url: string;
+  max_part_size: number;
+  max_file_size: number;
+}
+
+/**
+ * Resposta de cada `POST` de parte para a sessão de upload:
+ * - parte intermediária → `{ next_url }` (URL absoluta da próxima parte);
+ * - parte FINAL → `{ uuid }` (id do arquivo no drive, usado no attach).
+ */
+export interface KommoUploadedFile {
+  uuid?: string;
+  next_url?: string;
+}
+
+/**
  * Valor de um campo personalizado no formato de leitura/escrita do Kommo.
  * - Escrita texto/número/data: `{ field_id, values: [{ value }] }`.
  * - Escrita/leitura de select: `{ field_id, values: [{ enum_id }] }`.
@@ -109,6 +140,15 @@ export interface LeadPrefill {
 export interface FieldMapper {
   toCustomFields(input: BudgetLeadInput): KommoCustomFieldValue[];
   readLead(lead: KommoLead): LeadPrefill;
+}
+
+/**
+ * Contrato do serviço de upload + anexação de PDF ao lead (design.md → files).
+ * Orquestra o fluxo da Files API: descobrir drive → criar sessão → enviar
+ * partes → anexar o uuid ao lead. Requer escopo "files" no token (Req 4.4).
+ */
+export interface FilesService {
+  uploadPdfToLead(leadId: number, pdf: Buffer, filename: string): Promise<void>;
 }
 
 /**

@@ -44,7 +44,7 @@
   - _Requirements: 2.1, 2.3, 3.1, 3.2, 3.3_
   - _Boundary: fieldMapper_
   - _Depends: 1.2, 1.3_
-- [ ] 2.2 (P) Implementar o upload e anexação de PDF ao lead (Files API)
+- [x] 2.2 (P) Implementar o upload e anexação de PDF ao lead (Files API)
   - Implementar o fluxo multi-etapas: criar sessão de upload, enviar o arquivo em partes e anexar o arquivo resultante ao lead.
   - Tratar a ausência do escopo de arquivos como erro de autenticação tratável.
   - Observável: dado um lead e um PDF, o serviço sobe o arquivo e o anexa ao lead (visível na mídia do lead); sem o escopo de arquivos, retorna erro tipado.
