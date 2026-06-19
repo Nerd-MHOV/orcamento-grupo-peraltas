@@ -49,7 +49,7 @@ import { UpdateUserController } from "./controllers/Users/UpdateUsersController"
 import { ValidateUsersController } from "./controllers/Users/ValidateUsersController";
 import { authMiddleware } from "./middlewares/authMiddleware";
 import { isAdmin } from "./middlewares/isAdmin";
-import { RDController } from "./controllers/RdStation/RDController";
+import { KommoController } from "./controllers/Kommo/KommoController";
 import { RoutinesAutomations } from "./controllers/RoutinesAutomations/RoutinesAutomations";
 import assist48hInWalking from "./crons/DBStatus/assist48hInWalking";
 import { assistDBStatus } from "./crons/DBStatus/assistDBStatus";
@@ -119,7 +119,7 @@ const updateDiscount = new UpdateDiscountController();
 const activeDiscount = new ToggleActiveDiscountController();
 const daily_courtesy = new ToggleDailyCourtesyController();
 const deleteDiscount = new DeleteDiscountController();
-const rd = new RDController();
+const kommo = new KommoController();
 const routinesAutomations = new RoutinesAutomations();
 const appHotel = new AppHotel();
 
@@ -203,10 +203,7 @@ routes.put("/discount/:id/active", isAdmin, activeDiscount.handle);
 routes.put("/discount/:id/daily_courtesy", isAdmin, daily_courtesy.handle);
 routes.delete("/discount/:id", isAdmin, deleteDiscount.handle);
 
-routes.post("/rd/get_a_deal", rd.getDeal)
-routes.post("/rd/delete_product", rd.deleteProduct)
-routes.post("/rd/add_product", rd.addProduct)
-routes.post("/rd/change_stage", rd.changeStage)
+routes.use(kommo.router());
 
 
 routes.get("/insights/actions/:action", insightsActions.action);

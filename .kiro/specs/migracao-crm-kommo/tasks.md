@@ -58,7 +58,7 @@
   - _Requirements: 3.1, 3.2, 3.3, 3.4, 3.5, 6.1_
   - _Boundary: leads_
   - _Depends: 2.1_
-- [ ] 2.4 Expor os endpoints Kommo e remover os endpoints RD
+- [x] 2.4 Expor os endpoints Kommo e remover os endpoints RD
   - Disponibilizar os endpoints autenticados de leitura de lead, atualização do orçamento no lead e upload de PDF; remover os endpoints do RD.
   - Manter o token apenas no servidor (nunca em resposta) e registrar de forma estruturada as falhas de integração (endpoint, lead, tipo de erro) para auditoria.
   - Observável: os três endpoints respondem atrás do middleware de autenticação (sem auth → 401); falhas do CRM retornam status de erro distinto e geram log estruturado sem token.
