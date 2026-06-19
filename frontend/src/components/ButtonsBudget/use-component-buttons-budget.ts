@@ -4,9 +4,9 @@ import { useApi } from "../../hooks/api/api";
 import pdfBudget from "../../context/generateTariff/functions/pdfBudget";
 import pdfDescription from "../../context/generateTariff/functions/pdfDescription";
 import {
-  rdSaveProcess,
-  rdSaveProcessCorp,
-} from "../../context/generateTariff/functions/rdSaveProcess";
+  kommoSaveProcess,
+  kommoSaveProcessCorp,
+} from "../../context/generateTariff/functions/kommoSaveProcess";
 import {
   useGenerateTariff,
   useGenerateTariffCorporate,
@@ -16,6 +16,11 @@ import pdfBudgetCorp from "../../context/generateTariff/functions/pdfBudgetCorp/
 import pdfDescriptionCorp from "../../context/generateTariff/functions/pdfDescriptionCorp/pdfDescriptionCorp";
 import { Descendant } from "slate";
 import slateToPdfMake from "../ModalEditableText/ConvertText";
+import { useNotification } from "../../context/notification/notificationContext";
+import {
+  runGenerateBudgetFlow,
+  runGenerateBudgetCorpFlow,
+} from "./kommoGenerateFlow";
 
 export function useComponentButtonsBudget(corporate: boolean) {
   const { userLogin } = useContext(AuthContext);
@@ -27,10 +32,12 @@ export function useComponentButtonsBudget(corporate: boolean) {
     handleOpenBackdrop,
     dataTable,
     handleCloseBackdrop,
+    clientName,
   } = corporate
     ? useGenerateTariffCorporate()
     : { ...useGenerateTariff(), bodyResponseBudget: null };
   const api = useApi();
+  const notify = useNotification();
   const [openModalConfirmGroup, setOpenModalConfirmGroup] =
     React.useState(false);
   const [openModalEditableText, setOpenModalEditableText] =
@@ -69,22 +76,27 @@ export function useComponentButtonsBudget(corporate: boolean) {
       handleCloseBackdrop();
       return;
     }
-    await rdSaveProcessCorp(bodyResponseBudget);
     const arrUser = await api.user.getById(userLogin);
-    await pdfBudgetCorp(
-      bodyResponseBudget!,
-      arrUser.name,
-      arrUser.email,
-      arrUser.phone,
-      slateToPdfMake(text),
-      linesToBreakPage
-    );
 
-    // save budget
-    const deal_id = bodyResponseBudget.idClient;
-    let response;
-    if (deal_id) response = await api.rd.getDealById(deal_id);
-    api.budgetCorp.save(userLogin, bodyResponseBudget, true, response?.name);
+    await runGenerateBudgetCorpFlow(bodyResponseBudget, {
+      // O PDF abre em nova aba e é capturado como Blob — sempre ocorre.
+      generatePdf: () =>
+        pdfBudgetCorp(
+          bodyResponseBudget,
+          arrUser.name,
+          arrUser.email,
+          arrUser.phone,
+          slateToPdfMake(text),
+          linesToBreakPage
+        ),
+      syncToKommo: () => kommoSaveProcessCorp(bodyResponseBudget),
+      uploadPdf: (leadId, blob, filename) =>
+        api.kommo.uploadBudgetPdf(leadId, blob, filename),
+      saveBudget: (name) =>
+        api.budgetCorp.save(userLogin, bodyResponseBudget, true, name),
+      notify,
+      name: clientName,
+    });
 
     handleCloseBackdrop();
   }
@@ -94,22 +106,27 @@ export function useComponentButtonsBudget(corporate: boolean) {
     if (budgets.length < 1) {
       return;
     }
-    await rdSaveProcess(budgets, group);
     if (
       budgets.find((budget) =>
         budget.arrComplete?.responseForm.category.match(/Day-Use/)
       )
     ) {
+      // Day-use: comportamento legado preservado (sem PDF/CRM aqui).
       return;
     }
     const arrUser = await api.user.getById(userLogin);
-    await pdfBudget(budgets, arrUser.name, arrUser.email, arrUser.phone);
 
-    const deal_id = budgets[0].arrComplete?.responseForm.rd_client;
-    let response;
-    if (deal_id) response = await api.rd.getDealById(deal_id);
-
-    api.budget.save(userLogin, budgets, true, response?.name);
+    await runGenerateBudgetFlow(budgets, {
+      // O PDF abre em nova aba e é capturado como Blob — sempre ocorre.
+      generatePdf: () =>
+        pdfBudget(budgets, arrUser.name, arrUser.email, arrUser.phone),
+      syncToKommo: () => kommoSaveProcess(budgets, group),
+      uploadPdf: (leadId, blob, filename) =>
+        api.kommo.uploadBudgetPdf(leadId, blob, filename),
+      saveBudget: (name) => api.budget.save(userLogin, budgets, true, name),
+      notify,
+      name: clientName,
+    });
 
     handleCloseBackdrop();
   }

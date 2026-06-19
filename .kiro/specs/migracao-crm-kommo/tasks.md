@@ -100,7 +100,7 @@
   - Observável: abrir com um lead válido exibe o formulário preenchido e o nome do cliente; com lead inexistente, o formulário abre vazio e um aviso é exibido.
   - _Requirements: 6.1, 6.2, 6.3, 6.4_
   - _Depends: 3.1_
-- [ ] 3.7 Integrar o fluxo de geração: PDF, sincronização e salvamento resiliente
+- [x] 3.7 Integrar o fluxo de geração: PDF, sincronização e salvamento resiliente
   - Reordenar para gerar e abrir o PDF localmente, então, em melhor-esforço e isolado, gravar os dados no lead e anexar o PDF, e por fim salvar o orçamento localmente usando o nome do lead obtido no pré-preenchimento.
   - Exibir notificação quando a sincronização com o Kommo falhar, sem bloquear o PDF nem o salvamento; não acionar nenhuma mensageria legada no fluxo.
   - Observável: com o Kommo indisponível, o PDF abre e o orçamento é salvo, e um aviso de falha de sincronização aparece; com o Kommo disponível, o lead recebe os campos, o valor e o PDF anexado.
@@ -155,3 +155,4 @@
 - 3.2: `collectUsedTariffs` replica a regra weekend/midweek de `generateBudget.ts` (Sex/Sáb/Dom + Qui em jul/jan). Omite os args de special-case Dez-2024/Jan-2025 do getTariff (datas passadas, "REMOVE LATER") — sem efeito em orçamentos atuais/futuros. `tariffsUsed` é opcional/aditivo em todo o caminho.
 - 3.5: contrato de data frontend→backend: frontend envia `checkIn/checkOut` como ISO `YYYY-MM-DD`; o `KommoController.updateBudget` coage string→`Date` (o `fieldMapper` só grava data com `instanceof Date`). Sem essa coerção as datas não persistem.
 - 3.5: regra de `price` — hospedagem grupo→soma, simples→mais barato; corp→`rowsValues.total.total`. Lead id vem de `rd_client`/`idClient` (nomes legados, agora guardam id do Kommo).
+- 3.7: fluxo de geração ficou PDF-first e resiliente (kommoSaveProcess e uploadBudgetPdf em try/catch isolados; `budget.save` SEMPRE roda). Orquestração extraída em `kommoGenerateFlow.ts`. ATENÇÃO (revisar com dono): day-use deixou de sincronizar com o CRM (sync passou para depois do early-return do day-use, que não gera PDF). Nome do orçamento salvo agora vem do `clientName` (prefill), não mais de `getDealById`.
