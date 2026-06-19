@@ -89,7 +89,10 @@ if (typeof document !== "undefined" && typeof chrome !== "undefined") {
   };
 
   wireAction(budget_button, (id) => `${APP_BASE}/?client_id=${id}`);
-  wireAction(budget_corp_button, (id) => `${APP_BASE}/corporate?client_id=${id}`);
+  wireAction(
+    budget_corp_button,
+    (id) => `${APP_BASE}/corporate?client_id=${id}`,
+  );
   wireAction(listBudget_button, (id) => `${APP_BASE}/budgets?find=${id}`);
 
   document.addEventListener("DOMContentLoaded", refreshState);
