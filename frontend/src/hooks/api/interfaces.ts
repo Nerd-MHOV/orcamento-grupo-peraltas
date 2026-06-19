@@ -137,7 +137,8 @@ export interface CorporateBodyResponseBudget {
   requirements: RequirementSubmitProps[],
   dateRange: DateRange[],
   idClient: string | null,
-  rowsValues: ResponseValues
+  rowsValues: ResponseValues,
+  tariffs?: string[]
 }
 
 export interface ApiRequirementsProps {

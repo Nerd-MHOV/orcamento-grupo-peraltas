@@ -92,20 +92,24 @@ const CorporateProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
       const response = await api.budgetCorp.get(bodySendBudget.roomsToBudget);
       const responseBudget = response;
       bodySendBudget.setBodyResponseBudget(response);
-      infoBudgetHook.addRows(responseBudget.rowsValues.rows, {
-        childValue: [],
-        petValue: [],
-        selectionRange: selectionRangeHook.selectionRange[0],
-        responseForm: {
-          adult: responseBudget.rooms.reduce((acc, cur) => acc + cur.adt, 0),
-          category: `${responseBudget.rooms.length} quartos`,
-          pension: responseBudget.pension,
-          parcel: 0,
-          rd_client: responseBudget.idClient || "",
-          housingUnit: `${responseBudget.rooms.length} quartos`,
+      infoBudgetHook.addRows(
+        responseBudget.rowsValues.rows,
+        {
+          childValue: [],
+          petValue: [],
+          selectionRange: selectionRangeHook.selectionRange[0],
+          responseForm: {
+            adult: responseBudget.rooms.reduce((acc, cur) => acc + cur.adt, 0),
+            category: `${responseBudget.rooms.length} quartos`,
+            pension: responseBudget.pension,
+            parcel: 0,
+            rd_client: responseBudget.idClient || "",
+            housingUnit: `${responseBudget.rooms.length} quartos`,
+          },
+          dailyCourtesy: false,
         },
-        dailyCourtesy: false,
-      });
+        responseBudget.tariffs
+      );
     }
   }
 

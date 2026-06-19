@@ -72,11 +72,12 @@
   - _Requirements: 3.1, 3.2, 4.1, 6.1_
   - _Boundary: kommo.api_
   - _Depends: 2.4_
-- [ ] 3.2 (P) Persistir os tarifários usados no objeto de orçamento
-  - Registrar a lista de tarifários usados durante o cálculo do orçamento, de modo a estar disponível no momento de salvar.
-  - Observável: após calcular um orçamento, o objeto resultante contém a lista de tarifários usados.
+- [x] 3.2 Backend devolve tarifários usados e frontend os persiste (fatia vertical)
+  - Backend: nos cálculos de orçamento (`/budget` e `/budget-corp`), coletar os nomes de `Tariff` efetivamente usados (por dia, midweek/weekend e por quarto no corp), deduplicar em lista e incluí-los na resposta.
+  - Frontend: persistir a lista retornada (`tariffsUsed: string[]`) no objeto de orçamento (hospedagem e corporativo), de forma aditiva/opcional para não quebrar consumidores.
+  - Observável: a resposta de cálculo inclui a lista de tarifários; após gerar um orçamento, o objeto resultante carrega `tariffsUsed` com os nomes corretos (incluindo múltiplos quando a faixa de datas/quarto usa mais de um).
   - _Requirements: 3.3_
-  - _Boundary: calc_
+  - _Boundary: Budget calc (backend), generateTariff context (frontend) — tarefa de integração cross-boundary_
 - [ ] 3.3 (P) Expor o blob do PDF gerado
   - Permitir que o PDF gerado seja obtido como blob pelos chamadores, além de continuar abrindo-o em nova aba.
   - Observável: o gerador de PDF disponibiliza o blob para upload mantendo a abertura em nova aba inalterada.
@@ -151,3 +152,4 @@
 ## Implementation Notes
 - 2.1: datas (check-in/out) convertidas em unix **start-of-day UTC**; readLead devolve `YYYY-MM-DD`. Frontend (3.x) deve tratar as datas como UTC para round-trip consistente.
 - 2.1: `price` NÃO é custom field — é o campo nativo do lead, setado pelo leads service (2.3), não pelo fieldMapper.
+- 3.2: `collectUsedTariffs` replica a regra weekend/midweek de `generateBudget.ts` (Sex/Sáb/Dom + Qui em jul/jan). Omite os args de special-case Dez-2024/Jan-2025 do getTariff (datas passadas, "REMOVE LATER") — sem efeito em orçamentos atuais/futuros. `tariffsUsed` é opcional/aditivo em todo o caminho.

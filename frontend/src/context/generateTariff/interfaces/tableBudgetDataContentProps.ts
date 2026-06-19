@@ -9,6 +9,12 @@ interface DataContentProps {
         total: number;
         noDiscount: number;
     };
+    /**
+     * Nomes dos tarifários (Tariff.name) efetivamente usados no cálculo deste
+     * orçamento, retornados pelo backend. Opcional/aditivo: consumidores
+     * existentes (rdSaveProcess, pdfBudget) não dependem deste campo.
+     */
+    tariffsUsed?: string[];
 }
 
 export interface ArrComplete {

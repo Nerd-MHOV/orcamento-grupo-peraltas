@@ -1,6 +1,7 @@
 import { ArrFormProps, ArrRequirementProps, PetProps, RowsProps, UnitaryDiscountProps } from "../CalcBudgetController";
 import { adultBudget } from "./adultBudget";
 import { childBudget } from "./childBudget";
+import { collectUsedTariffs } from "./collectUsedTariffs";
 import getPeriod from "./getPeriod";
 import { petBudget } from "./petBudget";
 import { requirementBudget } from "./requirementBudget";
@@ -41,7 +42,11 @@ export async function mainBudget({
     //requirement
     requirementRows = await requirementBudget(arrForm, arrRequirement, unitaryDiscount, mainPeriod, mainPeriod);
 
+    //tarifários efetivamente usados (deduplicados)
+    const tariffs = await collectUsedTariffs(mainPeriod);
+
     return {
         rows: [...adultRows, ...childRows, ...petRows, ...requirementRows,],
+        tariffs,
     };
 }

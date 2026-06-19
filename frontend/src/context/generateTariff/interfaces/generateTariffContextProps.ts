@@ -36,7 +36,7 @@ export type occupacyUHProps = {
 }
 
 export interface InfoBudgetGTCP {
-    addRows(rows: any[], arrComplete: ArrComplete): void;
+    addRows(rows: any[], arrComplete: ArrComplete, tariffsUsed?: string[]): void;
     deleteLine(indexDelete: number): void;
     handleSaveBudget: () => Promise<void>;
     clearTariffs: () => Promise<void>;

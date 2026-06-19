@@ -41,9 +41,10 @@ export type PetProps = "pequeno" | "médio" | "grande";
 export class CalcBudgetController {
     async handle(request: Request, response: Response) {
         const budget: MainBudgetProps = request.body;
-        let {rows} = await mainBudget(budget)
+        let {rows, tariffs} = await mainBudget(budget)
         return response.json({
             rows,
+            tariffs,
         });
     }
 }
