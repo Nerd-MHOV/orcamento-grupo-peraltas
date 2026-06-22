@@ -144,3 +144,23 @@ Grupo de leads usado: **`leads_11861760358941`** ("Brotas Eco" — contém Quant
 - **Simplificação**: produtos/`deal_products` + `tariff.product_rd` → substituídos por `price` + custom field `tariffs_used`. Some `updateDeal` merge (PATCH parcial). Somem stage IDs, tokens por usuário, ChatGuru. `changeStage`+`addProduct`+`deleteProduct` colapsam em **uma** chamada `updateLeadBudget`.
 - **Decisão de fluxo do plugin (mais segura que o esquema atual)**: o plugin é reduzido a **extrair o lead-id da URL do Kommo e abrir o app autenticado** (`?client_id=<id>`). O **app logado** busca os campos do lead via `POST /kommo/lead` (atrás de `authMiddleware`) e pré-preenche. Logo o plugin **não contém token nem faz chamada autenticada ao backend** — satisfaz Req 7.3/7.5 com folga (o token nunca sai do servidor e o endpoint de leitura fica protegido por auth de usuário).
 - **Naming**: como produtos/etapa saíram, o contrato `rd.api.ts`/`changeStage` mudaria de qualquer forma; opta-se por **módulo `kommo` limpo** (substitui Opção C do gap por naming limpo) e remoção do código RD — atende Req 9 com clareza. Chave do lead no JSON do budget permanece `rd_client`/`idClient` (agora guardando o id do Kommo) para evitar migração de dados — dívida de nome documentada.
+
+---
+
+# Follow-up: campos "Tarifário", "Ações de venda" e correção do 805299 (2026-06-22)
+
+Equívoco anterior: os tarifários estavam indo para o campo **Condições comerciais (805299)**, que na verdade é **manual** (preenchido pelas atendentes). O usuário criou dois campos novos no grupo Brotas Eco:
+- **Tarifário** = `807182` (text) — destino correto dos tarifários (substitui 805299).
+- **Ações de venda** = `807184` (text) — resumo legível de descontos/ações aplicados (campo de API).
+- **Condições comerciais (805299)** — **parar de escrever via API** (vira só manual).
+
+Decisões (discovery 2026-06-22):
+- **Tarifários** → mover de 805299 para **807182**.
+- **Ações de venda (807184)** — texto:
+  - COM desconto: `"Ação: <NOME> | Desconto: <X>%"` (sem ação selecionada → `"Ação: — | Desconto: <X>%"`).
+  - SEM desconto → `"Padrão"`.
+  - **Incluir descontos unitários** (por quarto/linha) também no texto.
+- Fontes de dados (no momento de salvar):
+  - Desconto geral: `arrComplete.responseForm.action` (nome) + `arrComplete.responseForm.discount` (%). JÁ disponível no frontend.
+  - Desconto unitário: `RowModalDiscount[] { id, name, type, discount }` — **NÃO** está no objeto salvo hoje; precisa ser persistido no budget (DataContentProps) e threadado via `handleForm`/`buildBudgetTable` (igual `tariffsUsed`). Corp: `useBodyCorporateBudget.changeUnitaryDiscounts`.
+- Escopo da mudança: kommoConfig (807182/807184, remover 805299), fieldMapper (escrever os 2 campos), kommoSaveProcess (montar a string de ações de venda; hospedagem + corp), BudgetLeadInput (+`salesActions`), DataContentProps (+ persistir unitários), threading no handleForm/buildBudgetTable. Path A (extensão de migracao-crm-kommo).
