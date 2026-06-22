@@ -48,6 +48,7 @@ const sampleInput: BudgetLeadInput = {
   petSizes: ["pequeno"],
   price: 1234.56,
   tariffs: ["Alta", "Pacote X"],
+  salesActions: "Padrão",
 };
 
 const sampleCustomFields: KommoCustomFieldValue[] = [

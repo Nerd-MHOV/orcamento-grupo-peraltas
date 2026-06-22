@@ -3,6 +3,7 @@ import { useApi } from "../../../hooks/api/api";
 import RowModalDiscount from "../interfaces/rowModalDiscount";
 import SelectionRangeProps from "../interfaces/selectionRangeProps";
 import { ArrComplete } from "../interfaces/tableBudgetDataContentProps";
+import { buildSalesActions } from "./buildSalesActions";
 
 export interface selectionRange {
   startDate: Date;
@@ -15,7 +16,12 @@ export async function handleForm(
   selectionRange: SelectionRangeProps,
   unitaryDiscount: RowModalDiscount[],
   dailyCourtesy: boolean,
-  addRows: (rows: any[], arrComplete: ArrComplete, tariffsUsed?: string[]) => void
+  addRows: (
+    rows: any[],
+    arrComplete: ArrComplete,
+    tariffsUsed?: string[],
+    salesActions?: string
+  ) => void
 ) {
   const api = useApi();
 
@@ -28,6 +34,13 @@ export async function handleForm(
   // const selectionRange = JSON.parse(responseForm.rangeDate as string);
   const requirementValue = JSON.parse(
     responseForm.requirementComplete as string
+  );
+
+  // Texto de "Ações de venda" (Kommo): desconto geral (action + %) + unitários.
+  const salesActions = buildSalesActions(
+    responseForm.action,
+    Number(responseForm.discount) || 0,
+    unitaryDiscount
   );
 
   if (
@@ -43,13 +56,18 @@ export async function handleForm(
       unitaryDiscount
     );
 
-    addRows(response.rows, {
-      responseForm,
-      childValue,
-      petValue,
-      selectionRange,
-      dailyCourtesy: false,
-    });
+    addRows(
+      response.rows,
+      {
+        responseForm,
+        childValue,
+        petValue,
+        selectionRange,
+        dailyCourtesy: false,
+      },
+      undefined,
+      salesActions
+    );
 
     return;
   }
@@ -77,6 +95,7 @@ export async function handleForm(
       selectionRange,
       dailyCourtesy,
     },
-    response.tariffs
+    response.tariffs,
+    salesActions
   );
 }

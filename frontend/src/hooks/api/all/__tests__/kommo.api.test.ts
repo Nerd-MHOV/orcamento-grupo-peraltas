@@ -48,6 +48,7 @@ describe("kommo.api", () => {
         petSizes: ["P", "G"],
         price: 1234.5,
         tariffs: ["balada", "feriado"],
+        salesActions: "Ação: Black Friday | Desconto: 10%",
       };
 
       await client.saveBudgetToLead(99, budget);

@@ -15,7 +15,11 @@ import RowsProps from "../interfaces/tableBudgetRowsProps";
 export function buildBudgetTable(
   rows: RowsProps[],
   arrComplete?: ArrComplete,
-  tariffsUsed?: string[]
-): Pick<DataContentProps, "rows" | "arrComplete" | "tariffsUsed"> {
-  return { rows, arrComplete, tariffsUsed };
+  tariffsUsed?: string[],
+  salesActions?: string
+): Pick<
+  DataContentProps,
+  "rows" | "arrComplete" | "tariffsUsed" | "salesActions"
+> {
+  return { rows, arrComplete, tariffsUsed, salesActions };
 }

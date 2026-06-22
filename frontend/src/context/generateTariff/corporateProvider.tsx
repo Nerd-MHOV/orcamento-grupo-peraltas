@@ -17,6 +17,7 @@ import useUnitaryDiscount from "./hooks/useUnitaryDiscount";
 import useDiscountModal from "./hooks/useDiscountModal";
 import useStaff from "./hooks/useStaff";
 import { getColumnDataCorp } from "./functions/getters/getColumnDataCorp";
+import { buildSalesActions } from "./functions/buildSalesActions";
 
 const CorporateProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const api = useApi();
@@ -91,7 +92,17 @@ const CorporateProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     ) {
       const response = await api.budgetCorp.get(bodySendBudget.roomsToBudget);
       const responseBudget = response;
-      bodySendBudget.setBodyResponseBudget(response);
+
+      // Texto de "Ações de venda" (Kommo) do corporativo: desconto geral
+      // (% do body + ação selecionada) + descontos unitários.
+      const salesActions = buildSalesActions(
+        actionDiscountHook.actionSelected?.name,
+        Number(bodySendBudget.roomsToBudget.discount) || 0,
+        unitaryDiscountHook.unitaryDiscount
+      );
+      responseBudget.salesActions = salesActions;
+
+      bodySendBudget.setBodyResponseBudget(responseBudget);
       infoBudgetHook.addRows(
         responseBudget.rowsValues.rows,
         {
@@ -108,7 +119,8 @@ const CorporateProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
           },
           dailyCourtesy: false,
         },
-        responseBudget.tariffs
+        responseBudget.tariffs,
+        salesActions
       );
     }
   }

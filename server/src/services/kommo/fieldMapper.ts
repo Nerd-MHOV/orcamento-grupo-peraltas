@@ -119,6 +119,11 @@ class FieldMapperImpl implements FieldMapper {
       out.push(valueField(fields.tariffs_used, tariffs.join(", ")));
     }
 
+    const salesActions = (input.salesActions ?? "").trim();
+    if (salesActions.length > 0) {
+      out.push(valueField(fields.sales_actions, salesActions));
+    }
+
     return out;
   }
 

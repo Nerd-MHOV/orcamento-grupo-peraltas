@@ -46,7 +46,9 @@ describe("kommoConfig", () => {
     expect(kommoConfig.fields.chd_ages).toBe(786322);
     expect(kommoConfig.fields.pet_amount).toBe(786324);
     expect(kommoConfig.fields.pet_sizes).toBe(786326);
-    expect(kommoConfig.fields.tariffs_used).toBe(805299);
+    expect(kommoConfig.fields.tariffs_used).toBe(807182);
+    expect(kommoConfig.fields.sales_actions).toBe(807184);
+    expect(kommoConfig.fields.pdf_orcamento).toBe(786340);
   });
 
   it("maps the Porte PET multiselect enum ids", () => {

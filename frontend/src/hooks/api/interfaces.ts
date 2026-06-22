@@ -139,6 +139,7 @@ export interface CorporateBodyResponseBudget {
   idClient: string | null,
   rowsValues: ResponseValues,
   tariffs?: string[]
+  salesActions?: string
 }
 
 export interface ApiRequirementsProps {

@@ -15,6 +15,12 @@ interface DataContentProps {
      * existentes (rdSaveProcess, pdfBudget) não dependem deste campo.
      */
     tariffsUsed?: string[];
+    /**
+     * Texto legível do desconto/ação aplicado (campo Kommo "Ações de venda").
+     * Computado no momento da montagem (geral + unitários) e persistido aqui.
+     * Opcional/aditivo.
+     */
+    salesActions?: string;
 }
 
 export interface ArrComplete {
