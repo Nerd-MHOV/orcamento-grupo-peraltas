@@ -89,6 +89,7 @@ export async function kommoSaveProcess(
     petSizes: arr?.petValue ?? [],
     price,
     tariffs: reference.tariffsUsed ?? [],
+    salesActions: reference.salesActions ?? "Padrão",
   };
 
   await api.kommo.saveBudgetToLead(leadId, input);
@@ -117,6 +118,7 @@ export async function kommoSaveProcessCorp(
     petSizes,
     price: budget.rowsValues.total.total,
     tariffs: budget.tariffs ?? [],
+    salesActions: budget.salesActions ?? "Padrão",
   };
 
   await api.kommo.saveBudgetToLead(leadId, input);

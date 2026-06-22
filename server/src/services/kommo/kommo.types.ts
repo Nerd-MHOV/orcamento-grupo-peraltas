@@ -121,6 +121,8 @@ export interface BudgetLeadInput {
   petSizes: string[];
   price: number;
   tariffs: string[];
+  /** Resumo legível da ação/desconto aplicado (campo "Ações de venda"). */
+  salesActions: string;
 }
 
 /**

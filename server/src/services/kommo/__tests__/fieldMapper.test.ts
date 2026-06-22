@@ -24,7 +24,8 @@ function makeConfig(overrides: Partial<KommoConfig> = {}): KommoConfig {
         Médio: 648188,
         Grande: 648190,
       },
-      tariffs_used: 805299,
+      tariffs_used: 807182,
+      sales_actions: 807184,
       pdf_orcamento: 786340,
     },
     ...overrides,
@@ -57,6 +58,7 @@ describe("fieldMapper.toCustomFields", () => {
     petSizes: ["Médio", "Grande"],
     price: 1234,
     tariffs: ["Alta", "Feriado"],
+    salesActions: "Ação: Black Friday | Desconto: 10%",
   };
 
   it("check_in usa field_id 804864 com valor unix numérico (início do dia)", () => {
@@ -112,12 +114,24 @@ describe("fieldMapper.toCustomFields", () => {
     expect(entry!.values).toEqual([{ enum_id: 648188 }]);
   });
 
-  it("tariffs_used é string sob 805299", () => {
+  it("tariffs_used é string sob 807182", () => {
     const out = mapper.toCustomFields(sample);
-    const value = field(out, 805299)!.values[0].value;
+    const value = field(out, 807182)!.values[0].value;
     expect(typeof value).toBe("string");
     expect(value).toContain("Alta");
     expect(value).toContain("Feriado");
+  });
+
+  it("sales_actions é string sob 807184", () => {
+    const out = mapper.toCustomFields(sample);
+    const value = field(out, 807184)!.values[0].value;
+    expect(typeof value).toBe("string");
+    expect(value).toBe("Ação: Black Friday | Desconto: 10%");
+  });
+
+  it("sales_actions vazio → nenhuma entrada 807184", () => {
+    const out = mapper.toCustomFields({ ...sample, salesActions: "" });
+    expect(field(out, 807184)).toBeUndefined();
   });
 
   it("não inclui price como custom field", () => {
@@ -144,7 +158,7 @@ describe("fieldMapper.toCustomFields", () => {
 
   it("tariffs vazios → nenhuma entrada 805299", () => {
     const out = mapper.toCustomFields({ ...sample, tariffs: [] });
-    expect(field(out, 805299)).toBeUndefined();
+    expect(field(out, 807182)).toBeUndefined();
   });
 });
 

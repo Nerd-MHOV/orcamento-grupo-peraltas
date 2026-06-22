@@ -21,7 +21,8 @@ export interface KommoPetSizeEnum {
  * - adt / chd_amount / pet_amount: numéricos → string.
  * - chd_ages: texto → csv de idades.
  * - pet_sizes: multiselect → `enum_id` (ver `pet_sizes_enum`).
- * - tariffs_used: texto ("Condições comerciais") → lista de tarifários como string.
+ * - tariffs_used: texto ("Tarifário") → lista de tarifários como string.
+ * - sales_actions: texto ("Ações de venda") → resumo legível de desconto/ação.
  *
  * Não há custom field para o valor: usa-se o campo nativo `price` do lead.
  * O PDF do orçamento (hospedagem e corporativo) vai para o custom field do tipo
@@ -44,8 +45,10 @@ export interface KommoFields {
   pet_sizes: number;
   /** enum_id do multiselect Porte PET */
   pet_sizes_enum: KommoPetSizeEnum;
-  /** Condições comerciais — text (lista de tarifários usados) */
+  /** Tarifário — text (lista de tarifários usados) */
   tariffs_used: number;
+  /** Ações de venda — text (resumo legível de desconto/ação aplicada) */
+  sales_actions: number;
   /** PDF - Orçamento Hotel — file (recebe o PDF do orçamento; hospedagem e corp) */
   pdf_orcamento: number;
 }
@@ -78,7 +81,8 @@ export const kommoConfig: KommoConfig = {
       Médio: 648188,
       Grande: 648190,
     },
-    tariffs_used: 805299,
+    tariffs_used: 807182,
+    sales_actions: 807184,
     pdf_orcamento: 786340,
   },
 };

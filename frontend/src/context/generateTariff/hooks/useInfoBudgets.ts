@@ -23,8 +23,8 @@ const useInfoBudgets = () => {
         setBudgets([]);
     }
 
-    function addRows(rows: RowsProps[], arrComplete?: ArrComplete, tariffsUsed?: string[]) {
-        setDataTable((par) => ({...par, ...buildBudgetTable(rows, arrComplete, tariffsUsed)}));
+    function addRows(rows: RowsProps[], arrComplete?: ArrComplete, tariffsUsed?: string[], salesActions?: string) {
+        setDataTable((par) => ({...par, ...buildBudgetTable(rows, arrComplete, tariffsUsed, salesActions)}));
     }
     function clearRows() {
         addRows([]);
