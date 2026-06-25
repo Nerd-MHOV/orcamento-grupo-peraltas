@@ -70,6 +70,30 @@ describe("usePrefillFromLead", () => {
     expect(notify).not.toHaveBeenCalled();
   });
 
+  it("portes de PET capitalizados (Kommo) → normaliza para minúsculas e descarta desconhecidos", async () => {
+    // O adaptador Kommo entrega os rótulos capitalizados (`Pequeno`/`Médio`/...),
+    // mas `petOptions` e o campo `carrying` do banco usam minúsculas. Sem
+    // normalizar, o cálculo casa o porte por igualdade exata e zera o PET.
+    search = "?client_id=123";
+    getLead.mockResolvedValue({
+      id: 123,
+      name: "Ana",
+      petSizes: ["Pequeno", "Médio", "Gigante"],
+    });
+
+    const setChildValue = vi.fn();
+    const setPetValue = vi.fn();
+    const handleSelectDate = vi.fn();
+
+    renderHook(() =>
+      usePrefillFromLead({ setChildValue, setPetValue, handleSelectDate })
+    );
+
+    await waitFor(() =>
+      expect(setPetValue).toHaveBeenCalledWith(["pequeno", "médio"])
+    );
+  });
+
   it("campos ausentes no lead → preenche o que existe e deixa o resto em branco", async () => {
     search = "?client_id=123";
     getLead.mockResolvedValue({

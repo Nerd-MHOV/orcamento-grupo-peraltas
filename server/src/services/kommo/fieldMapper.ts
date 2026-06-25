@@ -68,6 +68,20 @@ function reversePetEnum(
   return reverse;
 }
 
+/**
+ * Resolve o `enum_id` do Kommo a partir de um rótulo de porte de PET, casando
+ * de forma case-insensitive. O enum do Kommo usa rótulos capitalizados
+ * (`Pequeno`/`Médio`/`Grande`), mas o domínio/formulário produz minúsculas
+ * (`pequeno`/...). Sem isso, a gravação descartaria os portes ao salvar o lead.
+ */
+function petEnumId(enumMap: KommoPetSizeEnum, size: string): number | undefined {
+  const target = size.toLowerCase();
+  const match = (Object.keys(enumMap) as Array<keyof KommoPetSizeEnum>).find(
+    (label) => label.toLowerCase() === target
+  );
+  return match ? enumMap[match] : undefined;
+}
+
 class FieldMapperImpl implements FieldMapper {
   private readonly config: KommoConfig;
 
@@ -101,7 +115,7 @@ class FieldMapperImpl implements FieldMapper {
       const enumMap = fields.pet_sizes_enum;
       const enumValues: Array<{ enum_id: number }> = [];
       petSizes.forEach((size) => {
-        const enumId = enumMap[size as keyof KommoPetSizeEnum];
+        const enumId = petEnumId(enumMap, size);
         if (typeof enumId === "number") {
           enumValues.push({ enum_id: enumId });
         }

@@ -114,6 +114,19 @@ describe("fieldMapper.toCustomFields", () => {
     expect(entry!.values).toEqual([{ enum_id: 648188 }]);
   });
 
+  it("pet_sizes em minúsculas (grafia do domínio/form) também resolve o enum_id", () => {
+    // O formulário/cálculo produz portes minúsculos; o enum do Kommo é
+    // capitalizado. O casamento precisa ser case-insensitive, senão os portes
+    // são descartados ao salvar o lead.
+    const out = mapper.toCustomFields({
+      ...sample,
+      petSizes: ["pequeno", "médio", "grande"],
+    });
+    const entry = field(out, 786326);
+    const enumIds = entry!.values.map((v) => v.enum_id);
+    expect(enumIds).toEqual([648186, 648188, 648190]);
+  });
+
   it("tariffs_used é string sob 807182", () => {
     const out = mapper.toCustomFields(sample);
     const value = field(out, 807182)!.values[0].value;

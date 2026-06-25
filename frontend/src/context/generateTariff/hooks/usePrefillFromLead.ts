@@ -27,6 +27,20 @@ function parseLocalDate(iso: string): Date {
   return new Date(year, (month ?? 1) - 1, day ?? 1);
 }
 
+/**
+ * Portes válidos de PET na forma canônica usada pelo formulário/cálculo
+ * (`petOptions` e o campo `carrying` do banco usam minúsculas). O Kommo entrega
+ * os rótulos capitalizados (`Pequeno`/`Médio`/`Grande`), então normalizamos para
+ * minúsculas e descartamos rótulos desconhecidos. Sem isso, o cálculo casa o
+ * porte por igualdade exata e sensível a maiúsculas, zerando o valor do PET.
+ */
+const PET_SIZES = ["pequeno", "médio", "grande"];
+function normalizePetSizes(sizes: string[]): string[] {
+  return sizes
+    .map((size) => size.toLowerCase())
+    .filter((size) => PET_SIZES.includes(size));
+}
+
 export interface UsePrefillFromLeadResult {
   /** Nome do cliente associado ao lead (Req 6.2). Vazio quando não houve prefill. */
   name: string;
@@ -88,7 +102,8 @@ const usePrefillFromLead = (
         }
 
         if (lead.petSizes && lead.petSizes.length > 0) {
-          setters.setPetValue(lead.petSizes);
+          const pets = normalizePetSizes(lead.petSizes);
+          if (pets.length > 0) setters.setPetValue(pets);
         }
       })
       .catch((err: unknown) => {
