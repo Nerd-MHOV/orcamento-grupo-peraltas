@@ -6,8 +6,9 @@ const APP_BASE = "https://orcamento.grupoperaltas.com.br";
 
 // Conta Kommo da Peraltas. Padrão de URL do lead:
 //   https://admperaltasturismo.kommo.com/leads/detail/{id}
+//   https://admperaltasturismo.kommo.com/chats/{chatId}/leads/detail/{id}
 const KOMMO_LEAD_URL_RE =
-  /^https:\/\/admperaltasturismo\.kommo\.com\/leads\/detail\/(\d+)/;
+  /^https:\/\/admperaltasturismo\.kommo\.com(?:\/chats\/\d+)?\/leads\/detail\/(\d+)/;
 
 /**
  * Função PURA: extrai o id numérico do lead a partir da URL do Kommo.
